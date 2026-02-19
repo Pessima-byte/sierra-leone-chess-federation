@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Member {
+  id          String   @id
+  name        String
+  title       String
+  rating      Int
+  club        String
+  status      String
+  joined      String
+  image       String?
+  bio         String?
+  fideId      String?
+  wins        Int      @default(0)
+  draws       Int      @default(0)
+  losses      Int      @default(0)
+  gamesWhite  Game[]   @relation("WhiteGames")
+  gamesBlack  Game[]   @relation("BlackGames")
+  user        User?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          String    @default("PLAYER")
+  memberId      String?   @unique
+  member        Member?   @relation(fields: [memberId], references: [id])
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Game {
+  id           String   @id @default(cuid())
+  whiteId      String
+  blackId      String
+  white        Member   @relation("WhiteGames", fields: [whiteId], references: [id])
+  black        Member   @relation("BlackGames", fields: [blackId], references: [id])
+  result       String
+  date         String
+  event        String
+  moves        String
+  ratingChange Float?
+}
+
+model CalendarEvent {
+  id               String   @id
+  title            String
+  date             String
+  time             String
+  location         String
+  type             String
+  prizePool        String?
+  status           String
+  organizer        String
+  description      String
+  image            String?
+  registrationOpen Boolean
+  level            String
+  entryFee         String?
+}
+
+model NewsArticle {
+  id       String   @id
+  title    String
+  excerpt  String
+  content  String
+  date     String
+  author   String
+  category String
+  image    String
+  readTime String
+  tags     String
+  featured Boolean  @default(false)
+}
