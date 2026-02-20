@@ -55,3 +55,9 @@ export async function getNews() {
         orderBy: { date: 'desc' }
     })
 }
+
+export async function getNewsArticleById(id: string) {
+    return await db.newsArticle.findUnique({
+        where: { id }
+    })
+}

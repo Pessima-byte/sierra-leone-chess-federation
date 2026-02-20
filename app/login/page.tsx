@@ -65,12 +65,16 @@ function LoginContent() {
             })
             setIsLoading(false)
         } else {
-            toast.success(mode === 'login' ? "Access Granted: Welcome back, Player!" : "Account Created: Welcome to the Federation!", {
-                description: "Redirecting to your dashboard...",
+            toast.success(mode === 'login' ? "Access Granted: Welcome back!" : "Account Created!", {
+                description: "Redirecting to your terminal...",
                 className: "bg-slate-900 border-white/10 text-white",
             })
-            // Router push handled by server action redirect or here
-            router.push('/members') // Fallback
+            const authResult = result as any
+            if (authResult?.role === 'ADMIN') {
+                router.push('/admin/dashboard')
+            } else {
+                router.push('/members')
+            }
         }
     }
 
@@ -159,7 +163,7 @@ function LoginContent() {
                                         type="email"
                                         name="email"
                                         required
-                                        placeholder="cadet@slchess.org"
+                                        placeholder="Enter your email"
                                         className="h-14 pl-12 bg-white/5 border-white/10 rounded-2xl focus:ring-blue-500/50 transition-all focus:bg-white/[0.08]"
                                     />
                                 </div>
@@ -178,7 +182,7 @@ function LoginContent() {
                                         type={showPassword ? "text" : "password"}
                                         name="password"
                                         required
-                                        placeholder="••••••••••••"
+                                        placeholder="Min. 8 characters"
                                         className="h-14 pl-12 pr-12 bg-white/5 border-white/10 rounded-2xl focus:ring-blue-500/50 transition-all focus:bg-white/[0.08]"
                                     />
                                     <button

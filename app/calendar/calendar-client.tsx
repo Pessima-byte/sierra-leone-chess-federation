@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/dialog"
 import { type CalendarEvent } from "@/lib/calendar-data"
 import { logout } from "@/app/actions/auth"
+import { toast } from "sonner"
 
 export default function CalendarPage({ initialEvents, session }: { initialEvents: CalendarEvent[], session: any }) {
     return (
@@ -88,7 +89,7 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                 url: window.location.href,
             })
         } else {
-            alert('Sharing is not supported on this browser. URL copied to clipboard!')
+            toast.info('URL copied to clipboard!')
             navigator.clipboard.writeText(window.location.href)
         }
     }
@@ -232,7 +233,7 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    onClick={() => alert('Calendar synchronization started... Redirecting to provider.')}
+                                    onClick={() => toast.success('Calendar synchronization started...')}
                                     className="h-16 px-8 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-black text-lg backdrop-blur-md"
                                 >
                                     Sync to Google
@@ -332,8 +333,9 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
 }
 
 function HostEventDialog() {
+    const [open, setOpen] = useState(false)
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="rounded-xl bg-blue-600 hover:bg-blue-500 font-bold shadow-lg shadow-blue-500/20">
                     <Plus className="w-5 h-5 mr-2" /> Host Event
@@ -371,7 +373,7 @@ function HostEventDialog() {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-500 font-bold h-12 rounded-xl" onClick={() => alert('Proposal submitted for review!')}>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-500 font-bold h-12 rounded-xl" onClick={() => { toast.success('Proposal submitted for review!'); setOpen(false); }}>
                         Submit Proposal
                     </Button>
                 </DialogFooter>
@@ -453,7 +455,7 @@ function EventDetailDialog({ event, children }: { event: CalendarEvent, children
                         </div>
 
                         <div className="space-y-3">
-                            <Button className="w-full h-12 rounded-2xl bg-blue-600 hover:bg-blue-500 font-bold" disabled={!event.registrationOpen} onClick={() => alert('Registration confirmed! Check your email for details.')}>
+                            <Button className="w-full h-12 rounded-2xl bg-blue-600 hover:bg-blue-500 font-bold" disabled={!event.registrationOpen} onClick={() => toast.success('Registration confirmed! Check your email for details.')}>
                                 {event.registrationOpen ? 'Register Now' : 'Registration Closed'}
                             </Button>
                             <Button variant="outline" className="w-full h-12 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-bold">

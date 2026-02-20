@@ -1,5 +1,6 @@
 import { getMembers, getEvents, getNews } from "@/lib/queries"
 import { Users, Calendar, Newspaper, Trophy } from "lucide-react"
+import { RecordGameDialog } from "../components/record-game-dialog"
 
 export default async function AdminDashboard() {
     const members = await getMembers()
@@ -39,7 +40,10 @@ export default async function AdminDashboard() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-black italic tracking-tight">OVERVIEW</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="text-3xl font-black italic tracking-tight">OVERVIEW</h1>
+                <RecordGameDialog members={members} />
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, i) => (

@@ -1,6 +1,10 @@
 import { getNews } from "@/lib/queries"
 import { Button } from "@/components/ui/button"
-import { Search, Plus, MoreHorizontal } from "lucide-react"
+import { Search, MoreHorizontal } from "lucide-react"
+import { CreateNewsDialog } from "../components/create-news-dialog"
+import { EditNewsDialog } from "../components/edit-news-dialog"
+import { DeleteAction } from "../components/delete-action"
+import { deleteNews } from "@/app/actions/admin"
 
 export default async function AdminNews() {
     const news = await getNews()
@@ -9,9 +13,7 @@ export default async function AdminNews() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-black italic tracking-tight">TRANSMISSION CONTROL</h1>
-                <Button className="bg-blue-600 hover:bg-blue-500 font-bold rounded-xl h-10 px-4">
-                    <Plus className="w-4 h-4 mr-2" /> Publish News
-                </Button>
+                <CreateNewsDialog />
             </div>
 
             <div className="bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden">
@@ -60,10 +62,13 @@ export default async function AdminNews() {
                                             {article.category}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </Button>
+                                    <td className="px-6 py-4 text-right flex justify-end gap-2">
+                                        <EditNewsDialog article={article as any} />
+                                        <DeleteAction
+                                            id={article.id}
+                                            action={deleteNews}
+                                            title="News"
+                                        />
                                     </td>
                                 </tr>
                             ))}

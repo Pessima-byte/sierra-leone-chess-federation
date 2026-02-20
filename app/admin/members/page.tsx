@@ -1,6 +1,10 @@
 import { getMembers } from "@/lib/queries"
 import { Button } from "@/components/ui/button"
-import { Search, Plus, MoreHorizontal } from "lucide-react"
+import { Search, MoreHorizontal } from "lucide-react"
+import { CreateMemberDialog } from "../components/create-member-dialog"
+import { EditMemberDialog } from "../components/edit-member-dialog"
+import { DeleteAction } from "../components/delete-action"
+import { deleteMember } from "@/app/actions/admin"
 
 export default async function AdminMembers() {
     const members = await getMembers()
@@ -9,9 +13,7 @@ export default async function AdminMembers() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-black italic tracking-tight">MEMBERS MANAGEMENT</h1>
-                <Button className="bg-blue-600 hover:bg-blue-500 font-bold rounded-xl h-10 px-4">
-                    <Plus className="w-4 h-4 mr-2" /> Add Member
-                </Button>
+                <CreateMemberDialog />
             </div>
 
             <div className="bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden">
@@ -53,10 +55,13 @@ export default async function AdminMembers() {
                                             {member.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </Button>
+                                    <td className="px-6 py-4 text-right flex justify-end gap-2">
+                                        <EditMemberDialog member={member as any} />
+                                        <DeleteAction
+                                            id={member.id}
+                                            action={deleteMember}
+                                            title="Member"
+                                        />
                                     </td>
                                 </tr>
                             ))}

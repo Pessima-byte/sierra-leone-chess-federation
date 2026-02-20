@@ -32,6 +32,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+import { ShareProfileButton, ChallengePlayerButton } from "./member-profile-client"
+
 export default async function MemberDetailPage({
     params,
 }: {
@@ -78,9 +80,7 @@ export default async function MemberDetailPage({
                         <span className="text-sm font-medium">Back to Registry</span>
                     </Link>
 
-                    <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground hover:text-white">
-                        <Share2 className="w-4 h-4 mr-2" /> Share Profile
-                    </Button>
+                    <ShareProfileButton />
                 </div>
             </header>
 
@@ -255,9 +255,7 @@ export default async function MemberDetailPage({
                         <Card className="bg-slate-900/40 border-white/10 backdrop-blur-md rounded-[2rem] p-8">
                             <div className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-6">Quick Actions</div>
                             <div className="space-y-4">
-                                <Button className="w-full h-14 rounded-2xl bg-blue-600 font-bold text-white hover:bg-blue-500 border-0">
-                                    Challenge Player
-                                </Button>
+                                <ChallengePlayerButton name={member.name} />
                                 <PlayerGamesDialog games={games as any} playerName={member.name} variant="full" />
                             </div>
                         </Card>

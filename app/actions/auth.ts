@@ -58,7 +58,7 @@ export async function login(prevState: any, formData: FormData) {
             path: "/",
         });
 
-        return { success: true };
+        return { success: true, role: user.role };
     } catch (error) {
         console.error("Login error:", error);
         return { error: "Something went wrong. Please try again." };
