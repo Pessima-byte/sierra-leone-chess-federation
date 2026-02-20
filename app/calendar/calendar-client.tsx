@@ -103,203 +103,162 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
             </div>
 
-            {/* Header */}
-            <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/60 backdrop-blur-xl">
-                <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <Link href="/" className="flex items-center gap-2 group">
-                            <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-all">
-                                <ChevronLeft className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                            </div>
-                            <span className="text-sm font-medium text-muted-foreground group-hover:text-white transition-colors hidden sm:block">Back to Home</span>
-                        </Link>
+            <main className="container mx-auto px-4 pt-16 relative z-10">
+                {/* Modern Hero Section */}
+                {/* Compact Hero Section */}
+                <section className="mb-12">
+                    <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blue-600/10 via-slate-900/50 to-slate-950 border border-white/10 backdrop-blur-2xl p-6 md:p-10 lg:p-12 shadow-2xl">
+                        {/* Decorative elements */}
+                        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-600/15 blur-[100px] rounded-full"></div>
+                        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-emerald-600/5 blur-[100px] rounded-full"></div>
 
-                        <Link href="/" className="flex items-center gap-3 group border-l border-white/10 pl-6">
-                            <div className="relative w-10 h-10">
-                                <div className="absolute inset-0 bg-blue-600 rounded-xl blur-lg opacity-40 group-hover:opacity-100 transition duration-500"></div>
-                                <div className="relative w-full h-full bg-slate-900 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
-                                    <Image
-                                        src="/images/logo.png"
-                                        alt="SLCF Logo"
-                                        width={40}
-                                        height={40}
-                                        className="w-full h-full object-cover"
-                                    />
+                        <div className="relative z-10 grid lg:grid-cols-5 gap-8 items-center">
+                            <div className="lg:col-span-3 space-y-6">
+                                <Badge className="py-1 px-3 rounded-full bg-blue-500/10 border-blue-500/20 text-blue-400 text-[9px] font-black uppercase tracking-[0.2em] flex w-fit items-center backdrop-blur-md">
+                                    <Sparkles className="w-3 h-3 mr-2 animate-pulse" />
+                                    Federation Schedule 2026
+                                </Badge>
+                                <div className="space-y-2">
+                                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-none tracking-tighter">
+                                        The Arena <br />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Awaits.</span>
+                                    </h1>
+                                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
+                                        From grandmaster showdowns to grassroots training, discover every move scheduled on the Sierra Leonean stage.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-4 pt-2">
+                                    <Button
+                                        size="lg"
+                                        onClick={scrollToEvents}
+                                        className="h-12 px-8 rounded-xl bg-blue-600 text-white hover:bg-blue-500 font-black transition-all hover:scale-[1.02] active:scale-95"
+                                    >
+                                        Explore Timeline
+                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                size="lg"
+                                                variant="outline"
+                                                className="h-12 px-8 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-black backdrop-blur-md transition-all"
+                                            >
+                                                Host Event
+                                            </Button>
+                                        </DialogTrigger>
+                                        <HostEventDialogContent />
+                                    </Dialog>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="font-bold text-xl leading-none">SLCF</span>
-                                <span className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em]">Events Hub</span>
-                            </div>
-                        </Link>
-                    </div>
 
-                    <nav className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/10">
-                        {[
-                            { label: 'Upcoming', value: 'Upcoming' },
-                            { label: 'Archived', value: 'Archived' },
-                            { label: 'All Events', value: 'All' }
-                        ].map((item) => (
-                            <Button
-                                key={item.value}
-                                onClick={() => setStatusFilter(item.value as any)}
-                                variant="ghost"
-                                className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${statusFilter === item.value ? 'bg-white/10 text-white' : 'text-muted-foreground hover:text-white hover:bg-white/5'}`}
-                            >
-                                {item.label}
-                            </Button>
-                        ))}
-                    </nav>
-
-                    <div className="flex items-center gap-4">
-                        <div className="hidden md:flex relative group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-blue-400 transition-colors" />
-                            <Input
-                                placeholder="Search events..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 h-10 w-48 lg:w-64 bg-white/5 border-white/10 rounded-xl focus:ring-blue-500/50 transition-all focus:w-80"
-                            />
-                        </div>
-                        {session ? (
-                            <>
-                                {session?.user?.role === "ADMIN" && (
-                                    <Link href="/admin">
-                                        <Button
-                                            variant="outline"
-                                            className="hidden md:flex rounded-xl border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 font-bold px-6 text-blue-400"
-                                        >
-                                            Admin Panel
+                            {/* Featured Event Spotlight - More Compact */}
+                            <div className="lg:col-span-2 relative lg:block hidden group">
+                                <div className="relative bg-slate-900/40 border border-white/10 rounded-[2rem] p-6 backdrop-blur-xl overflow-hidden group-hover:border-blue-500/30 transition-all duration-500">
+                                    <div className="relative z-10 space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <Badge className="bg-emerald-500/20 text-emerald-400 border-none font-black italic text-[10px]">FEATURED</Badge>
+                                            <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/40">
+                                                <Trophy className="w-4 h-4 text-white" />
+                                            </div>
+                                        </div>
+                                        <h3 className="text-xl font-black text-white leading-tight">National Chess Open 2026</h3>
+                                        <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-bold">
+                                            <div className="flex items-center gap-1.5">
+                                                <CalendarIcon className="w-3.5 h-3.5 text-blue-400" />
+                                                Jan 15, 2026
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <MapPin className="w-3.5 h-3.5 text-blue-400" />
+                                                Freetown
+                                            </div>
+                                        </div>
+                                        <div className="h-28 w-full rounded-xl overflow-hidden relative border border-white/5">
+                                            <Image
+                                                src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=1000"
+                                                alt="Spotlight"
+                                                fill
+                                                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                            />
+                                        </div>
+                                        <Button className="w-full h-10 rounded-xl bg-white text-slate-950 font-black hover:bg-slate-200 text-xs">
+                                            SECURE SPOT
                                         </Button>
-                                    </Link>
-                                )}
-                                <Link href="/members">
-                                    <Button
-                                        variant="outline"
-                                        className="hidden md:flex rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-bold px-6 text-white"
-                                    >
-                                        Dashboard
-                                    </Button>
-                                </Link>
-                                <form action={logout}>
-                                    <Button
-                                        type="submit"
-                                        className="hidden md:flex bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white border-0 shadow-lg shadow-red-900/20 rounded-xl font-bold px-6"
-                                    >
-                                        Log Out
-                                    </Button>
-                                </form>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login">
-                                    <Button variant="outline" className="hidden lg:flex rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-bold px-6">
-                                        Log In
-                                    </Button>
-                                </Link>
-                            </>
-                        )}
-                        <HostEventDialog />
-                    </div>
-                </div>
-            </header>
-
-            <main className="container mx-auto px-4 pt-32 relative z-10">
-                {/* Hero Section */}
-                <section className="mb-20">
-                    <div className="relative p-12 md:p-20 rounded-[3rem] overflow-hidden border border-white/10 bg-slate-900/40 backdrop-blur-3xl">
-                        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none"></div>
-                        <div className="relative z-10 max-w-3xl">
-                            <Badge variant="outline" className="mb-6 py-1.5 px-4 rounded-full bg-blue-500/10 border-blue-500/20 text-blue-400 text-xs font-black uppercase tracking-[0.2em] flex w-fit items-center">
-                                <Sparkles className="w-3 h-3 mr-2 animate-pulse" />
-                                Interactive Timeline
-                            </Badge>
-                            <h1 className="text-6xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter italic">
-                                NEXT LEVEL <br />
-                                <span className="text-blue-500 not-italic">FEDERATION</span> <br />
-                                CALENDAR.
-                            </h1>
-                            <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl">
-                                Discover upcoming tournaments, high-stakes seminars, and local club gatherings. The future of Sierra Leonean chess starts here.
-                            </p>
-                            <div className="flex flex-wrap gap-4">
-                                <Button
-                                    size="lg"
-                                    onClick={scrollToEvents}
-                                    className="h-16 px-8 rounded-2xl bg-white text-slate-950 hover:bg-slate-200 font-black text-lg transition-transform hover:scale-105 active:scale-95"
-                                >
-                                    Explore Today
-                                </Button>
-                                <Button
-                                    size="lg"
-                                    variant="outline"
-                                    onClick={() => toast.success('Calendar synchronization started...')}
-                                    className="h-16 px-8 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-black text-lg backdrop-blur-md"
-                                >
-                                    Sync to Google
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Floating elements for "futuristic" look */}
-                        <div className="absolute right-20 top-1/2 -translate-y-1/2 hidden xl:block animate-float">
-                            <div className="h-96 w-96 rounded-full border border-blue-500/30 relative flex items-center justify-center">
-                                <div className="h-72 w-72 rounded-full border border-green-500/20 animate-spin-slow"></div>
-                                <div className="absolute h-10 w-10 bg-blue-500 rounded-full blur-xl animate-pulse"></div>
-                                <CalendarIcon className="w-24 h-24 text-blue-500/50 absolute" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Calendar Controls */}
-                <div ref={eventsRef} className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 scroll-mt-32">
-                    <div className="flex items-center gap-2 p-1 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
+                {/* Compact Toolbar */}
+                <div className="flex flex-col gap-4 mb-10 scroll-mt-24" ref={eventsRef}>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-1.5 p-1 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg overflow-x-auto max-w-full">
+                            {[
+                                { label: 'Upcoming', value: 'Upcoming' },
+                                { label: 'Archived', value: 'Archived' },
+                                { label: 'All', value: 'All' }
+                            ].map((item) => (
+                                <Button
+                                    key={item.value}
+                                    onClick={() => setStatusFilter(item.value as any)}
+                                    variant="ghost"
+                                    className={`px-4 py-2 h-9 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap ${statusFilter === item.value ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 italic' : 'text-muted-foreground hover:text-white hover:bg-white/5'}`}
+                                >
+                                    {item.label}
+                                </Button>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-3 w-full md:w-auto">
+                            <div className="relative flex-1 md:w-64 group">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-blue-400 transition-colors" />
+                                <Input
+                                    placeholder="Search events..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="pl-10 h-10 w-full bg-white/5 border-white/5 rounded-2xl focus:ring-blue-500/50 transition-all text-sm placeholder:text-muted-foreground font-medium"
+                                />
+                            </div>
+                            <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 shadow-lg shrink-0">
+                                <Button
+                                    onClick={() => setView('grid')}
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`h-8 w-8 rounded-lg transition-all ${view === 'grid' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-muted-foreground hover:bg-white/10'}`}
+                                >
+                                    <CalendarDays className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                    onClick={() => setView('list')}
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`h-8 w-8 rounded-lg transition-all ${view === 'list' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-muted-foreground hover:bg-white/10'}`}
+                                >
+                                    <LayoutList className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                         {['all', 'Tournament', 'Training', 'Meeting'].map((t) => (
                             <Button
                                 key={t}
                                 onClick={() => setTypeFilter(t as any)}
-                                variant={typeFilter === t ? 'default' : 'ghost'}
-                                className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest h-10 transition-all ${typeFilter === t ? 'bg-blue-600 text-white' : 'text-muted-foreground'}`}
+                                variant="ghost"
+                                size="sm"
+                                className={`px-4 h-8 rounded-lg text-[9px] font-black uppercase tracking-[0.1em] transition-all whitespace-nowrap border ${typeFilter === t ? 'bg-white/10 border-white/20 text-white' : 'border-transparent text-muted-foreground hover:text-white hover:bg-white/5'}`}
                             >
-                                {t}
+                                {t === 'all' ? 'All Activities' : t}
                             </Button>
                         ))}
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 backdrop-blur-md">
-                            <Button
-                                onClick={() => setView('grid')}
-                                variant="ghost"
-                                size="icon"
-                                className={`h-10 w-10 rounded-lg transition-all ${view === 'grid' ? 'bg-blue-600 text-white shadow-lg' : 'text-muted-foreground'}`}
-                            >
-                                <CalendarDays className="w-4 h-4" />
-                            </Button>
-                            <Button
-                                onClick={() => setView('list')}
-                                variant="ghost"
-                                size="icon"
-                                className={`h-10 w-10 rounded-lg transition-all ${view === 'list' ? 'bg-blue-600 text-white shadow-lg' : 'text-muted-foreground'}`}
-                            >
-                                <LayoutList className="w-4 h-4" />
-                            </Button>
-                        </div>
-                        <Button
-                            variant="outline"
-                            onClick={handleShare}
-                            className="h-12 px-6 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-bold"
-                        >
-                            <Share2 className="w-4 h-4 mr-2" /> Share Feed
-                        </Button>
                     </div>
                 </div>
 
                 {/* Event Grid/List View */}
                 {filteredEvents.length > 0 ? (
                     view === 'grid' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                             {filteredEvents.map((event) => (
                                 <EventDetailDialog key={event.id} event={event}>
                                     <EventCard event={event} />
@@ -307,7 +266,7 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                             ))}
                         </div>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             {filteredEvents.map((event) => (
                                 <EventDetailDialog key={event.id} event={event}>
                                     <EventListItem event={event} />
@@ -316,14 +275,20 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                         </div>
                     )
                 ) : (
-                    <div className="py-20 text-center space-y-4 bg-white/5 rounded-[3rem] border border-white/10">
-                        <div className="h-20 w-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto border border-blue-500/20">
-                            <Search className="w-8 h-8 text-blue-400" />
+                    <div className="py-32 text-center space-y-6 rounded-[4rem] bg-gradient-to-b from-white/5 to-transparent border border-white/5 backdrop-blur-xl">
+                        <div className="h-24 w-24 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto border border-blue-500/20 animate-pulse">
+                            <Search className="w-10 h-10 text-blue-400" />
                         </div>
-                        <h3 className="text-2xl font-bold">No events found</h3>
-                        <p className="text-muted-foreground">Try adjusting your filters or search query.</p>
-                        <Button variant="outline" onClick={() => { setTypeFilter('all'); setStatusFilter('Upcoming'); setSearchQuery(""); }}>
-                            Reset All Filters
+                        <div className="space-y-2">
+                            <h3 className="text-3xl font-black text-white">No Transmissions Found</h3>
+                            <p className="text-muted-foreground max-w-sm mx-auto">We couldn't find any events matching your current signal. Try recalibrating your filters.</p>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="h-14 px-10 rounded-[2rem] border-white/10 bg-white/5 font-black uppercase tracking-widest text-[10px]"
+                            onClick={() => { setTypeFilter('all'); setStatusFilter('Upcoming'); setSearchQuery(""); }}
+                        >
+                            Reset Radar
                         </Button>
                     </div>
                 )}
@@ -332,53 +297,45 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
     )
 }
 
-function HostEventDialog() {
-    const [open, setOpen] = useState(false)
+function HostEventDialogContent() {
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button className="rounded-xl bg-blue-600 hover:bg-blue-500 font-bold shadow-lg shadow-blue-500/20">
-                    <Plus className="w-5 h-5 mr-2" /> Host Event
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] bg-slate-950 border-white/10 text-white rounded-[2rem]">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-black italic">HOST NEW EVENT</DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
-                        Fill out the federation event request form. Our technical committee will review your proposal.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-6 py-4">
+        <DialogContent className="sm:max-w-[500px] bg-slate-950/90 border-white/10 text-white rounded-[2.5rem] backdrop-blur-2xl">
+            <DialogHeader>
+                <DialogTitle className="text-3xl font-black italic">HOST NEW EVENT</DialogTitle>
+                <DialogDescription className="text-muted-foreground">
+                    Fill out the federation event request form. Our technical committee will review your proposal.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-6 py-4">
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Event Title</label>
+                    <Input placeholder="e.g. Freetown Masters Open" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Event Title</label>
-                        <Input placeholder="e.g. Freetown Masters Open" className="bg-white/5 border-white/10" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Date</label>
-                            <Input type="date" className="bg-white/5 border-white/10" />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Type</label>
-                            <select className="flex h-10 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm">
-                                <option className="bg-slate-900">Tournament</option>
-                                <option className="bg-slate-900">Training</option>
-                                <option className="bg-slate-900">Meeting</option>
-                            </select>
-                        </div>
+                        <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Date</label>
+                        <Input type="date" className="bg-white/5 border-white/10 h-12 rounded-xl" />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Requested Location</label>
-                        <Input placeholder="Physical or Virtual arena" className="bg-white/5 border-white/10" />
+                        <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Type</label>
+                        <select className="flex h-12 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/50 outline-none">
+                            <option className="bg-slate-900">Tournament</option>
+                            <option className="bg-slate-900">Training</option>
+                            <option className="bg-slate-900">Meeting</option>
+                        </select>
                     </div>
                 </div>
-                <DialogFooter>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-500 font-bold h-12 rounded-xl" onClick={() => { toast.success('Proposal submitted for review!'); setOpen(false); }}>
-                        Submit Proposal
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Requested Location</label>
+                    <Input placeholder="Physical or Virtual arena" className="bg-white/5 border-white/10 h-12 rounded-xl" />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button className="w-full bg-blue-600 hover:bg-blue-500 font-black h-14 rounded-2xl shadow-xl shadow-blue-600/20">
+                    Submit Proposal
+                </Button>
+            </DialogFooter>
+        </DialogContent>
     )
 }
 
@@ -388,78 +345,96 @@ function EventDetailDialog({ event, children }: { event: CalendarEvent, children
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
-            <DialogContent className="max-w-3xl bg-slate-950 border-white/10 text-white p-0 overflow-hidden rounded-[2.5rem]">
-                <div className="relative h-64 md:h-80 w-full">
+            <DialogContent className="max-w-4xl bg-slate-950/95 border-white/5 text-white p-0 overflow-hidden rounded-[3rem] backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)]">
+                <div className="relative h-[400px] w-full group">
                     <Image
                         src={event.image || "https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=1000"}
                         alt={event.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-[2s] group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-                    <div className="absolute bottom-6 left-6 right-6">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Badge className="bg-blue-600/80 backdrop-blur-md text-[10px] font-black uppercase tracking-widest">
-                                {event.type}
-                            </Badge>
-                            <Badge variant="outline" className="bg-slate-950/50 backdrop-blur-md border-white/20 text-[10px] uppercase font-black">
-                                {event.status}
-                            </Badge>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-black leading-tight italic">{event.title}</h2>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+
+                    <div className="absolute top-8 left-8 flex gap-3">
+                        <Badge className="bg-blue-600 text-white border-none font-black text-[10px] tracking-widest px-4 py-2 rounded-full shadow-xl shadow-blue-600/20">
+                            {event.type}
+                        </Badge>
+                        <Badge className="bg-white/10 backdrop-blur-md text-white border-white/10 font-black text-[10px] tracking-widest px-4 py-2 rounded-full">
+                            {event.status}
+                        </Badge>
+                    </div>
+
+                    <div className="absolute bottom-10 left-10 right-10">
+                        <h2 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase italic">{event.title}</h2>
                     </div>
                 </div>
 
-                <div className="p-8 grid md:grid-cols-3 gap-8">
-                    <div className="md:col-span-2 space-y-6">
-                        <p className="text-lg text-muted-foreground leading-relaxed">
-                            {event.description}
-                        </p>
-                        <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
-                            <div className="space-y-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Organizer</span>
-                                <div className="flex items-center gap-2 font-bold">
-                                    <User className="w-4 h-4 text-blue-400" />
+                <div className="p-10 md:p-14 grid md:grid-cols-3 gap-12">
+                    <div className="md:col-span-2 space-y-10">
+                        <div className="space-y-4">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400">Mission Briefing</span>
+                            <p className="text-xl text-muted-foreground leading-relaxed font-medium">
+                                {event.description}
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-8 pt-10 border-t border-white/5">
+                            <div className="space-y-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Logistics Lead</span>
+                                <div className="flex items-center gap-3 font-black text-lg">
+                                    <div className="h-8 w-8 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
+                                        <User className="w-4 h-4 text-blue-400" />
+                                    </div>
                                     {event.organizer}
                                 </div>
                             </div>
-                            <div className="space-y-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Entry Level</span>
-                                <div className="flex items-center gap-2 font-bold">
-                                    <Zap className="w-4 h-4 text-yellow-500" />
+                            <div className="space-y-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Combat Level</span>
+                                <div className="flex items-center gap-3 font-black text-lg text-yellow-500">
+                                    <Zap className="w-5 h-5" />
                                     {event.level}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="space-y-6 flex flex-col justify-between">
-                        <div className="bg-white/5 rounded-3xl p-6 border border-white/10 space-y-4">
-                            <div className="flex items-center gap-3 text-sm">
-                                <CalendarIcon className="w-4 h-4 text-blue-400" />
+                    <div className="space-y-8">
+                        <div className="bg-white/5 rounded-[2.5rem] p-8 border border-white/5 space-y-6 backdrop-blur-xl">
+                            <div className="flex items-center gap-4">
+                                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                                    <CalendarIcon className="w-5 h-5 text-blue-400" />
+                                </div>
                                 <div>
-                                    <div className="font-bold">{event.date}</div>
-                                    <div className="text-xs text-muted-foreground">{event.time}</div>
+                                    <div className="font-black text-white">{new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</div>
+                                    <div className="text-xs text-muted-foreground font-bold">{event.time}</div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3 text-sm">
-                                <MapPin className="w-4 h-4 text-blue-400" />
-                                <div className="font-bold truncate">{event.location}</div>
+                            <div className="flex items-center gap-4">
+                                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                                    <MapPin className="w-5 h-5 text-blue-400" />
+                                </div>
+                                <div className="font-black text-white truncate">{event.location}</div>
                             </div>
                             {event.prizePool && (
-                                <div className="flex items-center gap-3 text-sm font-bold text-green-400">
-                                    <Trophy className="w-4 h-4 text-yellow-500" />
-                                    {event.prizePool}
+                                <div className="flex items-center gap-4">
+                                    <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                                        <Trophy className="w-5 h-5 text-emerald-400" />
+                                    </div>
+                                    <div className="font-black text-emerald-400">{event.prizePool}</div>
                                 </div>
                             )}
                         </div>
 
-                        <div className="space-y-3">
-                            <Button className="w-full h-12 rounded-2xl bg-blue-600 hover:bg-blue-500 font-bold" disabled={!event.registrationOpen} onClick={() => toast.success('Registration confirmed! Check your email for details.')}>
-                                {event.registrationOpen ? 'Register Now' : 'Registration Closed'}
+                        <div className="space-y-4">
+                            <Button
+                                className="w-full h-16 rounded-2xl bg-blue-600 hover:bg-blue-500 font-black text-lg transition-all shadow-xl shadow-blue-600/20 active:scale-95"
+                                disabled={!event.registrationOpen}
+                                onClick={() => toast.success('Registration request transmitted!')}
+                            >
+                                {event.registrationOpen ? 'INITIALIZE ENTRY' : 'REG CLOSED'}
                             </Button>
-                            <Button variant="outline" className="w-full h-12 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-bold">
-                                Sync to Calendar
+                            <Button variant="outline" className="w-full h-16 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-black text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-all">
+                                SHARE FEED
                             </Button>
                         </div>
                     </div>
@@ -471,68 +446,50 @@ function EventDetailDialog({ event, children }: { event: CalendarEvent, children
 
 function EventCard({ event }: { event: CalendarEvent }) {
     return (
-        <Card className="group relative bg-slate-900/40 border-white/10 rounded-[2.5rem] overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] backdrop-blur-xl cursor-pointer">
-            <div className="relative h-64 overflow-hidden">
+        <Card className="group relative bg-slate-950 border-white/5 rounded-[2rem] overflow-hidden hover:border-blue-500/30 transition-all duration-500 shadow-xl hover:shadow-blue-500/10 cursor-pointer">
+            <div className="relative h-48 overflow-hidden">
                 <Image
                     src={event.image || "https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=1000"}
                     alt={event.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[50%] group-hover:grayscale-0"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
 
-                {/* Level Badge */}
-                <div className="absolute top-6 left-6">
-                    <Badge className="py-1 px-3 bg-slate-950/80 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest rounded-full">
-                        {event.level} Level
-                    </Badge>
+                <div className="absolute top-4 left-4">
+                    <div className="px-3 py-1 bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-xl flex flex-col items-center">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-blue-400">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                        <span className="text-base font-black leading-none">{event.date.split('-')[2]}</span>
+                    </div>
                 </div>
 
-                {/* Date Highlight */}
-                <div className="absolute bottom-6 left-6 flex items-center gap-4">
-                    <div className="h-14 w-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center font-black">
-                        <span className="text-[10px] text-blue-400 uppercase tracking-tighter">Day</span>
-                        <span className="text-xl leading-none">{event.date.split('-')[2]}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-bold text-white uppercase tracking-wider">{new Date(event.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                        <span className="text-xs text-muted-foreground">{event.time}</span>
-                    </div>
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                    <Badge className="bg-blue-600 text-white border-none font-black text-[9px] tracking-widest px-3 py-1 rounded-full">
+                        {event.type}
+                    </Badge>
                 </div>
             </div>
 
-            <CardContent className="p-8">
-                <div className="flex items-center gap-2 mb-4">
-                    <div className={`w-2 h-2 rounded-full ${event.type === 'Tournament' ? 'bg-red-500' : event.type === 'Training' ? 'bg-green-500' : 'bg-blue-500'} animate-pulse`}></div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{event.type}</span>
+            <CardContent className="p-5 space-y-4">
+                <div className="space-y-1.5">
+                    <h3 className="text-lg lg:text-xl font-black text-white leading-tight tracking-tight uppercase group-hover:text-blue-400 transition-colors line-clamp-1">
+                        {event.title}
+                    </h3>
+                    <p className="text-[12px] text-muted-foreground line-clamp-2 font-medium leading-relaxed">
+                        {event.description}
+                    </p>
                 </div>
-                <h3 className="text-2xl font-black mb-4 leading-tight group-hover:text-blue-400 transition-colors uppercase tracking-tighter">
-                    {event.title}
-                </h3>
 
-                <div className="space-y-3 mb-8">
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                        <MapPin className="w-4 h-4 text-blue-400" />
+                <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground">
+                        <MapPin className="w-3.5 h-3.5 text-blue-400" />
                         {event.location}
                     </div>
-                    {event.prizePool && (
-                        <div className="flex items-center gap-3 text-sm text-green-400 font-bold">
-                            <Trophy className="w-4 h-4 text-yellow-500" />
-                            Prize: {event.prizePool}
-                        </div>
-                    )}
                 </div>
 
-                <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                    <div className="flex flex-col">
-                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Entry Fee</span>
-                        <span className="font-bold text-white">{event.entryFee || 'Open Access'}</span>
-                    </div>
-                    <Button size="sm" className="rounded-xl bg-blue-600/10 text-blue-400 border border-blue-600/20 hover:bg-blue-600 hover:text-white transition-all group/btn px-4 h-10">
-                        View Details
-                        <ArrowUpRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                    </Button>
-                </div>
+                <Button className="w-full h-10 rounded-xl bg-white/5 hover:bg-blue-600 border border-white/10 hover:border-blue-600 text-white font-black text-xs transition-all">
+                    VIEW DETAILS
+                </Button>
             </CardContent>
         </Card>
     )
@@ -540,39 +497,30 @@ function EventCard({ event }: { event: CalendarEvent }) {
 
 function EventListItem({ event }: { event: CalendarEvent }) {
     return (
-        <div className="group bg-slate-900/40 border border-white/5 rounded-3xl p-6 flex flex-col md:flex-row items-center gap-8 hover:bg-white/[0.03] hover:border-blue-500/20 transition-all cursor-pointer backdrop-blur-md">
-            <div className="h-24 w-24 md:h-32 md:w-32 rounded-2xl overflow-hidden relative shrink-0">
-                <Image src={event.image || "https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=1000"} alt={event.title} fill className="object-cover" />
+        <div className="group bg-slate-950 border border-white/5 rounded-[1.5rem] p-3 pr-6 flex flex-col md:flex-row items-center gap-6 hover:bg-white/[0.02] hover:border-blue-500/20 transition-all cursor-pointer backdrop-blur-3xl shadow-lg">
+            <div className="h-20 w-20 md:h-24 md:w-24 rounded-xl overflow-hidden relative shrink-0">
+                <Image src={event.image || "https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=1000"} alt={event.title} fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
             </div>
 
-            <div className="flex-1 text-center md:text-left">
-                <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-2">
-                    <Badge variant="outline" className="bg-blue-500/10 border-blue-500/20 text-blue-400 text-[10px] font-black uppercase">
+            <div className="flex-1 text-center md:text-left space-y-1">
+                <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
+                    <Badge className="bg-blue-600/10 border-blue-500/20 text-blue-400 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
                         {event.type}
                     </Badge>
-                    <span className="text-xs text-muted-foreground">{event.date} • {event.time}</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                 </div>
-                <h3 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">{event.title}</h3>
-                <div className="flex justify-center md:justify-start items-center gap-4 mt-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
+                <h3 className="text-xl font-black text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">{event.title}</h3>
+                <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-[11px] font-medium text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-blue-400" />
                         {event.location}
                     </div>
-                    {event.prizePool && (
-                        <div className="flex items-center gap-2 text-green-400 font-bold">
-                            <Trophy className="w-4 h-4 text-yellow-500" />
-                            {event.prizePool}
-                        </div>
-                    )}
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" className="h-14 px-8 rounded-2xl border border-white/10 hover:bg-white/10 font-bold">
-                    Learn More
-                </Button>
-                <Button className="h-14 px-8 rounded-2xl bg-blue-600 hover:bg-blue-500 font-bold shadow-xl shadow-blue-500/20">
-                    Register Now
+            <div className="shrink-0">
+                <Button className="h-10 px-6 rounded-xl bg-white text-slate-950 font-black hover:bg-blue-600 hover:text-white transition-all text-xs">
+                    REGISTER
                 </Button>
             </div>
         </div>

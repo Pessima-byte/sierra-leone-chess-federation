@@ -18,119 +18,7 @@ export default async function MembersPage() {
 
     return (
         <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
-            {/* Navigation */}
-            <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <Link href="/" className="flex items-center gap-2 group">
-                            <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-all">
-                                <ChevronLeft className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                            </div>
-                            <span className="text-sm font-medium text-muted-foreground group-hover:text-white transition-colors hidden sm:block font-bold tracking-widest uppercase text-[10px]">Back to Home</span>
-                        </Link>
-
-                        <Link href="/" className="flex items-center gap-2 border-l border-white/10 pl-6">
-                            <div className="relative w-8 h-8 md:w-10 md:h-10">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-green-500 to-blue-600 rounded-lg blur-lg opacity-50"></div>
-                                <div className="relative w-full h-full bg-slate-950 rounded-lg border border-white/10 flex items-center justify-center overflow-hidden">
-                                    <Image
-                                        src="/images/logo.png"
-                                        alt="SLCF Logo"
-                                        width={40}
-                                        height={40}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="font-black text-lg leading-none tracking-tighter italic uppercase text-white">
-                                    SLCF
-                                </span>
-                                <span className="text-[0.6rem] text-blue-400 uppercase font-black tracking-[0.2em]">
-                                    FEderation Portal
-                                </span>
-                            </div>
-                        </Link>
-                    </div>
-
-                    {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-md">
-                        {[
-                            { name: "Home", href: "/" },
-                            { name: "Calendar", href: "/calendar" },
-                            { name: "Members", href: "/members", active: true },
-                            { name: "News", href: "/news" },
-                        ].map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all duration-300 ${item.active
-                                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20 italic"
-                                    : "text-muted-foreground hover:text-white hover:bg-white/10"
-                                    }`}
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <div className="flex items-center gap-4">
-                        {session ? (
-                            <>
-                                {session?.user?.role === "ADMIN" && (
-                                    <Link href="/admin/dashboard">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="hidden md:flex rounded-full border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 font-black italic uppercase text-[10px] tracking-widest text-blue-400"
-                                        >
-                                            Admin Panel
-                                        </Button>
-                                    </Link>
-                                )}
-                                <form action={logout}>
-                                    <Button
-                                        type="submit"
-                                        size="sm"
-                                        className="hidden md:flex bg-white/5 hover:bg-red-600 text-muted-foreground hover:text-white border border-white/10 rounded-full font-black uppercase text-[10px] tracking-widest transition-all"
-                                    >
-                                        Log Out
-                                    </Button>
-                                </form>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="hidden md:flex rounded-full border-white/10 bg-white/5 hover:bg-white/10 font-bold uppercase text-[10px] tracking-widest"
-                                    >
-                                        Log In
-                                    </Button>
-                                </Link>
-                                <Link href="/login?mode=register">
-                                    <Button
-                                        size="sm"
-                                        className="hidden md:flex bg-blue-600 hover:bg-blue-500 text-white border-0 shadow-lg shadow-blue-900/20 rounded-full font-black uppercase text-[10px] tracking-widest"
-                                    >
-                                        Join Federation
-                                    </Button>
-                                </Link>
-                            </>
-                        )}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="md:hidden text-muted-foreground"
-                        >
-                            <Menu className="w-5 h-5" />
-                        </Button>
-                    </div>
-                </div>
-            </header>
-
-            <main className="pt-32 pb-24">
+            <main className="pt-24 pb-24">
                 <MembersClient members={JSON.parse(JSON.stringify(members))} />
             </main>
 
@@ -197,6 +85,6 @@ export default async function MembersPage() {
                     </div>
                 </div>
             </footer>
-        </div>
+        </div >
     )
 }

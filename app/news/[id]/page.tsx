@@ -5,7 +5,6 @@ import Link from "next/link"
 import { ChevronLeft, Calendar, User, Clock, Share2, Bookmark, Newspaper } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { NewsDetailClient } from "./news-detail-client"
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -18,83 +17,103 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
     const tags = article.tags.split(',')
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500 selection:text-white pb-24 overflow-x-hidden uppercase">
-            {/* Nav */}
-            <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/60 backdrop-blur-xl italic">
-                <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-                    <Link href="/news" className="flex items-center gap-2 group">
-                        <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-blue-600 transition-all">
-                            <ChevronLeft className="w-4 h-4 text-muted-foreground group-hover:text-white" />
-                        </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-white">Back to Terminal</span>
-                    </Link>
-                    <NewsDetailClient title={article.title} />
-                </div>
-            </header>
+        <div className="min-h-screen bg-[#020617] text-slate-100 selection:bg-blue-500/30 pb-24 overflow-x-hidden">
+            {/* Ambient Background */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 blur-[120px] rounded-full"></div>
+            </div>
 
             <main className="container mx-auto px-4 pt-32 relative z-10 max-w-4xl">
-                <Badge className="bg-blue-600 mb-6 text-white font-black uppercase tracking-widest px-4 py-1.5 rounded-full italic">
-                    {article.category} Transmission
-                </Badge>
-                <h1 className="text-4xl md:text-7xl font-black mb-10 leading-[0.9] tracking-tighter italic uppercase">
-                    {article.title}
-                </h1>
+                <Link href="/news" className="flex items-center gap-2 group mb-12 w-fit">
+                    <div className="h-10 w-10 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center group-hover:bg-blue-600 transition-all">
+                        <ChevronLeft className="w-5 h-5 text-slate-500 group-hover:text-white" />
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-white">News Archives</span>
+                </Link>
 
-                <div className="flex flex-wrap items-center gap-8 mb-12 py-8 border-y border-white/10 italic">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
-                            <User className="w-5 h-5 text-blue-400" />
+                <div className="space-y-6 mb-12">
+                    <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full">
+                        {article.category} Update
+                    </Badge>
+                    <h1 className="text-4xl md:text-7xl font-black leading-[1.1] tracking-tighter">
+                        {article.title}
+                    </h1>
+
+                    <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-white/5">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center">
+                                <User className="w-5 h-5 text-slate-400" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Reporter</p>
+                                <p className="text-sm font-black text-white uppercase">{article.author}</p>
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">Dispatcher</span>
-                            <span className="text-sm font-black text-white">{article.author}</span>
+                        <div className="h-10 w-px bg-white/5 hidden md:block"></div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center">
+                                <Calendar className="w-5 h-5 text-blue-400" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Published</p>
+                                <p className="text-sm font-black text-white uppercase">{article.date}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Calendar className="w-5 h-5 text-blue-400" />
-                        <div className="flex flex-col">
-                            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">Timestamp</span>
-                            <span className="text-sm font-black text-white">{article.date}</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-blue-400" />
-                        <div className="flex flex-col">
-                            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">Transfer Time</span>
-                            <span className="text-sm font-black text-white">{article.readTime}</span>
+                        <div className="h-10 w-px bg-white/5 hidden md:block"></div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center">
+                                <Clock className="w-5 h-5 text-emerald-400" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Read Time</p>
+                                <p className="text-sm font-black text-white uppercase">{article.readTime}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="relative aspect-video rounded-[3rem] overflow-hidden border border-white/10 mb-16">
+                <div className="relative aspect-[21/10] rounded-[2.5rem] overflow-hidden border border-white/10 mb-16 shadow-2xl">
                     <Image
                         src={article.image}
                         alt={article.title}
                         fill
                         className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
                 </div>
 
-                <div className="prose prose-invert prose-blue max-w-none">
-                    <p className="text-xl md:text-2xl font-bold leading-relaxed text-blue-400 italic mb-10 normal-case">
+                <article className="max-w-none">
+                    <p className="text-xl md:text-3xl font-medium leading-relaxed text-blue-400/90 mb-12 font-serif italic border-l-4 border-blue-500 pl-8">
                         {article.excerpt}
                     </p>
-                    <div className="space-y-6 text-white/80 normal-case text-lg font-medium leading-loose">
+                    <div className="space-y-8 text-slate-300 text-lg md:text-xl font-medium leading-loose">
                         {article.content.split('\n').map((para: string, i: number) => (
-                            <p key={i}>{para}</p>
+                            para.trim() && <p key={i}>{para.trim()}</p>
                         ))}
                     </div>
-                </div>
+                </article>
 
-                <div className="mt-16 pt-12 border-t border-white/10 italic">
-                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-4 block">Key Intel Tags:</span>
-                    <div className="flex flex-wrap gap-3">
-                        {tags.map((tag: string) => (
-                            <Badge key={tag} variant="outline" className="bg-white/5 border-white/10 text-blue-400 hover:bg-blue-600 hover:text-white transition-all rounded-xl font-black uppercase text-[10px] tracking-widest px-4 py-1.5">
-                                #{tag.trim()}
-                            </Badge>
-                        ))}
+                <div className="mt-20 pt-12 border-t border-white/5">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                        <div className="space-y-4">
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block font-serif">Topic Markers</span>
+                            <div className="flex flex-wrap gap-2">
+                                {tags.map((tag: string) => (
+                                    <Badge key={tag} variant="outline" className="bg-slate-900 border-white/5 text-slate-400 hover:text-white transition-all rounded-lg font-bold uppercase text-[9px] tracking-widest px-3 py-1">
+                                        #{tag.trim()}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <Button variant="outline" size="lg" className="rounded-xl border-white/5 bg-slate-900 h-12 hover:bg-slate-800 font-black text-[10px] uppercase tracking-widest">
+                                <Bookmark className="w-4 h-4 mr-2" /> Save Story
+                            </Button>
+                            <Button size="lg" className="rounded-xl bg-blue-600 hover:bg-blue-500 h-12 text-white font-black text-[10px] uppercase tracking-widest px-8">
+                                <Share2 className="w-4 h-4 mr-2" /> Share Transmission
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </main>

@@ -25,19 +25,17 @@ import { type NewsArticle } from "@/lib/news-data"
 import { toast } from "sonner"
 export default function NewsClient({ initialNews }: { initialNews: NewsArticle[] }) {
     const [searchQuery, setSearchQuery] = useState("")
-    const [activeCategory, setActiveCategory] = useState<'all' | 'Tournament' | 'Federation' | 'International' | 'Training'>('all')
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 6
 
     const filteredArticles = useMemo(() => {
         return initialNews.filter(article => {
-            const matchesCategory = activeCategory === 'all' || article.category === activeCategory
             const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-            return matchesCategory && matchesSearch
+            return matchesSearch
         })
-    }, [activeCategory, searchQuery, initialNews])
+    }, [searchQuery, initialNews])
 
     const totalPages = Math.ceil(filteredArticles.length / itemsPerPage)
     const paginatedArticles = filteredArticles.slice(
@@ -48,191 +46,139 @@ export default function NewsClient({ initialNews }: { initialNews: NewsArticle[]
     const featuredArticle = initialNews.find(a => a.featured) || initialNews[0]
 
     const handleSubscribe = () => {
-        toast.success("Broadcast Scheduled", {
-            description: "You are now subscribed to the SLCF News Terminal.",
-            className: "bg-slate-900 border-white/10 text-white",
+        toast.success("Subscribed to the News Feed", {
+            description: "You'll receive the latest federation updates.",
         })
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500 selection:text-white pb-24 overflow-x-hidden uppercase">
-            {/* Futuristic Background */}
+        <div className="min-h-screen bg-[#020617] text-slate-100 selection:bg-blue-500/30 pb-24 overflow-x-hidden">
+            {/* Ambient Background */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 blur-[150px] rounded-full animate-pulse-slow animation-delay-2000"></div>
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+                <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-600/10 blur-[120px] rounded-full"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay"></div>
             </div>
 
-            {/* Header */}
-            <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/60 backdrop-blur-xl italic">
-                <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <Link href="/" className="flex items-center gap-2 group">
-                            <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-all">
-                                <ChevronLeft className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-white transition-colors hidden sm:block">Back to Home</span>
-                        </Link>
+            <main className="container mx-auto px-4 pt-20 relative z-10">
+                {/* Impressive Centralized News Header */}
+                <div className="relative flex flex-col items-center justify-center text-center space-y-4 mb-16">
+                    {/* Decorative Background Elements */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-32 bg-blue-500/5 blur-[100px] pointer-events-none"></div>
 
-                        <Link href="/" className="flex items-center gap-3 group border-l border-white/10 pl-6">
-                            <div className="relative w-10 h-10">
-                                <div className="absolute inset-0 bg-blue-600 rounded-xl blur-lg opacity-40 group-hover:opacity-100 transition duration-500"></div>
-                                <div className="relative w-full h-full bg-slate-900 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
-                                    <Image
-                                        src="/images/logo.png"
-                                        alt="SLCF Logo"
-                                        width={40}
-                                        height={40}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="font-black text-xl leading-none not-italic">SLCF</span>
-                                <span className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em] not-italic">News Terminal</span>
-                            </div>
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="hidden md:flex relative group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-blue-400 transition-colors" />
-                            <Input
-                                placeholder="Search archives..."
-                                value={searchQuery}
-                                onChange={(e) => {
-                                    setSearchQuery(e.target.value)
-                                    setCurrentPage(1)
-                                }}
-                                className="pl-10 h-10 w-48 lg:w-64 bg-white/5 border-white/10 rounded-xl focus:ring-blue-500/50 transition-all focus:w-80 font-bold placeholder:italic"
-                            />
+                    <div className="relative space-y-3">
+                        <div className="flex items-center justify-center gap-4 mb-2">
+                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-blue-500/50"></div>
+                            <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/30 px-3 py-1 text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-[0_0_15px_rgba(59,130,246,0.2)] backdrop-blur-md">
+                                Federation Newsroom
+                            </Badge>
+                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-blue-500/50"></div>
                         </div>
-                        <Button
-                            onClick={handleSubscribe}
-                            variant="outline"
-                            size="sm"
-                            className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10 hidden sm:flex font-black uppercase text-[10px] tracking-widest italic"
-                        >
-                            Subscribe
-                        </Button>
+
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-none">
+                            Latest <span className="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 via-emerald-400 to-emerald-600 font-serif italic pr-2">Transmissions</span>
+                        </h1>
+
+                        <div className="flex items-center justify-center gap-3 text-slate-500 text-[9px] font-bold uppercase tracking-widest pt-2">
+                            <Sparkles className="w-3 h-3 text-blue-400 animate-pulse" />
+                            <span>Broadcasting Live from Freetown Command</span>
+                            <Sparkles className="w-3 h-3 text-blue-400 animate-pulse" />
+                        </div>
                     </div>
+
+                    <div className="w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-6"></div>
                 </div>
-            </header>
 
-            <main className="container mx-auto px-4 pt-32 relative z-10">
-                {/* Hero Featured News */}
-                {!searchQuery && activeCategory === 'all' && currentPage === 1 && (
-                    <section className="mb-20">
-                        <div className="relative group cursor-pointer overflow-hidden rounded-[3rem] border border-white/10 bg-slate-900/40 backdrop-blur-3xl aspect-[21/9]">
-                            <Image
-                                src={featuredArticle.image}
-                                alt={featuredArticle.title}
-                                fill
-                                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-
-                            <div className="absolute bottom-0 left-0 p-8 md:p-16 max-w-4xl">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <Badge className="bg-blue-600 hover:bg-blue-600 text-white font-black uppercase tracking-widest px-4 py-1 rounded-full italic">
-                                        Featured Story
-                                    </Badge>
-                                    <span className="text-xs font-black text-white/60 flex items-center gap-2 italic">
-                                        <Clock className="w-4 h-4" /> {featuredArticle.readTime}
-                                    </span>
+                {/* Hero Featured News - Compressed Split Layout */}
+                {!searchQuery && currentPage === 1 && (
+                    <section className="mb-16 group">
+                        <div className="relative overflow-hidden rounded-[2rem] bg-slate-900/40 border border-white/10 backdrop-blur-xl shadow-2xl transition-all duration-700 hover:border-blue-500/30">
+                            <div className="grid lg:grid-cols-2">
+                                <div className="relative h-[300px] lg:h-[450px] overflow-hidden">
+                                    <Image
+                                        src={featuredArticle.image}
+                                        alt={featuredArticle.title}
+                                        fill
+                                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 to-transparent lg:hidden"></div>
                                 </div>
-                                <h1 className="text-4xl md:text-7xl font-black mb-6 leading-[0.9] tracking-tighter italic uppercase group-hover:text-blue-400 transition-colors">
-                                    {featuredArticle.title}
-                                </h1>
-                                <p className="text-lg text-white/70 line-clamp-2 mb-8 max-w-2xl normal-case font-medium">
-                                    {featuredArticle.excerpt}
-                                </p>
-                                <Button size="lg" className="h-14 px-8 rounded-2xl bg-white text-slate-950 font-black hover:bg-blue-500 hover:text-white transition-all uppercase italic tracking-widest">
-                                    Read Full Transmission <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
+                                <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center space-y-5">
+                                    <div className="flex items-center gap-4">
+                                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest">
+                                            Priority Story
+                                        </Badge>
+                                        <div className="flex items-center gap-2 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                                            <Clock className="w-3 h-3" /> {featuredArticle.readTime}
+                                        </div>
+                                    </div>
+                                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight tracking-tight uppercase group-hover:text-blue-400 transition-colors">
+                                        {featuredArticle.title}
+                                    </h2>
+                                    <p className="text-base text-slate-400 font-medium leading-relaxed line-clamp-2 md:line-clamp-3">
+                                        {featuredArticle.excerpt}
+                                    </p>
+                                    <div className="flex items-center justify-between pt-5 border-t border-white/5">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                                <User className="w-4 h-4 text-blue-400" />
+                                            </div>
+                                            <div>
+                                                <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Author</p>
+                                                <p className="text-xs font-black text-white uppercase">{featuredArticle.author}</p>
+                                            </div>
+                                        </div>
+                                        <Link href={`/news/${featuredArticle.id}`}>
+                                            <Button className="rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest h-11 px-6 shadow-xl shadow-blue-600/20 transition-all active:scale-95">
+                                                Read More <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
                 )}
 
-                {/* News Controls */}
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 italic">
-                    <div className="flex flex-wrap items-center gap-2 p-1 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
-                        {['all', 'Tournament', 'Federation', 'International', 'Training'].map((cat) => (
-                            <Button
-                                key={cat}
-                                onClick={() => {
-                                    setActiveCategory(cat as any)
-                                    setCurrentPage(1)
-                                }}
-                                variant={activeCategory === cat ? 'default' : 'ghost'}
-                                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest h-10 transition-all ${activeCategory === cat ? 'bg-blue-600 text-white' : 'text-muted-foreground'}`}
-                            >
-                                {cat}
-                            </Button>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <Button
-                            onClick={() => toast.info("Displaying Trending Transmissions", { className: "bg-slate-900 border-white/10 text-white" })}
-                            variant="outline"
-                            className="h-12 px-6 rounded-xl border-white/10 bg-white/5 font-black uppercase text-[10px] tracking-widest"
-                        >
-                            <TrendingUp className="w-4 h-4 mr-2 text-blue-400" /> Viral
-                        </Button>
-                        <Button
-                            onClick={() => toast.info("Accessing Saved Encrypts", { className: "bg-slate-900 border-white/10 text-white" })}
-                            variant="outline"
-                            className="h-12 px-6 rounded-xl border-white/10 bg-white/5 font-black uppercase text-[10px] tracking-widest"
-                        >
-                            <Bookmark className="w-4 h-4 mr-2 text-purple-400" /> Saved
-                        </Button>
-                    </div>
-                </div>
-
                 {/* News Grid */}
                 {paginatedArticles.length > 0 ? (
-                    <div className="space-y-12">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="space-y-16">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                             {paginatedArticles.map((article) => (
                                 <NewsCard key={article.id} article={article} />
                             ))}
                         </div>
 
                         {/* Pagination */}
-                        <div className="mt-20 p-8 bg-slate-900/30 backdrop-blur-md border border-white/10 rounded-[3rem] flex items-center justify-between shadow-2xl italic">
-                            <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                                Transmission Page <span className="text-white">{currentPage}</span> of <span className="text-white">{totalPages}</span>
-                            </div>
+                        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                                Page <span className="text-white">{currentPage}</span> / <span className="text-white">{totalPages}</span>
+                            </p>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    variant="outline"
-                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                                     disabled={currentPage === 1}
-                                    className="h-11 rounded-xl border-white/10 bg-white/5 font-black uppercase text-[10px] tracking-widest disabled:opacity-30"
+                                    className="h-10 px-4 rounded-lg font-bold text-[11px] uppercase tracking-widest disabled:opacity-30 hover:bg-white/5"
                                 >
                                     Previous
                                 </Button>
                                 <div className="flex gap-1">
                                     {Array.from({ length: totalPages }, (_, i) => (
-                                        <Button
+                                        <button
                                             key={i + 1}
                                             onClick={() => setCurrentPage(i + 1)}
-                                            variant="ghost"
-                                            className={`h-11 w-11 rounded-xl font-black text-[10px] transition-all ${currentPage === i + 1 ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/30 ring-2 ring-blue-500/20' : 'text-muted-foreground hover:bg-white/5'}`}
+                                            className={`h-10 w-10 rounded-lg font-black text-[11px] transition-all ${currentPage === i + 1 ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                                         >
                                             {i + 1}
-                                        </Button>
+                                        </button>
                                     ))}
                                 </div>
                                 <Button
-                                    variant="outline"
-                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                                     disabled={currentPage === totalPages || totalPages === 0}
-                                    className="h-11 rounded-xl border-white/10 bg-white/5 font-black uppercase text-[10px] tracking-widest disabled:opacity-30"
+                                    className="h-10 px-4 rounded-lg font-bold text-[11px] uppercase tracking-widest disabled:opacity-30 hover:bg-white/5"
                                 >
                                     Next
                                 </Button>
@@ -240,14 +186,16 @@ export default function NewsClient({ initialNews }: { initialNews: NewsArticle[]
                         </div>
                     </div>
                 ) : (
-                    <div className="py-32 text-center rounded-[3rem] border border-dashed border-white/10 bg-white/5 italic">
-                        <Newspaper className="w-16 h-16 text-white/10 mx-auto mb-6" />
-                        <h3 className="text-2xl font-black mb-2 uppercase tracking-tighter">No transmissions found</h3>
-                        <p className="text-muted-foreground normal-case font-medium">Adjust your filters or search query to find more news.</p>
+                    <div className="py-32 text-center rounded-[2.5rem] bg-slate-900/20 border border-dashed border-white/10">
+                        <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <Newspaper className="w-8 h-8 text-slate-500" />
+                        </div>
+                        <h3 className="text-2xl font-black mb-2 uppercase">No articles matched your search</h3>
+                        <p className="text-slate-500 font-medium">Try adjusting your search criteria or reset the terminal.</p>
                         <Button
                             variant="link"
-                            className="text-blue-400 font-black mt-4 uppercase tracking-[0.2em] text-[10px]"
-                            onClick={() => { setActiveCategory('all'); setSearchQuery(""); setCurrentPage(1); }}
+                            className="text-blue-400 font-black mt-4 uppercase tracking-widest text-[11px]"
+                            onClick={() => { setSearchQuery(""); setCurrentPage(1); }}
                         >
                             Reset Terminal
                         </Button>
@@ -260,9 +208,9 @@ export default function NewsClient({ initialNews }: { initialNews: NewsArticle[]
 
 function NewsCard({ article }: { article: NewsArticle }) {
     return (
-        <Link href={`/news/${article.id}`}>
-            <Card className="group relative bg-slate-900/40 border-white/10 rounded-[2.5rem] overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.1)] backdrop-blur-xl cursor-pointer h-full">
-                <div className="relative h-60 overflow-hidden">
+        <Link href={`/news/${article.id}`} className="group block h-full">
+            <div className="bg-slate-900/40 border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 hover:border-blue-500/30 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)] flex flex-col h-full backdrop-blur-xl">
+                <div className="relative h-56 overflow-hidden">
                     <Image
                         src={article.image}
                         alt={article.title}
@@ -270,62 +218,46 @@ function NewsCard({ article }: { article: NewsArticle }) {
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-
-                    <div className="absolute top-6 left-6">
-                        <Badge className="bg-white/10 backdrop-blur-md border-white/10 text-[10px] font-black uppercase tracking-widest rounded-full py-1.5 px-3 italic">
+                    <div className="absolute top-4 left-4">
+                        <Badge className="bg-slate-950/60 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest rounded-full py-1.5 px-3">
                             {article.category}
                         </Badge>
                     </div>
+                </div>
 
-                    <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-[10px] font-black text-white/70 uppercase italic">
-                            <Calendar className="w-3 h-3 text-blue-400" />
-                            {new Date(article.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                <div className="p-8 flex flex-col flex-1 space-y-4">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                        <div className="flex items-center gap-2">
+                            <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                            {new Date(article.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] font-black text-white/70 uppercase italic">
-                            <Clock className="w-3 h-3 text-blue-400" />
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-emerald-400" />
                             {article.readTime}
                         </div>
                     </div>
-                </div>
 
-                <CardContent className="p-8">
-                    <h3 className="text-2xl font-black mb-4 leading-tight group-hover:text-blue-400 transition-colors uppercase tracking-tight line-clamp-2 italic">
+                    <h3 className="text-xl font-black leading-tight uppercase tracking-tight group-hover:text-blue-400 transition-colors line-clamp-2">
                         {article.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-8 normal-case font-medium opacity-70">
+
+                    <p className="text-sm text-slate-400 font-medium leading-relaxed line-clamp-3">
                         {article.excerpt}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 mb-8">
-                        {article.tags.slice(0, 3).map(tag => (
-                            <span key={tag} className="text-[9px] font-black uppercase tracking-widest text-blue-400/60 transition-colors group-hover:text-blue-400 italic">
-                                #{tag}
-                            </span>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-6 border-t border-white/5 italic">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
-                                <User className="w-4 h-4 text-blue-400" />
+                    <div className="pt-6 mt-auto border-t border-white/5 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded-full bg-slate-800 border border-white/5 flex items-center justify-center">
+                                <User className="w-3.5 h-3.5 text-slate-400" />
                             </div>
-                            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{article.author}</span>
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{article.author}</span>
                         </div>
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                toast.success("Broadcast Shared", { description: "Link copied to clipboard.", className: "bg-slate-900 border-white/10 text-white" })
-                            }}
-                            variant="ghost"
-                            size="icon"
-                            className="rounded-full hover:bg-blue-600/20 text-muted-foreground hover:text-blue-400 transition-all"
-                        >
-                            <Share2 className="w-4 h-4" />
-                        </Button>
+                        <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                            <ArrowRight className="w-4 h-4 text-white" />
+                        </div>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </Link>
     )
 }

@@ -1,0 +1,83 @@
+import { getSession, logout } from "@/app/actions/auth"
+import Link from "next/link"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { NavLinks } from "./nav-links"
+import { Menu, LogOut, User } from "lucide-react"
+
+export default async function Navbar() {
+    const session = await getSession()
+
+    return (
+        <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-slate-950/60 backdrop-blur-xl supports-[backdrop-filter]:bg-slate-950/60">
+            <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+                {/* Branding */}
+                <Link href="/" className="flex items-center gap-3 group">
+                    <div className="relative w-10 h-10">
+                        <div className="absolute inset-0 bg-blue-600 rounded-xl blur-lg opacity-40 group-hover:opacity-100 transition duration-500"></div>
+                        <div className="relative w-full h-full bg-slate-900 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
+                            <Image
+                                src="/images/logo.png"
+                                alt="SLCF Logo"
+                                width={40}
+                                height={40}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="font-bold text-lg leading-none tracking-tight text-white uppercase">SLCF</span>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">Sierra Leone Chess</span>
+                    </div>
+                </Link>
+
+                {/* Center Nav */}
+                <NavLinks />
+
+                {/* Auth Buttons */}
+                <div className="flex items-center gap-2">
+                    {session ? (
+                        <div className="hidden md:flex items-center bg-white/5 backdrop-blur-xl rounded-full border border-white/10 p-1 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                            {session.user.role === "ADMIN" && (
+                                <Link href="/admin/dashboard">
+                                    <Button variant="ghost" size="sm" className="h-8 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 hover:text-white hover:bg-blue-500/40 transition-all px-4">
+                                        Admin
+                                    </Button>
+                                </Link>
+                            )}
+                            <Link href="/profile">
+                                <Button variant="ghost" size="sm" className="h-8 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-blue-500/20 hover:text-blue-200 transition-all px-4 flex items-center gap-2 group">
+                                    <User className="w-3.5 h-3.5 text-blue-400 group-hover:text-blue-300" />
+                                    {session.user.name?.split(' ')[0] || "Profile"}
+                                </Button>
+                            </Link>
+                            <div className="w-px h-4 bg-white/15 mx-1"></div>
+                            <form action={logout}>
+                                <Button type="submit" variant="ghost" title="Log Out" size="sm" className="h-8 w-8 rounded-full p-0 text-slate-400 hover:text-red-400 hover:bg-red-500/20 transition-all flex items-center justify-center">
+                                    <LogOut className="w-3.5 h-3.5" />
+                                    <span className="sr-only">Log Out</span>
+                                </Button>
+                            </form>
+                        </div>
+                    ) : (
+                        <>
+                            <Link href="/login">
+                                <Button variant="ghost" className="hidden md:flex rounded-full text-sm font-bold text-white hover:bg-white/10">
+                                    Log In
+                                </Button>
+                            </Link>
+                            <Link href="/login?mode=register">
+                                <Button className="hidden md:flex bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-400 hover:to-blue-500 text-white border-0 shadow-lg shadow-blue-500/20 rounded-full text-sm font-bold px-6 transition-all hover:scale-105 active:scale-95">
+                                    Join Federation
+                                </Button>
+                            </Link>
+                        </>
+                    )}
+                    <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-white/10 rounded-full">
+                        <Menu className="w-6 h-6" />
+                    </Button>
+                </div>
+            </div>
+        </header>
+    )
+}
