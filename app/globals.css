@@ -94,9 +94,9 @@
   html {
     @apply scroll-smooth;
     -webkit-tap-highlight-color: transparent;
-    /* Prevent Safari from bouncing the whole page area */
-    height: 100%;
-    overflow: hidden;
+    /* Allow natural document scrolling which is better for Safari momentum */
+    height: auto;
+    overflow-x: hidden;
   }
 
   * {
@@ -105,15 +105,11 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    /* Momentum scrolling for iOS needs the body to be the scrolling container or a wrapper */
-    height: 100%;
-    overflow-y: auto;
+    height: auto;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
     position: relative;
     width: 100%;
-    /* Hardware acceleration */
-    transform: translate3d(0, 0, 0);
+    /* Hardware acceleration - removed from body to avoid massive composite layers */
     -webkit-font-smoothing: antialiased;
   }
 
@@ -128,8 +124,13 @@
     .backdrop-blur {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      background-color: rgba(15, 23, 42, 0.95) !important;
-      /* Solid fallback */
+      background-color: rgba(15, 23, 42, 0.98) !important;
+    }
+
+    /* Also simplify shadows on mobile */
+    .shadow-2xl,
+    .shadow-xl {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
     }
   }
 }

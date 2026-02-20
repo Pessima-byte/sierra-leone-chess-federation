@@ -172,52 +172,53 @@ export default function TournamentCalendar() {
             <motion.div
               key={tournament.id}
               variants={itemVariants}
-              className={`relative group overflow-hidden transition-all duration-500 ${activeIndex === index ? "scale-[1.02]" : ""
+              className={`relative group overflow-hidden transition-all duration-300 ${activeIndex === index ? "scale-[1.01]" : ""
                 }`}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
+              style={{ transform: 'translateZ(0)' }}
             >
-              {/* Animated border glow on hover */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-30 transition-all duration-700 blur-xl"></div>
+              {/* Dynamic border glow - Desktop Only */}
+              <div className="hidden lg:block absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-30 transition-all duration-700 blur-xl"></div>
 
-              <div className="relative bg-slate-900/40 backdrop-blur-2xl rounded-2xl border border-white/10 p-6 transition-all duration-300 group-hover:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.25)]">
+              <div className="relative bg-slate-900/60 backdrop-blur-md lg:backdrop-blur-2xl rounded-2xl border border-white/10 p-5 md:p-6 transition-all duration-300 hover:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.15)] transform-gpu">
                 {/* Status Badge */}
                 <div className="absolute top-0 right-0">
                   <div
                     className={`
                     ${tournament.type === "international" ? "bg-blue-600/90" : "bg-green-600/90"} 
-                    backdrop-blur-md text-white text-[10px] font-black px-4 py-1.5 rounded-bl-2xl uppercase tracking-[0.2em] border-b border-l border-white/10
+                    backdrop-blur-md text-white text-[9px] font-black px-4 py-1.5 rounded-bl-2xl uppercase tracking-[0.2em] border-b border-l border-white/10
                   `}
                   >
                     {tournament.type}
                   </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row md:items-center gap-8">
+                <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
                   {/* Left side with icon */}
                   <div className="flex-shrink-0">
-                    <div className="relative h-16 w-16">
+                    <div className="relative h-14 w-14 md:h-16 md:w-16">
                       <div
-                        className={`absolute inset-0 ${tournament.type === "international" ? "bg-blue-500" : "bg-green-500"} rounded-2xl opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-300`}
+                        className={`absolute inset-0 ${tournament.type === "international" ? "bg-blue-500" : "bg-green-500"} rounded-2xl opacity-10 blur-lg group-hover:opacity-30 transition-opacity duration-300`}
                       ></div>
                       <div
-                        className={`relative h-full w-full flex items-center justify-center ${tournament.type === "international" ? "bg-blue-600/20 shadow-[inset_0_0_20px_rgba(59,130,246,0.3)]" : "bg-green-600/20 shadow-[inset_0_0_20px_rgba(34,197,94,0.3)]"} border border-white/10 rounded-2xl`}
+                        className={`relative h-full w-full flex items-center justify-center ${tournament.type === "international" ? "bg-blue-600/20" : "bg-green-600/20"} border border-white/10 rounded-2xl`}
                       >
                         {tournament.category === "women" ? (
-                          <Users className="h-7 w-7 text-white" />
+                          <Users className="h-6 w-6 md:h-7 md:w-7 text-white" />
                         ) : tournament.category === "junior" ? (
-                          <Award className="h-7 w-7 text-white" />
+                          <Award className="h-6 w-6 md:h-7 md:w-7 text-white" />
                         ) : (
-                          <Trophy className="h-7 w-7 text-white" />
+                          <Trophy className="h-6 w-6 md:h-7 md:w-7 text-white" />
                         )}
                       </div>
                     </div>
                   </div>
 
                   {/* Middle content */}
-                  <div className="flex-grow space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                      <h3 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">
+                  <div className="flex-grow space-y-3 md:space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                      <h3 className="text-xl md:text-2xl font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">
                         {tournament.name}
                       </h3>
                       <div className="flex gap-2">
@@ -228,22 +229,22 @@ export default function TournamentCalendar() {
                     </div>
 
                     <div className="flex flex-wrap gap-x-6 gap-y-2">
-                      <div className="flex items-center text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <div className="flex items-center text-slate-400 text-[10px] md:text-xs font-semibold uppercase tracking-wider">
                         <MapPin className="h-3.5 w-3.5 mr-2 text-blue-500" />
                         {tournament.location}
                       </div>
-                      <div className="flex items-center text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <div className="flex items-center text-slate-400 text-[10px] md:text-xs font-semibold uppercase tracking-wider">
                         <Clock className="h-3.5 w-3.5 mr-2 text-cyan-400" />
                         {tournament.date}
                       </div>
                     </div>
 
-                    <p className="text-slate-400 text-sm leading-relaxed max-w-2xl">{tournament.description}</p>
+                    <p className="text-slate-400 text-xs md:text-sm leading-relaxed max-w-2xl line-clamp-2 md:line-clamp-none">{tournament.description}</p>
                   </div>
 
                   {/* Right side with button */}
-                  <div className="flex-shrink-0">
-                    <Button asChild className="h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase tracking-widest shadow-lg shadow-blue-900/20 border-0 transition-all active:scale-95">
+                  <div className="flex-shrink-0 pt-2 md:pt-0">
+                    <Button asChild className="w-full md:w-auto h-11 md:h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase tracking-widest shadow-lg shadow-blue-900/20 border-0 transition-all active:scale-95 text-xs">
                       <a href={tournament.registrationLink}>
                         Register
                         <ChevronRight className="h-4 w-4 ml-2 transform group-hover:translate-x-1 transition-transform" />

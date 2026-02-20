@@ -20,6 +20,7 @@ export default function Navbar() {
                                 alt="SLCF Logo"
                                 width={40}
                                 height={40}
+                                priority
                                 className="w-full h-full object-cover"
                             />
                         </div>

@@ -97,13 +97,13 @@ export default async function Home() {
           className="relative min-h-screen flex items-center pt-20 overflow-hidden"
         >
           {/* Background Effects */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-[0.03]"></div>
+          <div className="absolute inset-0 z-0 transform-gpu">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent transform-gpu"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-[0.03] transform-gpu"></div>
 
-            {/* Animated Orbs */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-[100px] animate-pulse-slow"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse-slow delay-1000"></div>
+            {/* Animated Orbs - Desktop Only */}
+            <div className="hidden lg:block absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-[100px] animate-pulse-slow transform-gpu"></div>
+            <div className="hidden lg:block absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse-slow delay-1000 transform-gpu"></div>
           </div>
 
           <div className="container relative z-10 mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
@@ -255,7 +255,7 @@ export default async function Home() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4 mt-8">
                     <div className="aspect-[4/5] bg-slate-900 rounded-2xl border border-white/5 overflow-hidden relative group">
-                      <Image src="/images/player1.png" alt="Player" fill className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Image src="/images/player1.png" alt="Player" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent"></div>
                       <div className="absolute bottom-4 left-4">
                         <div className="text-sm font-bold">Community</div>
@@ -273,7 +273,7 @@ export default async function Home() {
                       <Trophy className="w-12 h-12 text-green-500" />
                     </div>
                     <div className="aspect-[4/5] bg-slate-900 rounded-2xl border border-white/5 overflow-hidden relative group">
-                      <Image src="/images/player2.png" alt="Player" fill className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Image src="/images/player2.png" alt="Player" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent"></div>
                       <div className="absolute bottom-4 left-4">
                         <div className="text-sm font-bold">Excellence</div>
@@ -316,7 +316,7 @@ export default async function Home() {
                         style={{ transform: 'translateZ(0)' }}
                       >
                         <div className="h-44 relative overflow-hidden">
-                          <Image src={event.image} alt={event.title} fill className="object-cover transition-transform duration-700 group-hover/card:scale-110" />
+                          <Image src={event.image} alt={event.title} fill sizes="(max-width: 768px) 100vw, 350px" className="object-cover transition-transform duration-700 group-hover/card:scale-110" />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                           <div className="absolute top-4 left-4">
                             <span className={`px-3 py-1 ${event.tagColor} backdrop-blur-md text-white text-[10px] font-bold rounded-full uppercase tracking-widest border border-white/10`}>
@@ -420,7 +420,7 @@ export default async function Home() {
                       <div className="flex -space-x-2">
                         {[1, 2, 3, 4].map((i) => (
                           <div key={i} className="w-10 h-10 rounded-full border border-slate-900 bg-slate-800 overflow-hidden relative">
-                            <Image src={`/images/player${i}.png`} alt="User" fill className="object-cover" />
+                            <Image src={`/images/player${i}.png`} alt="User" fill sizes="40px" className="object-cover" />
                           </div>
                         ))}
                       </div>
@@ -436,6 +436,7 @@ export default async function Home() {
                         src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=1000"
                         alt="Professional Chess Set"
                         fill
+                        sizes="(max-width: 1024px) 100vw, 450px"
                         className="object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 to-transparent"></div>

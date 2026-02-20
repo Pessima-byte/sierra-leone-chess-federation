@@ -28,17 +28,22 @@ html {
         `}</style>
       </head>
       <body className="antialiased selection:bg-blue-500/30 text-white bg-[#0f172a]">
-        {/* Extremely vibrant, colorful blue background to remove blackness completely */}
-        <div className="fixed inset-0 z-[-1] pointer-events-none bg-[url('/grid.svg')] opacity-[0.06] transform-gpu"></div>
-        <div className="fixed inset-0 z-[-2] pointer-events-none bg-[linear-gradient(to_bottom_right,#1e3a8a,#312e81,#020617)] transform-gpu"></div>
-        <div
-          className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] z-[-2] bg-blue-500/30 blur-[150px] rounded-full transform-gpu"
-          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-        ></div>
-        <div
-          className="fixed top-[20%] right-[-10%] w-[50%] h-[50%] z-[-2] bg-emerald-500/20 blur-[150px] rounded-full transform-gpu"
-          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-        ></div>
+        {/* Simplified background for mobile to improve scrolling performance */}
+        <div className="fixed inset-0 z-[-1] pointer-events-none bg-[url('/grid.svg')] opacity-[0.03] transform-gpu"></div>
+        <div className="fixed inset-0 z-[-2] pointer-events-none bg-slate-950 transform-gpu"></div>
+        <div className="fixed inset-0 z-[-3] pointer-events-none bg-[linear-gradient(to_bottom_right,#1e3a8a,#020617)] opacity-40 transform-gpu lg:opacity-100"></div>
+
+        {/* Only show expensive blur orbs on desktop */}
+        <div className="hidden lg:block">
+          <div
+            className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] z-[-2] bg-blue-500/20 blur-[150px] rounded-full transform-gpu"
+            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+          ></div>
+          <div
+            className="fixed top-[20%] right-[-10%] w-[50%] h-[50%] z-[-2] bg-emerald-500/15 blur-[150px] rounded-full transform-gpu"
+            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+          ></div>
+        </div>
         <Navbar />
         {children}
         <Toaster position="top-right" theme="dark" />
