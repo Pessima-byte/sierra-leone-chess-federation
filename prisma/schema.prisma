@@ -95,9 +95,3 @@ model NewsArticle {
   tags     String
   featured Boolean  @default(false)
 }
-
-model SystemSettings {
-  id             String  @id @default("default")
-  lockdownActive Boolean @default(false)
-  lockdownReason String?
-}

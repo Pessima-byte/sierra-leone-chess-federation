@@ -1,13 +1,11 @@
-import { getMembers, getEvents, getNews, getSystemSettings } from "@/lib/queries"
+import { getMembers, getEvents, getNews } from "@/lib/queries"
 import { Users, Calendar, Newspaper, Trophy } from "lucide-react"
 import { RecordGameDialog } from "../components/record-game-dialog"
-import { LockdownToggle } from "../components/lockdown-toggle"
 
 export default async function AdminDashboard() {
     const members = await getMembers()
     const events = await getEvents()
     const news = await getNews()
-    const settings = await getSystemSettings()
 
     const stats = [
         {
@@ -44,10 +42,7 @@ export default async function AdminDashboard() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-black italic tracking-tight">OVERVIEW</h1>
-                <div className="flex items-center gap-3">
-                    <LockdownToggle initialStatus={settings.lockdownActive} />
-                    <RecordGameDialog members={members} />
-                </div>
+                <RecordGameDialog members={members} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

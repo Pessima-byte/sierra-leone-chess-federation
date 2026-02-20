@@ -357,22 +357,3 @@ export async function deleteNews(id: string) {
         return { error: "Failed to delete news" };
     }
 }
-
-export async function toggleLockdown() {
-    try {
-        await checkAdmin();
-        const settings = await db.systemSettings.findUnique({ where: { id: "default" } });
-        const newStatus = !settings?.lockdownActive;
-
-        await db.systemSettings.upsert({
-            where: { id: "default" },
-            update: { lockdownActive: newStatus },
-            create: { id: "default", lockdownActive: newStatus }
-        });
-
-        revalidatePath("/", "layout");
-        return { success: true, active: newStatus };
-    } catch (error) {
-        return { error: "Failed to toggle lockdown" };
-    }
-}

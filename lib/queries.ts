@@ -61,17 +61,3 @@ export async function getNewsArticleById(id: string) {
         where: { id }
     })
 }
-
-export async function getSystemSettings() {
-    let settings = await db.systemSettings.findUnique({
-        where: { id: "default" }
-    })
-
-    if (!settings) {
-        settings = await db.systemSettings.create({
-            data: { id: "default", lockdownActive: false }
-        })
-    }
-
-    return settings
-}
