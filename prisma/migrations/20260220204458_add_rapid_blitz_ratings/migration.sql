@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Member" ADD COLUMN     "blitzRating" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "rapidRating" INTEGER NOT NULL DEFAULT 0;

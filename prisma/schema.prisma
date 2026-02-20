@@ -13,6 +13,8 @@ model Member {
   name        String
   title       String
   rating      Int
+  rapidRating Int      @default(0)
+  blitzRating Int      @default(0)
   club        String
   status      String
   joined      String

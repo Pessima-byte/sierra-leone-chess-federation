@@ -33,6 +33,8 @@ interface Member {
     name: string
     title: string
     rating: number
+    rapidRating: number
+    blitzRating: number
     club: string
     status: string
     joined: string
@@ -198,8 +200,8 @@ export default function MembersClient({ members }: { members: Member[] }) {
                             <div className="col-span-1">ID</div>
                             <div className="col-span-4">Member</div>
                             <div className="col-span-2 text-center">Title</div>
-                            <div className="col-span-2 text-center">Elo Rating</div>
-                            <div className="col-span-2 text-center">Status</div>
+                            <div className="col-span-3 text-center">Ratings (STD/R/B)</div>
+                            <div className="col-span-1 text-center">Status</div>
                             <div className="col-span-1 text-right">Action</div>
                         </div>
 
@@ -246,19 +248,31 @@ export default function MembersClient({ members }: { members: Member[] }) {
                                         )}
                                     </div>
 
-                                    <div className="md:col-span-2 flex justify-between md:justify-center items-center px-4 md:px-0">
-                                        <span className="md:hidden text-[10px] uppercase tracking-widest font-black text-slate-600">Rating</span>
-                                        <div className="flex items-center gap-2">
-                                            <Trophy className="w-4 h-4 text-yellow-500" />
-                                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">{member.rating}</span>
+                                    <div className="md:col-span-3 flex justify-between md:justify-center items-center px-4 md:px-0">
+                                        <span className="md:hidden text-[10px] uppercase tracking-widest font-black text-slate-600">Ratings</span>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter">STD</span>
+                                                <span className="text-sm font-black text-blue-400">{member.rating > 0 ? member.rating : '-'}</span>
+                                            </div>
+                                            <div className="w-px h-6 bg-white/5"></div>
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter">RAPID</span>
+                                                <span className="text-sm font-black text-emerald-400">{member.rapidRating > 0 ? member.rapidRating : '-'}</span>
+                                            </div>
+                                            <div className="w-px h-6 bg-white/5"></div>
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter">BLITZ</span>
+                                                <span className="text-sm font-black text-purple-400">{member.blitzRating > 0 ? member.blitzRating : '-'}</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="md:col-span-2 flex justify-between md:justify-center items-center px-4 md:px-0">
+                                    <div className="md:col-span-1 flex justify-between md:justify-center items-center px-4 md:px-0">
                                         <span className="md:hidden text-[10px] uppercase tracking-widest font-black text-slate-600">Status</span>
-                                        <Badge variant="outline" className={`bg-black/50 border-white/10 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1 ${member.status === 'Active' ? 'text-green-400 border-green-500/20 shadow-[0_0_10px_rgba(74,222,128,0.1)]' : 'text-red-400 border-red-500/20'}`}>
+                                        <Badge variant="outline" className={`bg-black/50 border-white/10 text-[9px] font-black uppercase tracking-[0.2em] px-2 py-1 ${member.status === 'Active' ? 'text-green-400 border-green-500/20' : 'text-red-400 border-red-500/20'}`}>
                                             <div className={`w-1.5 h-1.5 rounded-full mr-1.5 inline-block ${member.status === 'Active' ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                                            {member.status}
+                                            {member.status === 'Active' ? 'ACT' : 'OFF'}
                                         </Badge>
                                     </div>
 
@@ -320,18 +334,18 @@ export default function MembersClient({ members }: { members: Member[] }) {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between p-4 bg-black/40 rounded-2xl border border-white/5 drop-shadow-md">
-                                        <div className="space-y-1">
-                                            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Global Rating</div>
-                                            <div className="flex items-center gap-2">
-                                                <Trophy className="w-4 h-4 text-yellow-500" />
-                                                <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">{member.rating}</span>
-                                            </div>
+                                    <div className="grid grid-cols-3 gap-2 p-4 bg-black/40 rounded-2xl border border-white/5 drop-shadow-md">
+                                        <div className="flex flex-col items-center">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Standard</div>
+                                            <div className="text-lg font-black text-blue-400">{member.rating > 0 ? member.rating : '-'}</div>
                                         </div>
-                                        <div className="h-10 w-px bg-white/10"></div>
-                                        <div className="space-y-1 text-right">
-                                            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Active Since</div>
-                                            <div className="text-lg font-black text-white">{member.joined}</div>
+                                        <div className="flex flex-col items-center border-x border-white/5">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Rapid</div>
+                                            <div className="text-lg font-black text-emerald-400">{member.rapidRating > 0 ? member.rapidRating : '-'}</div>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Blitz</div>
+                                            <div className="text-lg font-black text-purple-400">{member.blitzRating > 0 ? member.blitzRating : '-'}</div>
                                         </div>
                                     </div>
                                 </div>
