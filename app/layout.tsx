@@ -29,10 +29,16 @@ html {
       </head>
       <body className="antialiased selection:bg-blue-500/30 text-white bg-[#0f172a]">
         {/* Extremely vibrant, colorful blue background to remove blackness completely */}
-        <div className="fixed inset-0 z-[-1] pointer-events-none bg-[url('/grid.svg')] opacity-[0.06]"></div>
-        <div className="fixed inset-0 z-[-2] pointer-events-none bg-[linear-gradient(to_bottom_right,#1e3a8a,#312e81,#020617)]"></div>
-        <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] z-[-2] bg-blue-500/30 blur-[150px] rounded-full"></div>
-        <div className="fixed top-[20%] right-[-10%] w-[50%] h-[50%] z-[-2] bg-emerald-500/20 blur-[150px] rounded-full"></div>
+        <div className="fixed inset-0 z-[-1] pointer-events-none bg-[url('/grid.svg')] opacity-[0.06] transform-gpu"></div>
+        <div className="fixed inset-0 z-[-2] pointer-events-none bg-[linear-gradient(to_bottom_right,#1e3a8a,#312e81,#020617)] transform-gpu"></div>
+        <div
+          className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] z-[-2] bg-blue-500/30 blur-[150px] rounded-full transform-gpu"
+          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+        ></div>
+        <div
+          className="fixed top-[20%] right-[-10%] w-[50%] h-[50%] z-[-2] bg-emerald-500/20 blur-[150px] rounded-full transform-gpu"
+          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+        ></div>
         <Navbar />
         {children}
         <Toaster position="top-right" theme="dark" />

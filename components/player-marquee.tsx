@@ -59,7 +59,10 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                             href={`/members/${player.id}`}
                             className="block w-64 md:w-80 shrink-0"
                         >
-                            <div className="group relative bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] hover:-translate-y-2">
+                            <div
+                                className="group relative bg-slate-900/60 backdrop-blur-md rounded-[2.5rem] overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] hover:-translate-y-2 transform-gpu"
+                                style={{ transform: 'translateZ(0)' }}
+                            >
                                 {/* Image Container */}
                                 <div className="relative h-64 md:h-80 overflow-hidden">
                                     <Image

@@ -91,12 +91,26 @@
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    /* Force hardware acceleration for the whole body to ensure smooth layer compositing */
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Enable momentum scrolling for iOS */
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
   }
 }
 

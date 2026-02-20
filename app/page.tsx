@@ -309,7 +309,11 @@ export default async function Home() {
                 {[0, 1].map((setIndex) => (
                   <div key={setIndex} className="flex gap-6 pr-6" aria-hidden={setIndex === 1}>
                     {upcomingEvents.map((event, i) => (
-                      <div key={i} className="w-[300px] md:w-[350px] shrink-0 relative group/card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 backdrop-blur-xl hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)]">
+                      <div
+                        key={i}
+                        className="w-[300px] md:w-[350px] shrink-0 relative group/card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 backdrop-blur-md hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)] transform-gpu"
+                        style={{ transform: 'translateZ(0)' }}
+                      >
                         <div className="h-44 relative overflow-hidden">
                           <Image src={event.image} alt={event.title} fill className="object-cover transition-transform duration-700 group-hover/card:scale-110" />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
