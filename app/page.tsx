@@ -182,12 +182,13 @@ export default async function Home() {
 
                 {/* Glass Card */}
                 <div className="absolute inset-0 z-10 bg-slate-950/50 backdrop-blur-md rounded-2xl border border-white/10 p-2 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500">
-                  <div className="relative h-full w-full rounded-xl overflow-hidden">
+                  <div className="relative h-full w-full rounded-xl overflow-hidden bg-slate-900">
                     <Image
                       src="/images/chess-hero.png"
                       alt="Chess Board"
                       fill
                       priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>

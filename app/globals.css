@@ -94,6 +94,9 @@
   html {
     @apply scroll-smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Prevent Safari from bouncing the whole page area */
+    height: 100%;
+    overflow: hidden;
   }
 
   * {
@@ -102,15 +105,32 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    /* Force hardware acceleration for the whole body to ensure smooth layer compositing */
-    transform: translateZ(0);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* Enable momentum scrolling for iOS */
-    -webkit-overflow-scrolling: touch;
+    /* Momentum scrolling for iOS needs the body to be the scrolling container or a wrapper */
+    height: 100%;
+    overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     position: relative;
     width: 100%;
+    /* Hardware acceleration */
+    transform: translate3d(0, 0, 0);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Aggressive optimization: Disable expensive backdrop-blur on iPad/Mobile 
+     Safari particularly struggles with repaint on blurred areas during scroll */
+  @media (max-width: 1024px) {
+
+    .backdrop-blur-xl,
+    .backdrop-blur-lg,
+    .backdrop-blur-md,
+    .backdrop-blur-sm,
+    .backdrop-blur {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background-color: rgba(15, 23, 42, 0.95) !important;
+      /* Solid fallback */
+    }
   }
 }
 
