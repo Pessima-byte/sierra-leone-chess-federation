@@ -137,7 +137,9 @@ export async function logout() {
     redirect("/"); // Changed back to home page from placeholder
 }
 
-export async function getSession() {
+import { cache } from "react";
+
+export const getSession = cache(async () => {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
@@ -157,4 +159,4 @@ export async function getSession() {
     } catch {
         return null;
     }
-}
+});

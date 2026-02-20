@@ -4,6 +4,31 @@ import { revalidatePath } from "next/cache";
 import db from "@/lib/db";
 import { getSession } from "./auth";
 import { z } from "zod";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
+
+export async function uploadPlayerImage(formData: FormData) {
+    try {
+        await checkAdmin();
+        const file = formData.get("image") as File;
+        if (!file || file.size === 0) return { error: "No file provided" };
+
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+
+        const ext = file.name.split(".").pop() ?? "jpg";
+        const filename = `player-${Date.now()}.${ext}`;
+        const uploadDir = path.join(process.cwd(), "public", "uploads");
+        await mkdir(uploadDir, { recursive: true });
+        await writeFile(path.join(uploadDir, filename), buffer);
+
+        return { success: true, url: `/uploads/${filename}` };
+    } catch (error) {
+        console.error("Image upload failed:", error);
+        return { error: "Image upload failed" };
+    }
+}
+
 
 const EventSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -126,12 +151,15 @@ const MemberSchema = z.object({
     id: z.string().min(1, "Member ID is required"),
     name: z.string().min(1, "Name is required"),
     title: z.string().min(1, "Title is required"),
-    rating: z.coerce.number().int(),
+    rating: z.coerce.number().int().default(0),
+    rapidRating: z.coerce.number().int().default(0),
+    blitzRating: z.coerce.number().int().default(0),
     club: z.string().min(1, "Club is required"),
     status: z.string().min(1, "Status is required"),
     joined: z.string().min(1, "Join date is required"),
     fideId: z.string().optional(),
     bio: z.string().optional(),
+    image: z.string().optional(),
 });
 
 export async function createMember(formData: FormData) {
@@ -142,12 +170,15 @@ export async function createMember(formData: FormData) {
             id: formData.get("id") as string,
             name: formData.get("name") as string,
             title: formData.get("title") as string,
-            rating: formData.get("rating"),
+            rating: formData.get("rating") || 0,
+            rapidRating: formData.get("rapidRating") || 0,
+            blitzRating: formData.get("blitzRating") || 0,
             club: formData.get("club") as string,
             status: formData.get("status") as string,
             joined: formData.get("joined") as string,
             fideId: formData.get("fideId") as string,
             bio: formData.get("bio") as string,
+            image: (formData.get("image") as string) || undefined,
         };
 
         const validated = MemberSchema.parse(data);
@@ -172,15 +203,18 @@ export async function updateMember(id: string, formData: FormData) {
         await checkAdmin();
 
         const data = {
-            id: formData.get("memberId") as string || id, // Can update the ID but we usually use the primary key
+            id: formData.get("memberId") as string || id,
             name: formData.get("name") as string,
             title: formData.get("title") as string,
-            rating: formData.get("rating"),
+            rating: formData.get("rating") || 0,
+            rapidRating: formData.get("rapidRating") || 0,
+            blitzRating: formData.get("blitzRating") || 0,
             club: formData.get("club") as string,
             status: formData.get("status") as string,
             joined: formData.get("joined") as string,
             fideId: formData.get("fideId") as string,
             bio: formData.get("bio") as string,
+            image: (formData.get("image") as string) || undefined,
         };
 
         const validated = MemberSchema.parse(data);
@@ -329,9 +363,25 @@ export async function recordGame(formData: FormData) {
 export async function deleteMember(id: string) {
     try {
         await checkAdmin();
+
+        // Delete all games that reference this member (as white or black player)
+        // to satisfy the foreign key constraints before deleting the member.
+        await db.game.deleteMany({
+            where: {
+                OR: [{ whiteId: id }, { blackId: id }],
+            },
+        });
+
+        // Also unlink any user account tied to this member
+        await db.user.updateMany({
+            where: { memberId: id },
+            data: { memberId: null },
+        });
+
         await db.member.delete({
             where: { id },
         });
+
         revalidatePath("/members");
         revalidatePath("/admin/members");
         revalidatePath("/admin/dashboard");

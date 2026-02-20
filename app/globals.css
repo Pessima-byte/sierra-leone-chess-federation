@@ -116,6 +116,14 @@
   .animate-spin-slow {
     animation: spin 12s linear infinite;
   }
+
+  .animate-spin-reverse {
+    animation: spin-reverse 2s linear infinite;
+  }
+
+  .animate-scan {
+    animation: scan 4s linear infinite;
+  }
 }
 
 @keyframes float {
@@ -149,5 +157,31 @@
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(100px);
+    opacity: 0;
   }
 }

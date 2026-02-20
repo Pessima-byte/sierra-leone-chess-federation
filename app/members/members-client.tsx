@@ -50,7 +50,7 @@ export default function MembersClient({ members }: { members: Member[] }) {
     const itemsPerPage = 6
 
     const filteredMembers = useMemo(() => {
-        return members.filter(member => {
+        const filtered = members.filter(member => {
             const matchesSearch =
                 member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 member.id.toLowerCase().includes(searchQuery.toLowerCase())
@@ -59,6 +59,16 @@ export default function MembersClient({ members }: { members: Member[] }) {
                 statusFilter === 'All' || member.status === statusFilter
 
             return matchesSearch && matchesStatus
+        })
+
+        // Members with images always surface first so the first 3 pages
+        // show real profile photos by default. Within each group, rating order
+        // (already applied server-side) is preserved.
+        return filtered.sort((a, b) => {
+            const aHasImage = !!(a.image && a.image.trim())
+            const bHasImage = !!(b.image && b.image.trim())
+            if (aHasImage === bHasImage) return 0
+            return aHasImage ? -1 : 1
         })
     }, [members, searchQuery, statusFilter])
 

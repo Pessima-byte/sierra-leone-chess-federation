@@ -23,9 +23,10 @@ export function NavLinks() {
                     <Link
                         key={item.name}
                         href={item.href}
+                        prefetch={true}
                         className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${isActive
-                                ? "bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                                : "text-muted-foreground hover:text-white hover:bg-white/5"
+                            ? "bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                            : "text-muted-foreground hover:text-white hover:bg-white/5"
                             }`}
                     >
                         {item.name}

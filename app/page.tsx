@@ -21,14 +21,28 @@ import NewsCard from "@/components/news-card"
 import { Button } from "@/components/ui/button"
 import { getSession, logout } from "@/app/actions/auth"
 import { getMembers } from "@/lib/queries"
+import PlayerMarquee from "@/components/player-marquee"
+
+export const revalidate = 60 // Update every minute
 
 export default async function Home() {
-  const session = await getSession()
-  const allMembers = await getMembers()
-  const topPlayers = allMembers.slice(0, 4).map((m, i) => ({
-    ...m,
-    style: ["from-blue-600 to-indigo-600", "from-purple-600 to-pink-600", "from-green-600 to-emerald-600", "from-orange-600 to-red-600"][i] || "from-slate-600 to-slate-400"
-  }))
+  const [session, allMembers] = await Promise.all([
+    getSession(),
+    getMembers()
+  ])
+  const topPlayers = allMembers
+    .filter(m => m.image && m.image.trim() !== "")
+    .map(m => ({
+      id: m.id,
+      name: m.name,
+      title: m.title,
+      rating: m.rating,
+      club: m.club,
+      image: m.image as string,
+      wins: m.wins,
+      draws: m.draws,
+      losses: m.losses,
+    }))
 
   const upcomingEvents = [
     {
@@ -62,6 +76,14 @@ export default async function Home() {
       tagColor: "bg-rose-500/80",
       date: "October 10-12, 2025",
       location: "Bintumani Hotel, SL"
+    },
+    {
+      title: "Village School Chess Outreach",
+      image: "/images/events/village-school-chess.png",
+      tag: "Community",
+      tagColor: "bg-emerald-500/80",
+      date: "July 1-5, 2025",
+      location: "Rural Provinces"
     }
   ]
 
@@ -165,6 +187,7 @@ export default async function Home() {
                       src="/images/chess-hero.png"
                       alt="Chess Board"
                       fill
+                      priority
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>
@@ -337,38 +360,8 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {topPlayers.map((player, i) => (
-                <Link key={i} href={`/members/${player.id}`} className="block transition-transform hover:scale-[1.02]">
-                  <div className="group relative bg-slate-900/40 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]">
-                    <div className="relative h-72 overflow-hidden">
-                      <Image src={player.image || "/images/player1.png"} alt={player.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-                      <div className={`absolute top-5 left-5 px-3 py-1 rounded-full bg-gradient-to-r ${player.style} text-[10px] font-bold text-white shadow-lg uppercase tracking-widest border border-white/20`}>
-                        {player.title}
-                      </div>
-                    </div>
-                    <div className="p-7 relative">
-                      <div className="absolute -top-7 right-7 h-14 w-14 rounded-2xl bg-slate-950 border border-white/10 flex flex-col items-center justify-center z-10 shadow-2xl transform group-hover:rotate-12 transition-transform duration-500">
-                        <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter leading-none">Elo</div>
-                        <div className="text-sm font-black text-blue-400">{player.rating}</div>
-                      </div>
-                      <h3 className="text-2xl font-bold mb-1 text-white group-hover:text-blue-400 transition-colors">{player.name}</h3>
-                      <p className="text-xs text-blue-400/60 font-medium mb-5 uppercase tracking-wider">National Champion '24</p>
-
-                      <div className="space-y-3">
-                        <div className="flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">
-                          <span>Win Rate</span>
-                          <span className="text-white">75%</span>
-                        </div>
-                        <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden p-[1px]">
-                          <div className={`h-full bg-gradient-to-r ${player.style} rounded-full transition-all duration-1000 group-hover:w-[75%]`} style={{ width: '0%' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+            <div className="relative -mx-4">
+              <PlayerMarquee players={topPlayers} />
             </div>
           </div>
         </section>

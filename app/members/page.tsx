@@ -12,14 +12,18 @@ import { getSession, logout } from "@/app/actions/auth"
 import { getMembers } from "@/lib/queries"
 import MembersClient from "./members-client"
 
+export const revalidate = 60
+
 export default async function MembersPage() {
-    const session = await getSession()
-    const members = await getMembers()
+    const [session, members] = await Promise.all([
+        getSession(),
+        getMembers()
+    ])
 
     return (
         <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
             <main className="pt-24 pb-24">
-                <MembersClient members={JSON.parse(JSON.stringify(members))} />
+                <MembersClient members={members as any} />
             </main>
 
             {/* Footer */}
