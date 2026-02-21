@@ -1,9 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { Trophy } from "lucide-react"
 
 interface Player {
     id: string
@@ -28,6 +26,8 @@ const CARD_STYLES = [
 export default function PlayerMarquee({ players }: { players: Player[] }) {
     // Duplicate the players list to create a seamless infinite scroll (2x is enough)
     const doubledPlayers = [...players, ...players]
+    // Calculate duration based on player count for consistent speed
+    const duration = Math.max(players.length * 5, 30)
 
     return (
         <div className="relative w-full overflow-hidden py-6 md:py-10">
@@ -35,17 +35,18 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
             <div className="absolute inset-y-0 left-0 w-20 md:w-64 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
             <div className="absolute inset-y-0 right-0 w-20 md:w-64 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
 
-            <motion.div
-                className="flex gap-4 md:gap-6 w-max px-4"
-                animate={{
-                    x: ["0%", "-50%"]
+            {/* 
+              Pure CSS marquee instead of framer-motion.
+              CSS animations run on the compositor thread, completely 
+              independent of main-thread scroll handling. This eliminates
+              the biggest source of scroll jank.
+            */}
+            <div
+                className="flex gap-4 md:gap-6 w-max px-4 animate-marquee hover:[animation-play-state:paused]"
+                style={{
+                    animationDuration: `${duration}s`,
+                    transform: 'translateZ(0)', // Force GPU layer
                 }}
-                transition={{
-                    duration: players.length * 5,
-                    ease: "linear",
-                    repeat: Infinity,
-                }}
-                style={{ willChange: 'transform' }}
             >
                 {doubledPlayers.map((player, idx) => {
                     const style = CARD_STYLES[idx % CARD_STYLES.length]
@@ -60,8 +61,7 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                             className="block w-56 md:w-80 shrink-0"
                         >
                             <div
-                                className="group relative bg-slate-900/60 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 transition-all duration-300 transform-gpu"
-                                style={{ transform: 'translateZ(0)' }}
+                                className="group relative bg-slate-900/60 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 transform-gpu"
                             >
                                 {/* Image Container */}
                                 <div className="relative h-56 md:h-80 overflow-hidden bg-slate-800">
@@ -70,20 +70,20 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                                         alt={player.name}
                                         fill
                                         sizes="(max-width: 768px) 224px, 320px"
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        className="object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/10 to-transparent" />
 
-                                    {/* Stats Badges - Simplified for mobile */}
+                                    {/* Stats Badges */}
                                     <div className="absolute top-3 left-3 md:top-4 md:left-4">
                                         <div className={`px-2 py-0.5 rounded-full bg-gradient-to-r ${style} text-[8px] md:text-[9px] font-black text-white uppercase tracking-widest`}>
                                             {player.title && player.title !== "None" ? player.title : "NR"}
                                         </div>
                                     </div>
 
-                                    {/* Elo Score */}
+                                    {/* Elo Score — removed backdrop-blur-sm for mobile perf */}
                                     <div className="absolute top-3 right-3 md:top-4 md:right-4">
-                                        <div className="px-2 py-1 bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg flex flex-col items-center">
+                                        <div className="px-2 py-1 bg-black/60 border border-white/10 rounded-lg flex flex-col items-center">
                                             <span className="text-[7px] font-black uppercase text-blue-400">ELO</span>
                                             <span className="text-xs font-black text-white">{player.rating > 0 ? player.rating : "—"}</span>
                                         </div>
@@ -92,7 +92,7 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
 
                                 {/* Content */}
                                 <div className="p-4 md:p-6 relative">
-                                    <h3 className="text-lg md:text-2xl font-black mb-0.5 text-white group-hover:text-blue-400 transition-colors line-clamp-1 uppercase tracking-tighter">
+                                    <h3 className="text-lg md:text-2xl font-black mb-0.5 text-white line-clamp-1 uppercase tracking-tighter">
                                         {player.name}
                                     </h3>
                                     <p className="text-[9px] text-blue-400/60 font-black mb-4 uppercase tracking-widest truncate">
@@ -106,7 +106,7 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                                         </div>
                                         <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
                                             <div
-                                                className={`h-full bg-gradient-to-r ${style} rounded-full transition-all duration-1000`}
+                                                className={`h-full bg-gradient-to-r ${style} rounded-full`}
                                                 style={{ width: `${winRate}%` }}
                                             />
                                         </div>
@@ -116,7 +116,7 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                         </Link>
                     )
                 })}
-            </motion.div>
+            </div>
         </div>
     )
 }

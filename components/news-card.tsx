@@ -12,18 +12,18 @@ interface NewsCardProps {
 
 export default function NewsCard({ title, date, category, image, excerpt }: NewsCardProps) {
   return (
-    <div className="group relative bg-slate-900/40 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+    <div className="group relative bg-slate-900/80 rounded-2xl overflow-hidden border border-white/10 hover:border-blue-500/30 transition-colors duration-500">
       <div className="relative h-56 overflow-hidden">
         <Image
           src={image || "/placeholder.svg"}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
         <div className="absolute top-4 right-4">
-          <span className="bg-blue-600/80 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-white/10 shadow-lg">
+          <span className="bg-blue-600/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-white/10">
             {category}
           </span>
         </div>

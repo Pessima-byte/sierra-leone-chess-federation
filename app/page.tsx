@@ -181,7 +181,7 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-green-500/20 to-blue-500/20 rounded-full blur-3xl opacity-30"></div>
 
                 {/* Glass Card */}
-                <div className="absolute inset-0 z-10 bg-slate-950/50 backdrop-blur-md rounded-2xl border border-white/10 p-2 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500">
+                <div className="absolute inset-0 z-10 bg-slate-950/80 rounded-2xl border border-white/10 p-2 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500">
                   <div className="relative h-full w-full rounded-xl overflow-hidden bg-slate-900">
                     <Image
                       src="/images/chess-hero.png"
@@ -193,7 +193,7 @@ export default async function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>
                     <div className="absolute bottom-6 left-6 right-6">
-                      <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10">
+                      <div className="flex items-center justify-between p-4 bg-slate-900/80 rounded-xl border border-white/10">
                         <div>
                           <div className="text-xs text-muted-foreground">
                             Next Event
@@ -312,14 +312,14 @@ export default async function Home() {
                     {upcomingEvents.map((event, i) => (
                       <div
                         key={i}
-                        className="w-[300px] md:w-[350px] shrink-0 relative group/card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 backdrop-blur-md hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)] transform-gpu"
+                        className="w-[300px] md:w-[350px] shrink-0 relative group/card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 hover:border-blue-500/30 transition-colors duration-500 transform-gpu"
                         style={{ transform: 'translateZ(0)' }}
                       >
                         <div className="h-44 relative overflow-hidden">
-                          <Image src={event.image} alt={event.title} fill sizes="(max-width: 768px) 100vw, 350px" className="object-cover transition-transform duration-700 group-hover/card:scale-110" />
+                          <Image src={event.image} alt={event.title} fill sizes="(max-width: 768px) 100vw, 350px" className="object-cover" />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                           <div className="absolute top-4 left-4">
-                            <span className={`px-3 py-1 ${event.tagColor} backdrop-blur-md text-white text-[10px] font-bold rounded-full uppercase tracking-widest border border-white/10`}>
+                            <span className={`px-3 py-1 ${event.tagColor} text-white text-[10px] font-bold rounded-full uppercase tracking-widest border border-white/10`}>
                               {event.tag}
                             </span>
                           </div>
@@ -384,7 +384,7 @@ export default async function Home() {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/30 to-cyan-600/30 rounded-[2rem] blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
 
-              <div className="relative bg-slate-900/40 backdrop-blur-2xl rounded-[2rem] border border-white/10 p-6 md:p-10 lg:p-12 overflow-hidden shadow-2xl">
+              <div className="relative bg-slate-900/80 rounded-[2rem] border border-white/10 p-6 md:p-10 lg:p-12 overflow-hidden shadow-2xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                   <div className="space-y-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase tracking-widest leading-none">
@@ -441,7 +441,7 @@ export default async function Home() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-blue-950/60 to-transparent"></div>
                       <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
-                        <div className="px-3 py-1.5 bg-slate-950/80 backdrop-blur-md border border-white/10 rounded-lg">
+                        <div className="px-3 py-1.5 bg-slate-950/90 border border-white/10 rounded-lg">
                           <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Premium Training</span>
                         </div>
                       </div>
@@ -512,7 +512,7 @@ export default async function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-blue-950/20 backdrop-blur-xl border-t border-white/10 pt-16 pb-8">
+      <footer className="bg-slate-950/90 border-t border-white/10 pt-16 pb-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="space-y-4">

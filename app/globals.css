@@ -94,9 +94,10 @@
   html {
     @apply scroll-smooth;
     -webkit-tap-highlight-color: transparent;
-    /* Allow natural document scrolling which is better for Safari momentum */
     height: auto;
     overflow-x: hidden;
+    /* Critical: Enable native momentum scrolling on iOS/iPadOS */
+    -webkit-overflow-scrolling: touch;
   }
 
   * {
@@ -109,28 +110,84 @@
     overflow-x: hidden;
     position: relative;
     width: 100%;
-    /* Hardware acceleration - removed from body to avoid massive composite layers */
     -webkit-font-smoothing: antialiased;
+    /* Prevent body from creating a stacking context that blocks GPU compositing */
+    isolation: isolate;
   }
 
-  /* Aggressive optimization: Disable expensive backdrop-blur on iPad/Mobile 
-     Safari particularly struggles with repaint on blurred areas during scroll */
+  /* ============================================
+     MOBILE / TABLET PERFORMANCE OPTIMIZATIONS
+     Safari/WebKit particularly struggles with:
+     - backdrop-filter during scroll (causes full repaint)
+     - Large blur() filters (massive GPU memory)
+     - Multiple overlapping composite layers
+     - Continuous CSS animations during scroll
+     ============================================ */
   @media (max-width: 1024px) {
 
+    /* Kill ALL backdrop-blur variants — these are the #1 scroll jank cause */
     .backdrop-blur-xl,
     .backdrop-blur-lg,
     .backdrop-blur-md,
     .backdrop-blur-sm,
-    .backdrop-blur {
+    .backdrop-blur,
+    .backdrop-blur-2xl,
+    [class*="backdrop-blur"] {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      background-color: rgba(15, 23, 42, 0.98) !important;
+      background-color: rgba(15, 23, 42, 0.95) !important;
     }
 
-    /* Also simplify shadows on mobile */
+    /* Simplify all heavy shadows on mobile */
     .shadow-2xl,
-    .shadow-xl {
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+    .shadow-xl,
+    .shadow-lg {
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.2) !important;
+    }
+
+    /* Kill massive blur orbs — they create huge GPU texture uploads */
+    [class*="blur-[100px]"],
+    [class*="blur-[120px]"],
+    [class*="blur-[150px]"] {
+      filter: none !important;
+      opacity: 0 !important;
+      display: none !important;
+    }
+
+    /* Reduce animation complexity during scroll */
+    .animate-pulse-slow,
+    .animate-float {
+      animation: none !important;
+    }
+
+    .animate-ping {
+      animation: none !important;
+      opacity: 0.75;
+    }
+
+    /* Decorative spinning rings — kill on mobile */
+    [class*="animate-[spin"] {
+      animation: none !important;
+    }
+
+    /* Content-visibility for off-screen sections to skip rendering */
+    section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 600px;
+    }
+
+    /* Ensure smooth scrolling feel on touch devices */
+    main {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Reduce hover transforms that can cause repaints during scroll */
+    .hover\:scale-105:hover,
+    .hover\:scale-110:hover,
+    .group-hover\:scale-105:hover,
+    .group-hover\:scale-110:hover,
+    .group-hover\/card\:scale-110:hover {
+      transform: none !important;
     }
   }
 }

@@ -28,21 +28,24 @@ html {
         `}</style>
       </head>
       <body className="antialiased selection:bg-blue-500/30 text-white bg-[#0f172a]">
-        {/* Simplified background for mobile to improve scrolling performance */}
-        <div className="fixed inset-0 z-[-1] pointer-events-none bg-[url('/grid.svg')] opacity-[0.03] transform-gpu"></div>
-        <div className="fixed inset-0 z-[-2] pointer-events-none bg-slate-950 transform-gpu"></div>
-        <div className="fixed inset-0 z-[-3] pointer-events-none bg-[linear-gradient(to_bottom_right,#1e3a8a,#020617)] opacity-40 transform-gpu lg:opacity-100"></div>
+        {/* 
+          Background container — uses `contain: strict` to isolate it
+          from the main scroll composite. This prevents the browser from
+          re-compositing these layers on every scroll frame.
+        */}
+        <div className="fixed inset-0 z-[-1] pointer-events-none" style={{ contain: 'strict' }}>
+          {/* Solid base */}
+          <div className="absolute inset-0 bg-slate-950"></div>
+          {/* Gradient overlay — hidden on mobile for perf */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom_right,#1e3a8a,#020617)] opacity-40 lg:opacity-100"></div>
+          {/* Grid texture — very lightweight */}
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]"></div>
+        </div>
 
-        {/* Only show expensive blur orbs on desktop */}
-        <div className="hidden lg:block">
-          <div
-            className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] z-[-2] bg-blue-500/20 blur-[150px] rounded-full transform-gpu"
-            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-          ></div>
-          <div
-            className="fixed top-[20%] right-[-10%] w-[50%] h-[50%] z-[-2] bg-emerald-500/15 blur-[150px] rounded-full transform-gpu"
-            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
-          ></div>
+        {/* Decorative blur orbs — DESKTOP ONLY (hidden on ≤1024px via CSS + class) */}
+        <div className="hidden lg:block fixed inset-0 z-[-1] pointer-events-none" style={{ contain: 'strict' }}>
+          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-500/20 blur-[150px] rounded-full transform-gpu"></div>
+          <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/15 blur-[150px] rounded-full transform-gpu"></div>
         </div>
         <Navbar />
         {children}
