@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/navbar'
+import NavbarWrapper from '@/components/navbar-wrapper'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -38,7 +39,9 @@ export default function RootLayout({
           <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-500/20 blur-[150px] rounded-full transform-gpu"></div>
           <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/15 blur-[150px] rounded-full transform-gpu"></div>
         </div>
-        <Navbar />
+        <NavbarWrapper>
+          <Navbar />
+        </NavbarWrapper>
         {children}
         <Toaster position="top-right" theme="dark" />
         <Analytics />

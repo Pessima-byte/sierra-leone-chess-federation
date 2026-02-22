@@ -1,16 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Home, CalendarDays, Users, GraduationCap, Newspaper, Shield, UserCircle, LogOut } from "lucide-react"
+import { Menu, X, Shield, User, LogOut, Home, Calendar, Users, Newspaper, Globe, Sparkles } from "lucide-react"
 import { logout } from "@/app/actions/auth"
 
 const navLinks = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Calendar", href: "/calendar", icon: CalendarDays },
+    { name: "Events", href: "/calendar", icon: Calendar },
     { name: "Members", href: "/members", icon: Users },
-    { name: "Learn", href: "/#learn", icon: GraduationCap },
     { name: "News", href: "/news", icon: Newspaper },
 ]
 
@@ -27,333 +27,156 @@ interface Props {
 export function MobileNavWrapper({ variant, user }: Props) {
     const pathname = usePathname()
     const [open, setOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
 
-    // Close on route change
-    useEffect(() => { setOpen(false) }, [pathname])
-
-    // Lock body scroll
     useEffect(() => {
-        document.body.style.overflow = open ? "hidden" : ""
-        return () => { document.body.style.overflow = "" }
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        setOpen(false)
+    }, [pathname])
+
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = ""
+        }
+        return () => {
+            document.body.style.overflow = ""
+        }
     }, [open])
 
-    // ── Desktop: pill-style links ──
+    if (!mounted) {
+        if (variant === "desktop") {
+            return (
+                <div className="flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/10 opacity-0">
+                    <div className="w-32 h-8" />
+                </div>
+            )
+        }
+        return (
+            <div className="w-10 h-10 rounded-full bg-slate-900 border border-white/10" />
+        )
+    }
+
     if (variant === "desktop") {
         return (
-            <>
+            <div className="flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/10">
                 {navLinks.map((item) => {
-                    const active = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
+                    const isActive = pathname === item.href
                     return (
                         <Link
                             key={item.name}
                             href={item.href}
-                            prefetch={true}
-                            className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${active
-                                ? "bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                                : "text-muted-foreground hover:text-white hover:bg-white/5"
-                                }`}
+                            className={`px-4 py-2 text-sm font-medium transition-all rounded-full ${isActive ? "bg-white/10 text-blue-400" : "text-slate-400 hover:text-white"}`}
                         >
                             {item.name}
                         </Link>
                     )
                 })}
-            </>
+            </div>
         )
     }
 
-    // ── Mobile: hamburger + fullscreen menu ──
     return (
         <div className="md:hidden">
             <button
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center justify-center text-white w-10 h-10 rounded-full hover:bg-white/10 transition-colors"
-                aria-label="Open menu"
+                type="button"
+                onClick={() => setOpen(!open)}
+                className="w-10 h-10 rounded-full bg-slate-900 border border-white/20 flex items-center justify-center text-white shadow-xl active:scale-95 transition-all relative z-[10001]"
             >
-                <Menu className="w-6 h-6" />
+                {open ? <X className="w-5 h-5 relative z-10" /> : <Menu className="w-5 h-5 relative z-10" />}
             </button>
 
-            {open && (
-                <>
-                    {/* 
-                        Portal-style fullscreen menu.
-                        Using inline styles for background to bypass any Tailwind overrides.
-                    */}
+            {open && createPortal(
+                <div className="fixed inset-0 z-[10000] flex flex-col justify-start pointer-events-none">
+                    {/* Darker Thick Backdrop */}
                     <div
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            zIndex: 9999,
-                            backgroundColor: "#060b18",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        {/* ─── Header ─── */}
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                padding: "12px 20px",
-                                paddingTop: "max(12px, env(safe-area-inset-top, 12px))",
-                                borderBottom: "1px solid rgba(255,255,255,0.08)",
-                            }}
-                        >
-                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                                <div
-                                    style={{
-                                        width: 36,
-                                        height: 36,
-                                        borderRadius: 10,
-                                        background: "linear-gradient(135deg, #3b82f6, #6366f1)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontWeight: 900,
-                                        fontSize: 12,
-                                        color: "#fff",
-                                    }}
-                                >
-                                    SL
-                                </div>
-                                <div>
-                                    <div style={{ fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1 }}>SLCF</div>
-                                    <div style={{ fontSize: 9, color: "#60a5fa", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const }}>
-                                        Sierra Leone Chess
+                        className="absolute inset-0 bg-slate-950/60 backdrop-blur-xl pointer-events-auto animate-in fade-in duration-500"
+                        onClick={() => setOpen(false)}
+                    />
+
+                    {/* The "High-Contrast" Command Hub */}
+                    <div className="relative w-full max-w-[350px] mx-auto pt-24 pointer-events-auto animate-in slide-in-from-top-8 duration-500">
+
+                        <div className="relative bg-[#05070a] rounded-[2rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden">
+
+                            {/* Header Strip - High Contrast Gold */}
+                            <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-6 h-6 rounded-lg bg-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.4)]">
+                                        <Sparkles className="w-3.5 h-3.5 text-slate-950" />
                                     </div>
+                                    <span className="text-[12px] font-black text-amber-500 uppercase tracking-[0.2em]">Imperial Hub</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                                    <span className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-0.5">Online</span>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => setOpen(false)}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: "50%",
-                                    border: "1px solid rgba(255,255,255,0.1)",
-                                    background: "rgba(255,255,255,0.05)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#fff",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
 
-                        {/* ─── Navigation Links ─── */}
-                        <nav
-                            style={{
-                                flex: 1,
-                                overflowY: "auto",
-                                padding: "24px 20px",
-                            }}
-                        >
-                            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            {/* Nav Rail - Crystal Clear Links */}
+                            <div className="px-4 py-8 flex items-center justify-around">
                                 {navLinks.map((item) => {
-                                    const active = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
-                                    const Icon = item.icon
+                                    const isActive = pathname === item.href
                                     return (
                                         <Link
                                             key={item.name}
                                             href={item.href}
                                             onClick={() => setOpen(false)}
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 14,
-                                                padding: "16px 18px",
-                                                borderRadius: 16,
-                                                fontSize: 17,
-                                                fontWeight: 600,
-                                                color: active ? "#60a5fa" : "#e2e8f0",
-                                                backgroundColor: active ? "rgba(59,130,246,0.1)" : "transparent",
-                                                border: active ? "1px solid rgba(59,130,246,0.2)" : "1px solid transparent",
-                                                textDecoration: "none",
-                                                transition: "all 0.2s",
-                                            }}
+                                            className="flex flex-col items-center gap-3 group flex-1"
                                         >
-                                            <Icon size={20} style={{ opacity: active ? 1 : 0.5 }} />
-                                            {item.name}
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 relative ${isActive
+                                                ? "bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] scale-110"
+                                                : "bg-white/5 text-slate-300 border border-white/5 hover:bg-white/10 hover:text-white"}`}>
+                                                <item.icon className={`w-7 h-7 relative z-10 ${isActive ? 'drop-shadow-lg' : ''}`} />
+                                            </div>
+                                            <span className={`text-[10px] font-black uppercase tracking-[0.15em] transition-colors ${isActive ? "text-blue-400" : "text-slate-500"}`}>
+                                                {item.name}
+                                            </span>
                                         </Link>
                                     )
                                 })}
                             </div>
-                        </nav>
 
-                        {/* ─── Auth Section (bottom) ─── */}
-                        <div
-                            style={{
-                                padding: "16px 20px",
-                                paddingBottom: "max(24px, env(safe-area-inset-bottom, 24px))",
-                                borderTop: "1px solid rgba(255,255,255,0.08)",
-                            }}
-                        >
-                            {user ? (
-                                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                    {/* User card */}
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: 12,
-                                            padding: "12px 14px",
-                                            borderRadius: 14,
-                                            backgroundColor: "rgba(255,255,255,0.03)",
-                                            border: "1px solid rgba(255,255,255,0.06)",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                width: 42,
-                                                height: 42,
-                                                borderRadius: "50%",
-                                                background: "linear-gradient(135deg, #3b82f6, #6366f1)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                fontWeight: 700,
-                                                fontSize: 16,
-                                                color: "#fff",
-                                                flexShrink: 0,
-                                            }}
-                                        >
-                                            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-                                        </div>
-                                        <div style={{ flex: 1, minWidth: 0 }}>
-                                            <div style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>
-                                                {user.name || "User"}
-                                            </div>
-                                            <div style={{ fontSize: 10, color: "#60a5fa", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
-                                                {user.role === "ADMIN" ? "Administrator" : "Player"}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Buttons row */}
-                                    <div style={{ display: "flex", gap: 8 }}>
-                                        {user.role === "ADMIN" && (
-                                            <Link
-                                                href="/admin/dashboard"
-                                                onClick={() => setOpen(false)}
-                                                style={{
-                                                    flex: 1,
-                                                    height: 44,
-                                                    borderRadius: 12,
-                                                    backgroundColor: "#2563eb",
-                                                    color: "#fff",
-                                                    fontWeight: 700,
-                                                    fontSize: 13,
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    gap: 6,
-                                                    textDecoration: "none",
-                                                }}
-                                            >
-                                                <Shield size={16} />
-                                                Admin
-                                            </Link>
-                                        )}
+                            {/* Action Dock - High Legibility */}
+                            <div className="px-6 pb-8 pt-2">
+                                {user ? (
+                                    <div className="flex flex-col gap-3">
                                         <Link
-                                            href="/profile"
-                                            onClick={() => setOpen(false)}
-                                            style={{
-                                                flex: 1,
-                                                height: 44,
-                                                borderRadius: 12,
-                                                border: "1px solid rgba(255,255,255,0.1)",
-                                                color: "#fff",
-                                                fontWeight: 700,
-                                                fontSize: 13,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                gap: 6,
-                                                textDecoration: "none",
-                                            }}
+                                            href={user.role === "ADMIN" ? "/admin/dashboard" : "/profile"}
+                                            className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-lg active:scale-95"
                                         >
-                                            <UserCircle size={16} />
-                                            Profile
+                                            {user.role === "ADMIN" ? <Shield className="w-4 h-4" /> : <User className="w-4 h-4" />}
+                                            Go to {user.name?.split(' ')[0]}&apos;s Center
+                                        </Link>
+                                        <form action={logout} className="w-full">
+                                            <button
+                                                type="submit"
+                                                className="w-full h-12 rounded-xl bg-white/5 border border-white/10 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 transition-all"
+                                            >
+                                                <LogOut className="w-4 h-4" />
+                                                Log Out Securely
+                                            </button>
+                                        </form>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col gap-3">
+                                        <Link href="/login?mode=register" className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center text-[11px] font-black uppercase tracking-[0.2em] shadow-lg transition-all active:scale-95">
+                                            Join Federation Hub
+                                        </Link>
+                                        <Link href="/login" className="w-full h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-all">
+                                            Log In to Account
                                         </Link>
                                     </div>
-
-                                    {/* Logout */}
-                                    <form action={logout}>
-                                        <button
-                                            type="submit"
-                                            onClick={() => setOpen(false)}
-                                            style={{
-                                                width: "100%",
-                                                height: 44,
-                                                borderRadius: 12,
-                                                border: "1px solid rgba(239,68,68,0.2)",
-                                                backgroundColor: "transparent",
-                                                color: "#f87171",
-                                                fontWeight: 700,
-                                                fontSize: 13,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                gap: 6,
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            <LogOut size={16} />
-                                            Log Out
-                                        </button>
-                                    </form>
-                                </div>
-                            ) : (
-                                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                    <Link
-                                        href="/login"
-                                        onClick={() => setOpen(false)}
-                                        style={{
-                                            width: "100%",
-                                            height: 48,
-                                            borderRadius: 14,
-                                            border: "1px solid rgba(255,255,255,0.15)",
-                                            color: "#fff",
-                                            fontWeight: 700,
-                                            fontSize: 15,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            textDecoration: "none",
-                                        }}
-                                    >
-                                        Log In
-                                    </Link>
-                                    <Link
-                                        href="/login?mode=register"
-                                        onClick={() => setOpen(false)}
-                                        style={{
-                                            width: "100%",
-                                            height: 48,
-                                            borderRadius: 14,
-                                            background: "linear-gradient(135deg, #10b981, #2563eb)",
-                                            color: "#fff",
-                                            fontWeight: 700,
-                                            fontSize: 15,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            textDecoration: "none",
-                                            border: "none",
-                                        }}
-                                    >
-                                        Join Federation
-                                    </Link>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
-                </>
+                </div>,
+                document.body
             )}
         </div>
     )

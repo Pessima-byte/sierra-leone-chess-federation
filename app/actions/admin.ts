@@ -7,26 +7,44 @@ import { z } from "zod";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
-export async function uploadPlayerImage(formData: FormData) {
+export async function uploadImage(formData: FormData, prefix: string = "upload") {
     try {
         await checkAdmin();
         const file = formData.get("image") as File;
         if (!file || file.size === 0) return { error: "No file provided" };
 
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
         const ext = file.name.split(".").pop() ?? "jpg";
-        const filename = `player-${Date.now()}.${ext}`;
-        const uploadDir = path.join(process.cwd(), "public", "uploads");
-        await mkdir(uploadDir, { recursive: true });
-        await writeFile(path.join(uploadDir, filename), buffer);
+        const filename = `${prefix}-${Date.now()}.${ext}`;
 
-        return { success: true, url: `/uploads/${filename}` };
+        const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/uploads/${filename}`;
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+                "Content-Type": file.type || "image/jpeg"
+            },
+            body: file,
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Supabase upload error:", errorText);
+            throw new Error(`Upload failed: ${response.statusText}`);
+        }
+
+        const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${filename}`;
+
+        return { success: true, url: publicUrl };
     } catch (error) {
         console.error("Image upload failed:", error);
         return { error: "Image upload failed" };
     }
+}
+
+export async function uploadPlayerImage(formData: FormData) {
+    return uploadImage(formData, "player");
 }
 
 
@@ -43,6 +61,7 @@ const EventSchema = z.object({
     prizePool: z.string().optional(),
     entryFee: z.string().optional(),
     registrationOpen: z.boolean().default(true),
+    image: z.string().optional(),
 });
 
 async function checkAdmin() {
@@ -66,9 +85,10 @@ export async function createEvent(formData: FormData) {
             status: formData.get("status") as string || "Upcoming",
             organizer: formData.get("organizer") as string,
             description: formData.get("description") as string,
-            prizePool: formData.get("prizePool") as string,
-            entryFee: formData.get("entryFee") as string,
+            prizePool: formData.get("prizePool") as string || undefined,
+            entryFee: formData.get("entryFee") as string || undefined,
             registrationOpen: formData.get("registrationOpen") === "on",
+            image: formData.get("image") as string || undefined,
         };
 
         const validated = EventSchema.parse(data);
@@ -105,9 +125,10 @@ export async function updateEvent(id: string, formData: FormData) {
             status: formData.get("status") as string,
             organizer: formData.get("organizer") as string,
             description: formData.get("description") as string,
-            prizePool: formData.get("prizePool") as string,
-            entryFee: formData.get("entryFee") as string,
+            prizePool: formData.get("prizePool") as string || undefined,
+            entryFee: formData.get("entryFee") as string || undefined,
             registrationOpen: formData.get("registrationOpen") === "on",
+            image: formData.get("image") as string || undefined,
         };
 
         const validated = EventSchema.parse(data);
