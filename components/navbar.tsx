@@ -5,7 +5,9 @@ import { LogOut, User } from "lucide-react"
 import { Suspense } from "react"
 import { MobileNavWrapper } from "./mobile-nav-wrapper"
 
-export default function Navbar() {
+export default async function Navbar() {
+    const session = await getSession()
+    const sessionUser = session ? { name: session.user.name, role: session.user.role } : null
     return (
         <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-slate-950/90 supports-[backdrop-filter]:bg-slate-950/60 supports-[backdrop-filter]:backdrop-blur-xl">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -41,7 +43,7 @@ export default function Navbar() {
                 </Suspense>
 
                 {/* Mobile Menu Toggle + Panel */}
-                <MobileNavWrapper variant="mobile" />
+                <MobileNavWrapper variant="mobile" user={sessionUser} />
             </div>
         </header>
     )

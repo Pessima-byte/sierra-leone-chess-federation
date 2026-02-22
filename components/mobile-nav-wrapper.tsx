@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Shield, User, LogOut } from "lucide-react"
+import { logout } from "@/app/actions/auth"
 
 const links = [
     { name: "Home", href: "/" },
@@ -13,11 +14,17 @@ const links = [
     { name: "News", href: "/news" },
 ]
 
-interface Props {
-    variant: "desktop" | "mobile"
+interface SessionUser {
+    name: string | null
+    role: string
 }
 
-export function MobileNavWrapper({ variant }: Props) {
+interface Props {
+    variant: "desktop" | "mobile"
+    user?: SessionUser | null
+}
+
+export function MobileNavWrapper({ variant, user }: Props) {
     const pathname = usePathname()
     const [open, setOpen] = useState(false)
 
@@ -85,14 +92,14 @@ export function MobileNavWrapper({ variant }: Props) {
 
             {/* Slide-down Panel */}
             <div
-                className={`fixed top-16 left-0 right-0 z-50 bg-slate-950 border-b border-white/10 transition-all duration-300 ease-out ${open
+                className={`fixed top-16 left-0 right-0 bottom-0 z-50 bg-slate-950 transition-all duration-300 ease-out ${open
                     ? "translate-y-0 opacity-100"
                     : "-translate-y-full opacity-0 pointer-events-none"
                     }`}
             >
-                <div className="container mx-auto px-4 py-6">
+                <div className="flex flex-col h-full">
                     {/* Nav Links */}
-                    <nav className="flex flex-col gap-1 mb-6">
+                    <nav className="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
                         {links.map((item) => {
                             const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
                             return (
@@ -111,22 +118,77 @@ export function MobileNavWrapper({ variant }: Props) {
                         })}
                     </nav>
 
-                    {/* Mobile Auth Buttons — using plain <a> to avoid <button> inside <a> hydration error */}
-                    <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
-                        <Link
-                            href="/login"
-                            onClick={() => setOpen(false)}
-                            className="w-full h-12 rounded-xl text-base font-bold border border-white/10 hover:bg-white/5 inline-flex items-center justify-center text-white transition-colors"
-                        >
-                            Log In
-                        </Link>
-                        <Link
-                            href="/login?mode=register"
-                            onClick={() => setOpen(false)}
-                            className="w-full h-12 rounded-xl text-base font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-400 hover:to-blue-500 text-white border-0 inline-flex items-center justify-center transition-colors"
-                        >
-                            Join Federation
-                        </Link>
+                    {/* Bottom Auth Section */}
+                    <div className="px-4 pb-8 pt-4 border-t border-white/10">
+                        {user ? (
+                            /* Logged-in state */
+                            <div className="space-y-3">
+                                {/* User Info Card */}
+                                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-sm text-white shrink-0">
+                                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="font-semibold text-sm text-white truncate">{user.name || "User"}</div>
+                                        <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                                            {user.role === "ADMIN" ? "Administrator" : "Player"}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex gap-2">
+                                    {user.role === "ADMIN" && (
+                                        <Link
+                                            href="/admin/dashboard"
+                                            onClick={() => setOpen(false)}
+                                            className="flex-1 h-11 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white inline-flex items-center justify-center gap-2 transition-colors"
+                                        >
+                                            <Shield className="w-4 h-4" />
+                                            Admin Panel
+                                        </Link>
+                                    )}
+                                    <Link
+                                        href="/profile"
+                                        onClick={() => setOpen(false)}
+                                        className="flex-1 h-11 rounded-xl text-sm font-bold border border-white/10 hover:bg-white/5 text-white inline-flex items-center justify-center gap-2 transition-colors"
+                                    >
+                                        <User className="w-4 h-4" />
+                                        Profile
+                                    </Link>
+                                </div>
+
+                                {/* Logout */}
+                                <form action={logout}>
+                                    <button
+                                        type="submit"
+                                        onClick={() => setOpen(false)}
+                                        className="w-full h-11 rounded-xl text-sm font-bold border border-red-500/20 hover:bg-red-500/10 text-red-400 inline-flex items-center justify-center gap-2 transition-colors"
+                                    >
+                                        <LogOut className="w-4 h-4" />
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                        ) : (
+                            /* Logged-out state */
+                            <div className="flex flex-col gap-3">
+                                <Link
+                                    href="/login"
+                                    onClick={() => setOpen(false)}
+                                    className="w-full h-12 rounded-xl text-base font-bold border border-white/10 hover:bg-white/5 inline-flex items-center justify-center text-white transition-colors"
+                                >
+                                    Log In
+                                </Link>
+                                <Link
+                                    href="/login?mode=register"
+                                    onClick={() => setOpen(false)}
+                                    className="w-full h-12 rounded-xl text-base font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-400 hover:to-blue-500 text-white border-0 inline-flex items-center justify-center transition-colors"
+                                >
+                                    Join Federation
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
