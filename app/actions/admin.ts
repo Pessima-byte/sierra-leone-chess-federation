@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import db from "@/lib/db";
 import { getSession } from "./auth";
 import { z } from "zod";
@@ -102,6 +102,7 @@ export async function createEvent(formData: FormData) {
 
         revalidatePath("/calendar");
         revalidatePath("/admin/events");
+        revalidateTag("events");
         revalidatePath("/admin/dashboard");
 
         return { success: true };
@@ -140,6 +141,7 @@ export async function updateEvent(id: string, formData: FormData) {
 
         revalidatePath("/calendar");
         revalidatePath("/admin/events");
+        revalidateTag("events");
         revalidatePath("/admin/dashboard");
 
         return { success: true };
@@ -159,6 +161,7 @@ export async function deleteEvent(id: string) {
 
         revalidatePath("/calendar");
         revalidatePath("/admin/events");
+        revalidateTag("events");
         revalidatePath("/admin/dashboard");
 
         return { success: true };

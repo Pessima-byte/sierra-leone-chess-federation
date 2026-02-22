@@ -90,7 +90,7 @@ export const getEvents = cache(async () => {
                 ...e,
             }))
         },
-        ["events-list-v3"],
+        ["events-list-v5"],
         { revalidate: 60, tags: ["events"] }
     )()
 })
