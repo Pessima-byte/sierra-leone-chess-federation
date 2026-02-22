@@ -106,7 +106,7 @@ export const getNews = cache(async () => {
                 tags: article.tags.split(',')
             }))
         },
-        ["news-list-v3"],
+        ["news-list-v4"],
         { revalidate: 60, tags: ["news"] }
     )()
 })
