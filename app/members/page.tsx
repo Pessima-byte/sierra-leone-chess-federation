@@ -158,6 +158,10 @@ export default async function MembersPage() {
                                     <Mail className="w-3.5 h-3.5 text-blue-500/60" />
                                     <p className="text-xs font-bold text-slate-400">info@slchess.org</p>
                                 </div>
+                                <a href="https://wa.me/23275553029" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group/dev hover:text-emerald-400 transition-colors">
+                                    <Phone className="w-3.5 h-3.5 text-emerald-500/60 group-hover/dev:text-emerald-400" />
+                                    <p className="text-xs font-bold text-slate-400 group-hover/dev:text-emerald-400">Architect: Tommace</p>
+                                </a>
                             </div>
                         </div>
                     </div>

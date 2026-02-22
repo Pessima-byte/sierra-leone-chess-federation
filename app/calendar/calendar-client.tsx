@@ -136,18 +136,20 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                                     >
                                         Explore Timeline
                                     </Button>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                size="lg"
-                                                variant="outline"
-                                                className="h-12 px-10 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-black backdrop-blur-md transition-all text-xs md:text-sm uppercase tracking-widest"
-                                            >
-                                                Host Event
-                                            </Button>
-                                        </DialogTrigger>
-                                        <HostEventDialogContent />
-                                    </Dialog>
+                                    {session?.user?.role === "ADMIN" && (
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    size="lg"
+                                                    variant="outline"
+                                                    className="h-12 px-10 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-black backdrop-blur-md transition-all text-xs md:text-sm uppercase tracking-widest"
+                                                >
+                                                    Host Event
+                                                </Button>
+                                            </DialogTrigger>
+                                            <HostEventDialogContent />
+                                        </Dialog>
+                                    )}
                                 </div>
                             </div>
 
@@ -263,17 +265,17 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
                     view === 'grid' ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                             {filteredEvents.map((event) => (
-                                <EventDetailDialog key={event.id} event={event}>
+                                <Link key={event.id} href={`/events/${event.id}`}>
                                     <EventCard event={event} />
-                                </EventDetailDialog>
+                                </Link>
                             ))}
                         </div>
                     ) : (
                         <div className="space-y-6">
                             {filteredEvents.map((event) => (
-                                <EventDetailDialog key={event.id} event={event}>
+                                <Link key={event.id} href={`/events/${event.id}`}>
                                     <EventListItem event={event} />
-                                </EventDetailDialog>
+                                </Link>
                             ))}
                         </div>
                     )
@@ -342,110 +344,6 @@ function HostEventDialogContent() {
     )
 }
 
-function EventDetailDialog({ event, children }: { event: CalendarEvent, children: React.ReactNode }) {
-    return (
-        <Dialog>
-            <DialogTrigger asChild>
-                {children}
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl bg-slate-950/95 border-white/5 text-white p-0 overflow-hidden rounded-[3rem] backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)]">
-                <div className="relative h-[400px] w-full group">
-                    <Image
-                        src={event.image || "/images/national-blitz.png"}
-                        alt={event.title}
-                        fill
-                        className="object-cover transition-transform duration-[2000ms] group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-
-                    <div className="absolute top-8 left-8 flex gap-3">
-                        <Badge className="bg-blue-600 text-white border-none font-black text-[10px] tracking-widest px-4 py-2 rounded-full shadow-xl shadow-blue-600/20">
-                            {event.type}
-                        </Badge>
-                        <Badge className="bg-white/10 backdrop-blur-md text-white border-white/10 font-black text-[10px] tracking-widest px-4 py-2 rounded-full">
-                            {event.status}
-                        </Badge>
-                    </div>
-
-                    <div className="absolute bottom-10 left-10 right-10">
-                        <h2 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase italic">{event.title}</h2>
-                    </div>
-                </div>
-
-                <div className="p-10 md:p-14 grid md:grid-cols-3 gap-12">
-                    <div className="md:col-span-2 space-y-10">
-                        <div className="space-y-4">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400">Mission Briefing</span>
-                            <p className="text-xl text-muted-foreground leading-relaxed font-medium">
-                                {event.description}
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8 pt-10 border-t border-white/5">
-                            <div className="space-y-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Logistics Lead</span>
-                                <div className="flex items-center gap-3 font-black text-lg">
-                                    <div className="h-8 w-8 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
-                                        <User className="w-4 h-4 text-blue-400" />
-                                    </div>
-                                    {event.organizer}
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Combat Level</span>
-                                <div className="flex items-center gap-3 font-black text-lg text-yellow-500">
-                                    <Zap className="w-5 h-5" />
-                                    {event.level}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-8">
-                        <div className="bg-white/5 rounded-[2.5rem] p-8 border border-white/5 space-y-6 backdrop-blur-xl">
-                            <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                                    <CalendarIcon className="w-5 h-5 text-blue-400" />
-                                </div>
-                                <div>
-                                    <div className="font-black text-white" suppressHydrationWarning>{new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</div>
-                                    <div className="text-xs text-muted-foreground font-bold">{event.time}</div>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                                    <MapPin className="w-5 h-5 text-blue-400" />
-                                </div>
-                                <div className="font-black text-white truncate">{event.location}</div>
-                            </div>
-                            {event.prizePool && (
-                                <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                                        <Trophy className="w-5 h-5 text-emerald-400" />
-                                    </div>
-                                    <div className="font-black text-emerald-400">{event.prizePool}</div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="space-y-4">
-                            <Button
-                                className="w-full h-16 rounded-2xl bg-blue-600 hover:bg-blue-500 font-black text-lg transition-all shadow-xl shadow-blue-600/20 active:scale-95"
-                                disabled={!event.registrationOpen}
-                                onClick={() => toast.success('Registration request transmitted!')}
-                            >
-                                {event.registrationOpen ? 'INITIALIZE ENTRY' : 'REG CLOSED'}
-                            </Button>
-                            <Button variant="outline" className="w-full h-16 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-black text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-all">
-                                SHARE FEED
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </DialogContent>
-        </Dialog>
-    )
-}
 
 function EventCard({ event }: { event: CalendarEvent }) {
     return (
@@ -488,12 +386,12 @@ function EventCard({ event }: { event: CalendarEvent }) {
                 <p className="text-[12px] text-slate-500 font-medium leading-relaxed mb-6 line-clamp-2">
                     {event.description}
                 </p>
-                <Link href="#" className="flex items-center justify-center w-full h-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-blue-500 transition-all group/btn relative overflow-hidden">
+                <div className="flex items-center justify-center w-full h-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-blue-500 transition-all group/btn relative overflow-hidden">
                     <div className="absolute inset-0 bg-blue-600 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
                     <span className="relative z-10 text-[10px] font-black text-white uppercase tracking-[0.2em] group-hover/btn:scale-105 transition-transform">
                         Explore Mission
                     </span>
-                </Link>
+                </div>
             </CardContent>
         </Card>
     )

@@ -606,9 +606,9 @@ export default async function Home() {
                   Become a Member <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>
               </Link>
-              <Link href="#" className="w-full sm:w-auto h-16 sm:h-auto rounded-2xl border border-white/10 bg-white/5 text-white px-10 py-5 transition-all hover:bg-white/10 active:scale-95">
+              <Link href="https://wa.me/23275553029" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto h-16 sm:h-auto rounded-2xl border border-white/10 bg-white/5 text-white px-10 py-5 transition-all hover:bg-white/10 active:scale-95">
                 <div className="flex items-center justify-center gap-3 font-black text-[12px] uppercase tracking-widest">
-                  Contact Support <Mail className="w-4 h-4" />
+                  Contact Support <Phone className="w-4 h-4" />
                 </div>
               </Link>
             </div>
@@ -691,6 +691,10 @@ export default async function Home() {
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40"></div>
                 <p className="text-[10px] font-bold text-slate-400">info@slchess.org</p>
               </div>
+              <a href="https://wa.me/23275553029" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 relative z-10 group/dev hover:text-emerald-400 transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40 group-hover/dev:bg-emerald-400"></div>
+                <p className="text-[10px] font-bold text-slate-400 group-hover/dev:text-emerald-400">Architect: Tommace</p>
+              </a>
             </div>
           </div>
 
@@ -756,6 +760,10 @@ export default async function Home() {
                   <Mail className="w-3.5 h-3.5 text-blue-500/60" />
                   <p className="text-xs font-bold text-slate-400">info@slchess.org</p>
                 </div>
+                <a href="https://wa.me/23275553029" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group/dev hover:text-emerald-400 transition-colors">
+                  <Phone className="w-3.5 h-3.5 text-emerald-500/60 group-hover/dev:text-emerald-400" />
+                  <p className="text-xs font-bold text-slate-400 group-hover/dev:text-emerald-400">Architect: Tommace</p>
+                </a>
               </div>
             </div>
           </div>

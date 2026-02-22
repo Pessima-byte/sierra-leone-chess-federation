@@ -95,6 +95,20 @@ export const getEvents = cache(async () => {
     )()
 })
 
+export const getEventById = cache(async (id: string) => {
+    if (!id) return null
+    return unstable_cache(
+        async () => {
+            const event = await db.calendarEvent.findUnique({
+                where: { id }
+            })
+            return event
+        },
+        [`event-${id}`],
+        { revalidate: 60, tags: ["events"] }
+    )()
+})
+
 export const getNews = cache(async () => {
     return unstable_cache(
         async () => {
