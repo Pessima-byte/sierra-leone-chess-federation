@@ -21,7 +21,7 @@ export const newsArticles: NewsArticle[] = [
         date: '2025-06-12',
         author: 'Technical Committee',
         category: 'Tournament',
-        image: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1000',
+        image: '/images/hosting-rights-news.png',
         readTime: '5 min read',
         tags: ['Championship', 'Freetown', 'International'],
         featured: true
@@ -34,7 +34,7 @@ export const newsArticles: NewsArticle[] = [
         date: '2025-06-10',
         author: 'IT Department',
         category: 'Federation',
-        image: 'https://images.unsplash.com/photo-1586075010923-2cf457062149?q=80&w=1000',
+        image: '/images/digital-rating-news.png',
         readTime: '3 min read',
         tags: ['Technology', 'Ratings', 'Digital Hub'],
         featured: false
@@ -47,7 +47,7 @@ export const newsArticles: NewsArticle[] = [
         date: '2025-06-08',
         author: 'Training Academy',
         category: 'Training',
-        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000',
+        image: '/images/chess-seminar.png',
         readTime: '4 min read',
         tags: ['Training', 'Seminar', 'Masterclass'],
         featured: false
@@ -60,7 +60,7 @@ export const newsArticles: NewsArticle[] = [
         date: '2025-06-05',
         author: 'Press Office',
         category: 'International',
-        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=1000',
+        image: '/images/chess-schools-news.png',
         readTime: '6 min read',
         tags: ['FIDE', 'Development', 'Education'],
         featured: false
@@ -73,7 +73,7 @@ export const newsArticles: NewsArticle[] = [
         date: '2025-06-02',
         author: 'Youth Development',
         category: 'Tournament',
-        image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1000',
+        image: '/images/junior-masters.png',
         readTime: '4 min read',
         tags: ['Youth', 'Trials', 'Competition'],
         featured: false

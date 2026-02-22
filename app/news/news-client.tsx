@@ -227,7 +227,7 @@ function NewsCard({ article }: { article: NewsArticle }) {
 
                 <div className="p-8 flex flex-col flex-1 space-y-4">
                     <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2" suppressHydrationWarning>
                             <Calendar className="w-3.5 h-3.5 text-blue-400" />
                             {new Date(article.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </div>

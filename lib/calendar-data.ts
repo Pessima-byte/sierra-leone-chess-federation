@@ -27,7 +27,7 @@ export const calendarEvents: CalendarEvent[] = [
         status: "Upcoming",
         organizer: "SLCF",
         description: "The biggest blitz event of the year, featuring 100+ players in a 9-round Swiss format.",
-        image: "https://images.unsplash.com/photo-1529158017232-9019688b1369?q=80&w=1000",
+        image: "/images/national-blitz.png",
         registrationOpen: true,
         level: "All",
         entryFee: "SLE 200"
@@ -71,7 +71,7 @@ export const calendarEvents: CalendarEvent[] = [
         status: "Upcoming",
         organizer: "FIDE / SLCF",
         description: "The elite qualifying event for the West African Zonal. Only registered professionals may enter.",
-        image: "https://images.unsplash.com/photo-1586165368502-1bad197a6461?q=80&w=1000",
+        image: "/images/zonal-qualifiers.png",
         registrationOpen: false,
         level: "Professional",
         entryFee: "SLE 500"

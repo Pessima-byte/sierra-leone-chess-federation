@@ -1,4 +1,5 @@
 "use client"
+// Trigger re-compile: 2026-02-21T21:49
 
 import Image from "next/image"
 import Link from "next/link"
@@ -42,7 +43,7 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
               the biggest source of scroll jank.
             */}
             <div
-                className="flex gap-4 md:gap-6 w-max px-4 animate-marquee hover:[animation-play-state:paused]"
+                className="flex gap-4 md:gap-6 w-max px-4 animate-marquee"
                 style={{
                     animationDuration: `${duration}s`,
                     transform: 'translateZ(0)', // Force GPU layer
@@ -58,18 +59,18 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                         <Link
                             key={`${player.id}-${idx}`}
                             href={`/members/${player.id}`}
-                            className="block w-56 md:w-80 shrink-0"
+                            className="block w-48 md:w-80 shrink-0"
                         >
                             <div
                                 className="group relative bg-slate-900/60 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 transform-gpu"
                             >
                                 {/* Image Container */}
-                                <div className="relative h-56 md:h-80 overflow-hidden bg-slate-800">
+                                <div className="relative h-48 md:h-80 overflow-hidden bg-slate-800">
                                     <Image
                                         src={player.image || "/images/player1.png"}
                                         alt={player.name}
                                         fill
-                                        sizes="(max-width: 768px) 224px, 320px"
+                                        sizes="(max-width: 768px) 192px, 320px"
                                         className="object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/10 to-transparent" />
@@ -91,11 +92,11 @@ export default function PlayerMarquee({ players }: { players: Player[] }) {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-4 md:p-6 relative">
-                                    <h3 className="text-lg md:text-2xl font-black mb-0.5 text-white line-clamp-1 uppercase tracking-tighter">
+                                <div className="p-3 md:p-6 relative">
+                                    <h3 className="text-base md:text-2xl font-black mb-0.5 text-white line-clamp-1 uppercase tracking-tighter">
                                         {player.name}
                                     </h3>
-                                    <p className="text-[9px] text-blue-400/60 font-black mb-4 uppercase tracking-widest truncate">
+                                    <p className="text-[8px] md:text-[9px] text-blue-400/60 font-black mb-3 md:mb-4 uppercase tracking-widest truncate">
                                         {player.club}
                                     </p>
 

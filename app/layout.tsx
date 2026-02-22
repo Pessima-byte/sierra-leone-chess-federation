@@ -18,16 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body className="antialiased selection:bg-blue-500/30 text-white bg-[#0f172a]">
+      <body className={`${GeistSans.className} ${GeistMono.variable} antialiased selection:bg-blue-500/30 text-white bg-[#0f172a]`} suppressHydrationWarning>
         {/* 
           Background container — uses `contain: strict` to isolate it
           from the main scroll composite. This prevents the browser from

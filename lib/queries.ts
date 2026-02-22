@@ -90,7 +90,7 @@ export const getEvents = cache(async () => {
                 ...e,
             }))
         },
-        ["events-list"],
+        ["events-list-v3"],
         { revalidate: 60, tags: ["events"] }
     )()
 })
@@ -106,7 +106,7 @@ export const getNews = cache(async () => {
                 tags: article.tags.split(',')
             }))
         },
-        ["news-list"],
+        ["news-list-v3"],
         { revalidate: 60, tags: ["news"] }
     )()
 })
@@ -128,3 +128,16 @@ export const getNewsArticleById = cache(async (id: string) => {
     )()
 })
 
+export const getHomeStats = cache(async () => {
+    return unstable_cache(
+        async () => {
+            const [memberCount, eventCount] = await Promise.all([
+                db.member.count(),
+                db.calendarEvent.count()
+            ])
+            return { memberCount, eventCount }
+        },
+        ["home-stats"],
+        { revalidate: 3600, tags: ["members", "events"] }
+    )()
+})

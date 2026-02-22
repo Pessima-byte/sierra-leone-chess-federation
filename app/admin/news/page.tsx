@@ -1,6 +1,5 @@
 import { getNews } from "@/lib/queries"
-import { Button } from "@/components/ui/button"
-import { Search, MoreHorizontal } from "lucide-react"
+import { Search } from "lucide-react"
 import { CreateNewsDialog } from "../components/create-news-dialog"
 import { EditNewsDialog } from "../components/edit-news-dialog"
 import { DeleteAction } from "../components/delete-action"
@@ -10,26 +9,67 @@ export default async function AdminNews() {
     const news = await getNews()
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-black italic tracking-tight">TRANSMISSION CONTROL</h1>
+        <div className="space-y-4 md:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div>
+                    <h1 className="text-2xl md:text-3xl font-black italic tracking-tight">NEWS</h1>
+                    <p className="text-xs text-muted-foreground mt-0.5">{news.length} articles published</p>
+                </div>
                 <CreateNewsDialog />
             </div>
 
-            <div className="bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden">
-                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
-                    <div className="relative w-64">
-                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                        <input
-                            type="text"
-                            placeholder="Search transmissions..."
-                            className="w-full h-9 pl-9 pr-4 bg-slate-950 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-blue-500"
-                        />
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                        Showing {news.length} articles
-                    </div>
+            {/* Search Bar */}
+            <div className="bg-slate-900/50 border border-white/10 rounded-xl p-3 md:rounded-2xl md:p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div className="relative flex-1 max-w-sm">
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                        type="text"
+                        placeholder="Search articles..."
+                        className="w-full h-9 pl-9 pr-4 bg-slate-950 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-blue-500"
+                    />
                 </div>
+                <div className="text-xs text-muted-foreground">
+                    {news.length} articles
+                </div>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-2">
+                {news.map(article => (
+                    <div key={article.id} className="bg-slate-900/40 border border-white/[0.06] rounded-xl p-3.5 space-y-2">
+                        {/* Header */}
+                        <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                                <div className="font-semibold text-sm text-white leading-tight line-clamp-2">{article.title}</div>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-[10px] text-muted-foreground">{article.date}</span>
+                                    <span className="text-[10px] text-muted-foreground">·</span>
+                                    <span className="text-[10px] text-muted-foreground">{article.author}</span>
+                                </div>
+                            </div>
+                            {article.featured ? (
+                                <span className="shrink-0 bg-blue-600 text-white px-2 py-0.5 rounded text-[9px] font-bold uppercase">Featured</span>
+                            ) : (
+                                <span className="shrink-0 bg-white/10 text-white/50 px-2 py-0.5 rounded text-[9px] font-bold uppercase">Standard</span>
+                            )}
+                        </div>
+
+                        {/* Category + Actions */}
+                        <div className="flex items-center justify-between pt-1 border-t border-white/5">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                {article.category}
+                            </span>
+                            <div className="flex items-center gap-1">
+                                <EditNewsDialog article={article as any} />
+                                <DeleteAction id={article.id} action={deleteNews} title="News" />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
                         <thead className="bg-slate-950/50 text-muted-foreground uppercase text-[10px] font-black tracking-wider">
@@ -64,11 +104,7 @@ export default async function AdminNews() {
                                     </td>
                                     <td className="px-6 py-4 text-right flex justify-end gap-2">
                                         <EditNewsDialog article={article as any} />
-                                        <DeleteAction
-                                            id={article.id}
-                                            action={deleteNews}
-                                            title="News"
-                                        />
+                                        <DeleteAction id={article.id} action={deleteNews} title="News" />
                                     </td>
                                 </tr>
                             ))}

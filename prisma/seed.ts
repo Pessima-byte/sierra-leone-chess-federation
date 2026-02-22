@@ -8,6 +8,7 @@ async function main() {
     await prisma.member.deleteMany()
     await prisma.calendarEvent.deleteMany()
     await prisma.newsArticle.deleteMany()
+    await prisma.user.deleteMany()
 
     console.log('Seeding members...')
     const membersData = [
@@ -40,9 +41,9 @@ async function main() {
 
     console.log('Seeding events...')
     const eventsData = [
-        { id: "ev-001", title: "National Blitz Championship 2025", date: "2025-03-15", time: "09:00 AM", location: "National Stadium Hub, Freetown", type: "Tournament", prizePool: "SLE 50,000", status: "Upcoming", organizer: "SLCF", description: "The biggest blitz event of the year.", image: "https://images.unsplash.com/photo-1529158017232-9019688b1369?q=80&w=1000", registrationOpen: true, level: "All", entryFee: "SLE 200" },
-        { id: "ev-002", title: "GM Meta-Strategy Seminar", date: "2025-03-20", time: "06:00 PM", location: "Zoom Virtual Arena", type: "Training", status: "Upcoming", organizer: "Technical Committee", description: "Deep dive into grandmaster concepts.", registrationOpen: true, level: "Professional", entryFee: "Free for Members" },
-        { id: "ev-004", title: "West African Zonal Qualifiers", date: "2025-05-12", time: "08:00 AM", location: "Radisson Blu, Freetown", type: "Tournament", prizePool: "SLE 150,000 + FIDE Norms", status: "Upcoming", organizer: "FIDE / SLCF", description: "The elite qualifying event for the West African Zonal.", image: "https://images.unsplash.com/photo-1586165368502-1bad197a6461?q=80&w=1000", registrationOpen: false, level: "Professional", entryFee: "SLE 500" }
+        { id: "ev-001", title: "National Blitz Championship 2025", date: "2025-03-15", time: "09:00 AM", location: "National Stadium Hub, Freetown", type: "Tournament", prizePool: "SLE 50,000", status: "Upcoming", organizer: "SLCF", description: "The biggest blitz event of the year.", image: "/images/national-blitz.png", registrationOpen: true, level: "All", entryFee: "SLE 200" },
+        { id: "ev-002", title: "GM Meta-Strategy Seminar", date: "2025-03-20", time: "06:00 PM", location: "Zoom Virtual Arena", type: "Training", status: "Upcoming", organizer: "Technical Committee", description: "Deep dive into grandmaster concepts.", image: "/images/chess-seminar.png", registrationOpen: true, level: "Professional", entryFee: "Free for Members" },
+        { id: "ev-004", title: "West African Zonal Qualifiers", date: "2025-05-12", time: "08:00 AM", location: "Radisson Blu, Freetown", type: "Tournament", prizePool: "SLE 150,000 + FIDE Norms", status: "Upcoming", organizer: "FIDE / SLCF", description: "The elite qualifying event for the West African Zonal.", image: "/images/zonal-qualifiers.png", registrationOpen: false, level: "Professional", entryFee: "SLE 500" }
     ]
 
     for (const event of eventsData) {
@@ -51,12 +52,45 @@ async function main() {
 
     console.log('Seeding news...')
     const newsData = [
-        { id: '1', title: 'Sierra Leone Set to Host West Africa Zonal Tournament', excerpt: 'The Sierra Leone Chess Federation has officially been awarded the hosting rights.', content: 'Freetown is preparing to welcome elite grandmasters...', date: '2024-01-01', author: 'Technical Committee', category: 'Tournament', image: '/images/hosting-rights-news.png', readTime: '5 min read', tags: 'Championship,Freetown,International', featured: false },
-        { id: '2', title: 'New Digital Rating System Launched for National Players', excerpt: 'SLCF introduces a blockchain-verified rating terminal.', content: 'In a significant move towards modernization...', date: '2025-06-10', author: 'IT Department', category: 'Federation', image: '/images/digital-rating-news.png', readTime: '3 min read', tags: 'Technology,Ratings,Digital Hub', featured: false },
-        { id: '3', title: 'Chess in Schools Program Expands to 10 New Districts', excerpt: 'The SLCF initiative reaches over 5,000 students across Sierra Leone.', content: 'In a landmark expansion, the Chess in Schools program has successfully integrated into 10 additional districts...', date: '2025-06-15', author: 'Education Dept', category: 'Federation', image: '/images/chess-schools-news.png', readTime: '4 min read', tags: 'Education,Youth,Expansion', featured: true },
-        { id: '4', title: 'Kadiatu Kamara Triumphs at Freetown Open 2024', excerpt: 'A dominant performance secures the title for the rising star.', content: 'The 2024 Freetown Open concluded with a thrilling finale as Kadiatu Kamara secured the first-place trophy.', date: '2024-11-25', author: 'Sports Desk', category: 'Tournament', image: '/images/tournament-winner-news.png', readTime: '6 min read', tags: 'Victory,Freetown,Kamara', featured: false },
-        { id: '5', title: 'New Training Hub Opens in Bo City', excerpt: 'Southern region players gain access to world-class training facilities.', content: 'The Southern Province now boasts a state-of-the-art chess hub located in the heart of Bo.', date: '2025-05-30', author: 'Regional Ops', category: 'Training', image: '/images/bo-training-hub-news.png', readTime: '4 min read', tags: 'Bo,Development,Infrastructure', featured: false },
-        { id: '6', title: 'SLCF Partners with International Chess Academy', excerpt: 'New partnership brings Grandmaster coaching to local talent.', content: 'The Sierra Leone Chess Federation is proud to announce a strategic partnership with the International Chess Academy of Excellence.', date: '2025-04-10', author: 'External Affairs', category: 'International', image: 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?q=80&w=1000', readTime: '5 min read', tags: 'Partnership,Coaching,Global', featured: false }
+        {
+            id: 'n1',
+            title: 'Junior Team Claims Victory at West African Zonals',
+            excerpt: 'Our under-18 squad secured 3 gold medals in Accra this weekend, setting a new record.',
+            content: 'The Sierra Leone national junior team has achieved an unprecedented victory at the West African Zonal Championships held in Accra, Ghana. The team, coached by CM Abubakarr Jalloh, dominated the rapid and blitz categories, showcasing the immense potential of Sierra Leonean youth in international competition.',
+            date: 'May 12, 2025',
+            author: 'Technical Committee',
+            category: 'INTERNATIONAL',
+            image: '/images/news1.png',
+            readTime: '4 min read',
+            tags: 'Youth,International,Victory',
+            featured: true
+        },
+        {
+            id: 'n2',
+            title: 'New Grandmaster Coaching Program Announced',
+            excerpt: 'Special seminars with visiting GM Nigel Short will begin next month for the national team.',
+            content: 'The Sierra Leone Chess Federation is proud to announce the launch of a revolutionary Grandmaster Coaching Program. We are honored to welcome legendary GM Nigel Short, who will lead a series of intensive seminars designed to prepare our players for the upcoming Olympiad.',
+            date: 'May 08, 2025',
+            author: 'External Affairs',
+            category: 'DEVELOPMENT',
+            image: '/images/news2.png',
+            readTime: '5 min read',
+            tags: 'Coaching,Grandmaster,Training',
+            featured: false
+        },
+        {
+            id: 'n3',
+            title: 'Chess in Schools Initiative Expands to Bo',
+            excerpt: 'Over 500 students in the Bo district will receive free chess sets and training materials.',
+            content: 'The Chess in Schools initiative continues its successful journey across the provinces. Bo City recently hosted the regional launch event where over 500 students from various schools received their first chess sets and began their journey into the world of strategy.',
+            date: 'April 25, 2025',
+            author: 'Education Dept',
+            category: 'COMMUNITY',
+            image: '/images/news3.png',
+            readTime: '3 min read',
+            tags: 'Education,Bo,Youth',
+            featured: false
+        }
     ]
 
     for (const article of newsData) {
