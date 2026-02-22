@@ -3,15 +3,15 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Shield, User, LogOut } from "lucide-react"
+import { Menu, X, Home, CalendarDays, Users, GraduationCap, Newspaper, Shield, UserCircle, LogOut } from "lucide-react"
 import { logout } from "@/app/actions/auth"
 
-const links = [
-    { name: "Home", href: "/" },
-    { name: "Calendar", href: "/calendar" },
-    { name: "Members", href: "/members" },
-    { name: "Learn", href: "/#learn" },
-    { name: "News", href: "/news" },
+const navLinks = [
+    { name: "Home", href: "/", icon: Home },
+    { name: "Calendar", href: "/calendar", icon: CalendarDays },
+    { name: "Members", href: "/members", icon: Users },
+    { name: "Learn", href: "/#learn", icon: GraduationCap },
+    { name: "News", href: "/news", icon: Newspaper },
 ]
 
 interface SessionUser {
@@ -28,35 +28,27 @@ export function MobileNavWrapper({ variant, user }: Props) {
     const pathname = usePathname()
     const [open, setOpen] = useState(false)
 
-    // Close menu on route change
-    useEffect(() => {
-        setOpen(false)
-    }, [pathname])
+    // Close on route change
+    useEffect(() => { setOpen(false) }, [pathname])
 
-    // Prevent body scroll when menu is open
+    // Lock body scroll
     useEffect(() => {
-        if (open) {
-            document.body.style.overflow = "hidden"
-        } else {
-            document.body.style.overflow = ""
-        }
-        return () => {
-            document.body.style.overflow = ""
-        }
+        document.body.style.overflow = open ? "hidden" : ""
+        return () => { document.body.style.overflow = "" }
     }, [open])
 
-    // Desktop variant: just render the link pills
+    // ── Desktop: pill-style links ──
     if (variant === "desktop") {
         return (
             <>
-                {links.map((item) => {
-                    const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
+                {navLinks.map((item) => {
+                    const active = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
                     return (
                         <Link
                             key={item.name}
                             href={item.href}
                             prefetch={true}
-                            className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${isActive
+                            className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${active
                                 ? "bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                                 : "text-muted-foreground hover:text-white hover:bg-white/5"
                                 }`}
@@ -69,141 +61,299 @@ export function MobileNavWrapper({ variant, user }: Props) {
         )
     }
 
-    // Mobile variant: hamburger + full-screen panel
+    // ── Mobile: hamburger + fullscreen menu ──
     return (
         <div className="md:hidden">
-            {/* Toggle Button */}
             <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                className="relative z-[80] inline-flex items-center justify-center text-white hover:bg-white/10 rounded-full w-10 h-10 transition-colors"
-                aria-label={open ? "Close menu" : "Open menu"}
+                onClick={() => setOpen(true)}
+                className="inline-flex items-center justify-center text-white w-10 h-10 rounded-full hover:bg-white/10 transition-colors"
+                aria-label="Open menu"
             >
-                {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                <Menu className="w-6 h-6" />
             </button>
 
-            {/* Full-screen menu panel */}
             {open && (
-                <div
-                    className="fixed inset-0 z-[70] flex flex-col"
-                    style={{
-                        backgroundColor: '#0a0f1e',
-                        paddingTop: 'env(safe-area-inset-top, 0px)',
-                    }}
-                >
-                    {/* Panel Header */}
-                    <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0 mt-2">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                                <span className="text-xs font-black text-white">SL</span>
-                            </div>
-                            <div>
-                                <div className="font-bold text-white text-sm leading-none">SLCF</div>
-                                <div className="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Sierra Leone Chess</div>
-                            </div>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => setOpen(false)}
-                            className="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-white transition-colors"
+                <>
+                    {/* 
+                        Portal-style fullscreen menu.
+                        Using inline styles for background to bypass any Tailwind overrides.
+                    */}
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 9999,
+                            backgroundColor: "#060b18",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        {/* ─── Header ─── */}
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                padding: "12px 20px",
+                                paddingTop: "max(12px, env(safe-area-inset-top, 12px))",
+                                borderBottom: "1px solid rgba(255,255,255,0.08)",
+                            }}
                         >
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
-
-                    {/* Nav Links — Large & Prominent */}
-                    <nav className="flex-1 overflow-y-auto px-5 py-6">
-                        <div className="space-y-1">
-                            {links.map((item) => {
-                                const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
-                                return (
-                                    <Link
-                                        key={item.name}
-                                        href={item.href}
-                                        onClick={() => setOpen(false)}
-                                        className={`block px-4 py-4 text-lg font-semibold rounded-2xl transition-all ${isActive
-                                            ? "bg-blue-500/15 text-blue-400 border border-blue-500/20"
-                                            : "text-white hover:bg-white/5 border border-transparent"
-                                            }`}
-                                    >
-                                        {item.name}
-                                    </Link>
-                                )
-                            })}
-                        </div>
-                    </nav>
-
-                    {/* Bottom Auth Section */}
-                    <div className="shrink-0 px-5 pb-10 pt-4 border-t border-white/10">
-                        {user ? (
-                            <div className="space-y-3">
-                                {/* User Info */}
-                                <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.04] border border-white/[0.08]">
-                                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-base text-white shrink-0">
-                                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                <div
+                                    style={{
+                                        width: 36,
+                                        height: 36,
+                                        borderRadius: 10,
+                                        background: "linear-gradient(135deg, #3b82f6, #6366f1)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontWeight: 900,
+                                        fontSize: 12,
+                                        color: "#fff",
+                                    }}
+                                >
+                                    SL
+                                </div>
+                                <div>
+                                    <div style={{ fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1 }}>SLCF</div>
+                                    <div style={{ fontSize: 9, color: "#60a5fa", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const }}>
+                                        Sierra Leone Chess
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-bold text-sm text-white truncate">{user.name || "User"}</div>
-                                        <div className="text-[10px] text-blue-400 uppercase tracking-widest font-bold mt-0.5">
-                                            {user.role === "ADMIN" ? "Administrator" : "Player"}
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setOpen(false)}
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: "50%",
+                                    border: "1px solid rgba(255,255,255,0.1)",
+                                    background: "rgba(255,255,255,0.05)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* ─── Navigation Links ─── */}
+                        <nav
+                            style={{
+                                flex: 1,
+                                overflowY: "auto",
+                                padding: "24px 20px",
+                            }}
+                        >
+                            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                {navLinks.map((item) => {
+                                    const active = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
+                                    const Icon = item.icon
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
+                                            onClick={() => setOpen(false)}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 14,
+                                                padding: "16px 18px",
+                                                borderRadius: 16,
+                                                fontSize: 17,
+                                                fontWeight: 600,
+                                                color: active ? "#60a5fa" : "#e2e8f0",
+                                                backgroundColor: active ? "rgba(59,130,246,0.1)" : "transparent",
+                                                border: active ? "1px solid rgba(59,130,246,0.2)" : "1px solid transparent",
+                                                textDecoration: "none",
+                                                transition: "all 0.2s",
+                                            }}
+                                        >
+                                            <Icon size={20} style={{ opacity: active ? 1 : 0.5 }} />
+                                            {item.name}
+                                        </Link>
+                                    )
+                                })}
+                            </div>
+                        </nav>
+
+                        {/* ─── Auth Section (bottom) ─── */}
+                        <div
+                            style={{
+                                padding: "16px 20px",
+                                paddingBottom: "max(24px, env(safe-area-inset-bottom, 24px))",
+                                borderTop: "1px solid rgba(255,255,255,0.08)",
+                            }}
+                        >
+                            {user ? (
+                                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                                    {/* User card */}
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 12,
+                                            padding: "12px 14px",
+                                            borderRadius: 14,
+                                            backgroundColor: "rgba(255,255,255,0.03)",
+                                            border: "1px solid rgba(255,255,255,0.06)",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                width: 42,
+                                                height: 42,
+                                                borderRadius: "50%",
+                                                background: "linear-gradient(135deg, #3b82f6, #6366f1)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontWeight: 700,
+                                                fontSize: 16,
+                                                color: "#fff",
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>
+                                                {user.name || "User"}
+                                            </div>
+                                            <div style={{ fontSize: 10, color: "#60a5fa", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
+                                                {user.role === "ADMIN" ? "Administrator" : "Player"}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* Action Buttons */}
-                                <div className="flex gap-2">
-                                    {user.role === "ADMIN" && (
+                                    {/* Buttons row */}
+                                    <div style={{ display: "flex", gap: 8 }}>
+                                        {user.role === "ADMIN" && (
+                                            <Link
+                                                href="/admin/dashboard"
+                                                onClick={() => setOpen(false)}
+                                                style={{
+                                                    flex: 1,
+                                                    height: 44,
+                                                    borderRadius: 12,
+                                                    backgroundColor: "#2563eb",
+                                                    color: "#fff",
+                                                    fontWeight: 700,
+                                                    fontSize: 13,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    gap: 6,
+                                                    textDecoration: "none",
+                                                }}
+                                            >
+                                                <Shield size={16} />
+                                                Admin
+                                            </Link>
+                                        )}
                                         <Link
-                                            href="/admin/dashboard"
+                                            href="/profile"
                                             onClick={() => setOpen(false)}
-                                            className="flex-1 h-12 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white inline-flex items-center justify-center gap-2 transition-colors"
+                                            style={{
+                                                flex: 1,
+                                                height: 44,
+                                                borderRadius: 12,
+                                                border: "1px solid rgba(255,255,255,0.1)",
+                                                color: "#fff",
+                                                fontWeight: 700,
+                                                fontSize: 13,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                gap: 6,
+                                                textDecoration: "none",
+                                            }}
                                         >
-                                            <Shield className="w-4 h-4" />
-                                            Admin Panel
+                                            <UserCircle size={16} />
+                                            Profile
                                         </Link>
-                                    )}
+                                    </div>
+
+                                    {/* Logout */}
+                                    <form action={logout}>
+                                        <button
+                                            type="submit"
+                                            onClick={() => setOpen(false)}
+                                            style={{
+                                                width: "100%",
+                                                height: 44,
+                                                borderRadius: 12,
+                                                border: "1px solid rgba(239,68,68,0.2)",
+                                                backgroundColor: "transparent",
+                                                color: "#f87171",
+                                                fontWeight: 700,
+                                                fontSize: 13,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                gap: 6,
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <LogOut size={16} />
+                                            Log Out
+                                        </button>
+                                    </form>
+                                </div>
+                            ) : (
+                                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                                     <Link
-                                        href="/profile"
+                                        href="/login"
                                         onClick={() => setOpen(false)}
-                                        className="flex-1 h-12 rounded-xl text-sm font-bold border border-white/10 hover:bg-white/5 text-white inline-flex items-center justify-center gap-2 transition-colors"
+                                        style={{
+                                            width: "100%",
+                                            height: 48,
+                                            borderRadius: 14,
+                                            border: "1px solid rgba(255,255,255,0.15)",
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            fontSize: 15,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            textDecoration: "none",
+                                        }}
                                     >
-                                        <User className="w-4 h-4" />
-                                        Profile
+                                        Log In
+                                    </Link>
+                                    <Link
+                                        href="/login?mode=register"
+                                        onClick={() => setOpen(false)}
+                                        style={{
+                                            width: "100%",
+                                            height: 48,
+                                            borderRadius: 14,
+                                            background: "linear-gradient(135deg, #10b981, #2563eb)",
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            fontSize: 15,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            textDecoration: "none",
+                                            border: "none",
+                                        }}
+                                    >
+                                        Join Federation
                                     </Link>
                                 </div>
-
-                                {/* Logout */}
-                                <form action={logout}>
-                                    <button
-                                        type="submit"
-                                        onClick={() => setOpen(false)}
-                                        className="w-full h-12 rounded-xl text-sm font-bold border border-red-500/20 hover:bg-red-500/10 text-red-400 inline-flex items-center justify-center gap-2 transition-colors"
-                                    >
-                                        <LogOut className="w-4 h-4" />
-                                        Log Out
-                                    </button>
-                                </form>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col gap-3">
-                                <Link
-                                    href="/login"
-                                    onClick={() => setOpen(false)}
-                                    className="w-full h-13 rounded-xl text-base font-bold border border-white/10 hover:bg-white/5 inline-flex items-center justify-center text-white transition-colors"
-                                >
-                                    Log In
-                                </Link>
-                                <Link
-                                    href="/login?mode=register"
-                                    onClick={() => setOpen(false)}
-                                    className="w-full h-13 rounded-xl text-base font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-400 hover:to-blue-500 text-white border-0 inline-flex items-center justify-center transition-colors"
-                                >
-                                    Join Federation
-                                </Link>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
+                </>
             )}
         </div>
     )
