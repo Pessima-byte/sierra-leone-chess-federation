@@ -86,10 +86,13 @@ export function MobileNavWrapper({ variant, user }: Props) {
             {open && (
                 <div
                     className="fixed inset-0 z-[70] flex flex-col"
-                    style={{ backgroundColor: '#0a0f1e' }}
+                    style={{
+                        backgroundColor: '#0a0f1e',
+                        paddingTop: 'env(safe-area-inset-top, 0px)',
+                    }}
                 >
                     {/* Panel Header */}
-                    <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0">
+                    <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 shrink-0 mt-2">
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                                 <span className="text-xs font-black text-white">SL</span>
