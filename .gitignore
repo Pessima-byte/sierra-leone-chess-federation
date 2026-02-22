@@ -26,3 +26,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /lib/generated/prisma
+
+# Logs
+*.log
+.DS_Store
+
+# Uploads
+/public/uploads
+
+# Test Scripts
+test-query.ts
+test-upload.js
+page.html
