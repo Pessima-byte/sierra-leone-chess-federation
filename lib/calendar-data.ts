@@ -6,7 +6,7 @@ export interface CalendarEvent {
     location: string
     type: 'Tournament' | 'Training' | 'Meeting' | 'Social'
     prizePool?: string
-    status: 'Upcoming' | 'Ongoing' | 'Completed'
+    status: 'Upcoming' | 'Ongoing' | 'Completed' | 'Planned' | 'Active'
     organizer: string
     description: string
     image?: string

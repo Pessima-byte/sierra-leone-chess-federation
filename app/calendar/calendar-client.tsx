@@ -68,7 +68,7 @@ function CalendarContent({ initialEvents, session }: { initialEvents: CalendarEv
         return initialEvents.filter(event => {
             const matchesType = typeFilter === 'all' || event.type === typeFilter
             const matchesStatus = statusFilter === 'All' ||
-                (statusFilter === 'Upcoming' && (event.status === 'Upcoming' || event.status === 'Ongoing')) ||
+                (statusFilter === 'Upcoming' && (event.status === 'Upcoming' || event.status === 'Ongoing' || event.status === 'Planned' || event.status === 'Active')) ||
                 (statusFilter === 'Archived' && event.status === 'Completed')
             const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
