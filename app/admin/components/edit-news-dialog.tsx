@@ -95,159 +95,158 @@ export function EditNewsDialog({ article }: { article: NewsArticle }) {
                     <Pencil className="w-4 h-4" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[900px] bg-slate-900 border-white/10 text-white rounded-[2rem] overflow-hidden p-0 gap-0">
-                <div className="flex flex-col h-full max-h-[90vh]">
-                    <DialogHeader className="p-8 pb-4 border-b border-white/5">
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                                <Pencil className="w-5 h-5 text-blue-400" />
-                            </div>
-                            <div>
-                                <DialogTitle className="text-2xl font-black italic tracking-tight uppercase">RE-ENCRYPT TRANSMISSION</DialogTitle>
-                                <DialogDescription className="text-slate-400">
-                                    Update the content for the news transmission: {article.title}.
-                                </DialogDescription>
-                            </div>
-                        </div>
-                    </DialogHeader>
+            <DialogContent className="w-[95vw] sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-slate-950/90 border-white/10 text-white rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-3xl p-0 shadow-2xl no-scrollbar border-b-0">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/5 blur-[80px] rounded-full pointer-events-none"></div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-                        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* Left Column: Core Identity */}
-                                <div className="space-y-6">
-                                    <div className="space-y-4">
-                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 border-b border-white/10 pb-2">Transmission Data</h3>
+                <DialogHeader className="p-6 pb-3 border-b border-white/5 relative z-50 sticky top-0 bg-slate-950/95 backdrop-blur-2xl">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 italic">Intel Revision</span>
+                    </div>
+                    <DialogTitle className="text-xl md:text-2xl font-black italic tracking-tighter uppercase leading-none">
+                        Edit <span className="text-blue-500">Dispatch</span>
+                    </DialogTitle>
+                    <DialogDescription className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mt-1">
+                        Updating the central news transmission.
+                    </DialogDescription>
+                </DialogHeader>
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="title" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Headline</Label>
-                                            <Input id="title" name="title" defaultValue={article.title} required className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium" />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="excerpt" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Short Summary</Label>
-                                            <Input id="excerpt" name="excerpt" defaultValue={article.excerpt} required className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium" />
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="category" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Category</Label>
-                                                <Select name="category" defaultValue={article.category}>
-                                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium">
-                                                        <SelectValue placeholder="Select category" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                        <SelectItem value="Tournament">Tournament</SelectItem>
-                                                        <SelectItem value="Federation">Federation</SelectItem>
-                                                        <SelectItem value="Training">Training</SelectItem>
-                                                        <SelectItem value="Global">Global</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="author" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Author</Label>
-                                                <Input id="author" name="author" defaultValue={article.author} required className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium" />
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="date" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Publish Date</Label>
-                                                <Input id="date" name="date" defaultValue={article.date} required className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium" />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="readTime" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Read Time</Label>
-                                                <Input id="readTime" name="readTime" defaultValue={article.readTime} required className="bg-white/[0.03] border-white/10 rounded-xl h-11 font-medium" />
-                                            </div>
-                                        </div>
-                                    </div>
+                <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-6 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Media Section (Left on Desktop) */}
+                        <div className="lg:col-span-12 xl:col-span-4 space-y-5">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Transmission Visual</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
                                 </div>
-
-                                {/* Right Column: Content & Media */}
-                                <div className="space-y-6">
-                                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 border-b border-white/10 pb-2">Media & Content</h3>
-
-                                    <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Cover Image</Label>
-                                        <div className="relative rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/50 transition-all overflow-hidden group">
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                onChange={handleImageUpload}
-                                                accept="image/*"
-                                                className="hidden"
-                                            />
-                                            {imageUrl ? (
-                                                <div className="relative aspect-video w-full">
-                                                    <Image src={imageUrl} alt="Preview" fill className="object-cover" />
-                                                    <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                                                        <Button
-                                                            type="button"
-                                                            variant="secondary"
-                                                            size="sm"
-                                                            onClick={() => fileInputRef.current?.click()}
-                                                            className="rounded-xl h-9"
-                                                            disabled={uploading}
-                                                        >
-                                                            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-                                                            {uploading ? "Uploading..." : "Replace"}
-                                                        </Button>
-                                                        <Button
-                                                            type="button"
-                                                            variant="destructive"
-                                                            size="icon"
-                                                            onClick={() => setImageUrl(null)}
-                                                            className="rounded-xl h-9 w-9"
-                                                        >
-                                                            <X className="w-4 h-4" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="relative aspect-video rounded-2xl bg-slate-950 border border-white/10 hover:border-blue-500/50 transition-all cursor-pointer overflow-hidden group shadow-2xl"
+                                >
+                                    {imageUrl ? (
+                                        <>
+                                            <Image src={imageUrl} alt="Preview" fill className="object-cover grayscale group-hover:grayscale-0" />
+                                            <button
+                                                type="button"
+                                                onClick={(e) => { e.stopPropagation(); setImageUrl(null); }}
+                                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/80 border border-white/10 text-white hover:bg-red-500 z-20"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-500">
+                                            {uploading ? (
+                                                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                                             ) : (
-                                                <div
-                                                    className="aspect-video w-full flex flex-col items-center justify-center gap-2 cursor-pointer p-6"
-                                                    onClick={() => fileInputRef.current?.click()}
-                                                >
-                                                    {uploading ? (
-                                                        <>
-                                                            <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
-                                                            <span className="text-xs font-bold text-slate-400">Uploading to Secure Storage...</span>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform">
-                                                                <ImageIcon className="w-5 h-5 text-blue-400" />
-                                                            </div>
-                                                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center">Click to upload cover image</span>
-                                                        </>
-                                                    )}
-                                                </div>
+                                                <>
+                                                    <ImageIcon className="w-6 h-6 opacity-20" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Inject Media</span>
+                                                </>
                                             )}
                                         </div>
-                                    </div>
+                                    )}
+                                    <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                                </div>
+                            </div>
 
-                                    <div className="space-y-2 flex-1 flex flex-col">
-                                        <Label htmlFor="content" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Main Content (Markdown supported)</Label>
-                                        <Textarea id="content" name="content" defaultValue={article.content} required className="bg-white/[0.03] border-white/10 rounded-xl flex-1 min-h-[120px] font-medium leading-relaxed resize-y" />
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Parameters</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="category" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Category</Label>
+                                        <Select name="category" required defaultValue={article.category}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                <SelectItem value="Tournament">Tournament</SelectItem>
+                                                <SelectItem value="Federation">Federation</SelectItem>
+                                                <SelectItem value="Global">Global</SelectItem>
+                                                <SelectItem value="Announcement">Announcement</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="readTime" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Weight</Label>
+                                        <Input id="readTime" name="readTime" defaultValue={article.readTime} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold uppercase text-xs" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <DialogFooter className="p-6 border-t border-white/5 bg-slate-900/50 flex flex-row items-center justify-between mt-auto">
-                            <div className="flex items-center gap-2 pl-2">
-                                <div className="flex items-center space-x-2">
-                                    <input type="checkbox" id={`featured-${article.id}`} name="featured" defaultChecked={article.featured} className="w-4 h-4 rounded border-white/10 bg-white/5 accent-blue-600" />
-                                    <Label htmlFor={`featured-${article.id}`} className="text-[11px] font-bold uppercase tracking-widest text-slate-400 cursor-pointer">Promoted Story</Label>
+                        {/* Content Section (Right on Desktop) */}
+                        <div className="lg:col-span-12 xl:col-span-8 space-y-6">
+                            {/* 01 Sector Headline */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">01 Tactical Headline</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="title" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Headline</Label>
+                                    <Input id="title" name="title" defaultValue={article.title} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 font-black uppercase italic focus:ring-1 focus:ring-blue-500/30 text-blue-400 text-xs" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="excerpt" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Brief Intel</Label>
+                                    <Input id="excerpt" name="excerpt" defaultValue={article.excerpt} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-slate-300 text-xs" />
                                 </div>
                             </div>
 
-                            <Button type="submit" disabled={loading || uploading} className="bg-blue-600 hover:bg-blue-500 text-white font-black h-12 px-8 rounded-xl uppercase tracking-widest shadow-lg shadow-blue-600/20 !mt-0 transition-all active:scale-95">
-                                {loading ? "UPDATING..." : "CONFIRM UPDATE"}
+                            {/* 02 Intel Feed */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500/50">02 Intel Feed</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="content" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Transmission (Markdown)</Label>
+                                    <Textarea id="content" name="content" defaultValue={article.content} required className="bg-white/[0.03] border-white/10 rounded-xl min-h-[180px] text-xs font-medium leading-relaxed resize-none focus:ring-1 focus:ring-blue-500/30 transition-all placeholder:text-slate-700 p-4" />
+                                </div>
+                            </div>
+
+                            {/* Metadata */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="author" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Entity</Label>
+                                    <Input id="author" name="author" defaultValue={article.author} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="date" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Archive</Label>
+                                    <Input id="date" name="date" defaultValue={article.date} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-4 rounded-2xl bg-blue-600/5 border border-blue-500/10">
+                                <div className="space-y-0.5">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-400">Promotion Protocol</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id={`featured-${article.id}`}
+                                    name="featured"
+                                    defaultChecked={article.featured}
+                                    className="w-6 h-6 rounded-lg border-white/10 bg-slate-950 accent-blue-500 cursor-pointer"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="pt-6 border-t border-white/5 pb-6 sm:justify-center sticky bottom-0 bg-slate-950/95 backdrop-blur-2xl -mx-6 px-6 z-50">
+                        <div className="flex w-full gap-3">
+                            <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="flex-1 h-11 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] border border-white/5 text-slate-500 transition-all">
+                                Abort
                             </Button>
-                        </DialogFooter>
-                    </form>
-                </div>
+                            <Button type="submit" disabled={loading || uploading} className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white font-black h-11 rounded-xl shadow-[0_10px_40px_rgba(37,99,235,0.3)] uppercase tracking-[0.2em] text-[10px] transition-all active:scale-[0.98] italic">
+                                {loading ? "UPDATING..." : "UPDATE TRANSMISSION"}
+                            </Button>
+                        </div>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )

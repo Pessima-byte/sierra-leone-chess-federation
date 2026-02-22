@@ -59,82 +59,117 @@ export function RecordGameDialog({ members }: { members: Member[] }) {
                     <Swords className="w-4 h-4 mr-2" /> Record Match
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[525px] bg-slate-900 border-white/10 text-white">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-black italic">RECORD MATCH RESULT</DialogTitle>
-                    <DialogDescription className="text-slate-400">
-                        Submit the official result of a federation-sanctioned match.
+            <DialogContent className="w-[95vw] sm:max-w-[550px] max-h-[85vh] overflow-y-auto bg-slate-950/90 border-white/10 text-white rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-3xl p-0 shadow-2xl no-scrollbar border-b-0">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/5 blur-[80px] rounded-full pointer-events-none"></div>
+
+                <DialogHeader className="p-6 pb-3 border-b border-white/5 relative z-50 sticky top-0 bg-slate-950/95 backdrop-blur-2xl">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 italic">Combat Certification</span>
+                    </div>
+                    <DialogTitle className="text-xl md:text-2xl font-black italic tracking-tighter uppercase leading-none">
+                        Log <span className="text-blue-500">Conflict</span>
+                    </DialogTitle>
+                    <DialogDescription className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mt-1">
+                        Validating match outcome for ranking.
                     </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">White Player</Label>
-                            <Select name="whiteId" required>
-                                <SelectTrigger className="bg-white/5 border-white/10 rounded-xl h-12">
-                                    <SelectValue placeholder="Select player" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    {members.map(member => (
-                                        <SelectItem key={member.id} value={member.id}>{member.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">Black Player</Label>
-                            <Select name="blackId" required>
-                                <SelectTrigger className="bg-white/5 border-white/10 rounded-xl h-12">
-                                    <SelectValue placeholder="Select player" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    {members.map(member => (
-                                        <SelectItem key={member.id} value={member.id}>{member.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="result" className="text-xs font-bold uppercase tracking-widest text-slate-400">Result (W-D-L)</Label>
-                            <Select name="result" defaultValue="1-0">
-                                <SelectTrigger className="bg-white/5 border-white/10 rounded-xl h-12">
-                                    <SelectValue placeholder="Select result" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="1-0">1-0 (White wins)</SelectItem>
-                                    <SelectItem value="0-1">0-1 (Black wins)</SelectItem>
-                                    <SelectItem value="1/2-1/2">1/2-1/2 (Draw)</SelectItem>
-                                </SelectContent>
-                            </Select>
+                <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-6 relative z-10">
+                    {/* 01 Opponents */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">01 Operatives</span>
+                            <div className="flex-1 h-px bg-white/5"></div>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="date" className="text-xs font-bold uppercase tracking-widest text-slate-400">Match Date</Label>
-                            <Input id="date" name="date" placeholder="OCT 20, 2025" required className="bg-white/5 border-white/10 rounded-xl h-12" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-50 relative pl-3 after:content-[''] after:absolute after:left-0.5 after:top-1/2 after:-translate-y-1/2 after:w-1 after:h-1 after:bg-white after:rounded-full">White</Label>
+                                <Select name="whiteId" required>
+                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                        <SelectValue placeholder="Select operative" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                        {members.map(member => (
+                                            <SelectItem key={member.id} value={member.id} className="font-bold text-xs">{member.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-50 relative pl-3 after:content-[''] after:absolute after:left-0.5 after:top-1/2 after:-translate-y-1/2 after:w-1 after:h-1 after:bg-slate-950 after:rounded-full after:border after:border-white">Black</Label>
+                                <Select name="blackId" required>
+                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                        <SelectValue placeholder="Select operative" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                        {members.map(member => (
+                                            <SelectItem key={member.id} value={member.id} className="font-bold text-xs">{member.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="event" className="text-xs font-bold uppercase tracking-widest text-slate-400">Event Context</Label>
-                        <Input id="event" name="event" placeholder="Freetown Open - Round 4" required className="bg-white/5 border-white/10 rounded-xl h-12" />
+                    {/* 02 Outcome */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500/50">02 Outcome</span>
+                            <div className="flex-1 h-px bg-white/5"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="result" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Terminal Result</Label>
+                                <Select name="result" defaultValue="1-0">
+                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-black italic text-xs">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                        <SelectItem value="1-0" className="font-black text-xs">1-0 (White Victorious)</SelectItem>
+                                        <SelectItem value="0-1" className="font-black text-xs">0-1 (Black Victorious)</SelectItem>
+                                        <SelectItem value="1/2-1/2" className="font-black text-slate-400 text-xs">1/2-1/2 (Draw)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="date" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Archive Date</Label>
+                                <Input id="date" name="date" placeholder="OCT 20" required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="moves" className="text-xs font-bold uppercase tracking-widest text-slate-400">PGN / Moves (Optional)</Label>
-                        <Input id="moves" name="moves" placeholder="1. e4 e5 2. Nf3 Nc6..." className="bg-white/5 border-white/10 rounded-xl h-12" />
+                    {/* 03 Operational Context */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-500/50">03 Operational Context</span>
+                            <div className="flex-1 h-px bg-white/5"></div>
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="event" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Mission Deployment</Label>
+                            <Input id="event" name="event" placeholder="Event Name" required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold italic text-xs" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                            <div className="md:col-span-8 space-y-1.5">
+                                <Label htmlFor="moves" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Combat Logs (PGN)</Label>
+                                <Input id="moves" name="moves" placeholder="1. e4 e5..." className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-medium text-xs" />
+                            </div>
+                            <div className="md:col-span-4 space-y-1.5">
+                                <Label htmlFor="ratingChange" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 italic">Impact</Label>
+                                <Input id="ratingChange" name="ratingChange" type="number" placeholder="+12" className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-black text-blue-400 text-center text-xs" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="ratingChange" className="text-xs font-bold uppercase tracking-widest text-slate-400">Rating Impact (Optional)</Label>
-                        <Input id="ratingChange" name="ratingChange" type="number" placeholder="+12" className="bg-white/5 border-white/10 rounded-xl h-12" />
-                    </div>
-
-                    <DialogFooter className="pt-4">
-                        <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold h-12 rounded-xl">
-                            {loading ? "RECORDING..." : "LOG OFFICIAL RESULT"}
-                        </Button>
+                    <DialogFooter className="pt-6 border-t border-white/5 pb-6 sm:justify-center sticky bottom-0 bg-slate-950/95 backdrop-blur-2xl -mx-6 px-6 z-50">
+                        <div className="flex w-full gap-3">
+                            <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="flex-1 h-11 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] border border-white/5 text-slate-500 transition-all">
+                                Abort
+                            </Button>
+                            <Button type="submit" disabled={loading} className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white font-black h-11 rounded-xl shadow-[0_10px_40px_rgba(37,99,235,0.3)] uppercase tracking-[0.2em] text-[10px] transition-all active:scale-[0.98] italic">
+                                {loading ? "VALIDATING..." : "CERTIFY MATCH"}
+                            </Button>
+                        </div>
                     </DialogFooter>
                 </form>
             </DialogContent>

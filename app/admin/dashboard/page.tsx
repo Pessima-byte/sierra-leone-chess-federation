@@ -51,68 +51,74 @@ export default async function AdminDashboard() {
     const topMembers = [...members].sort((a, b) => b.rating - a.rating).slice(0, 5)
 
     return (
-        <div className="space-y-5 md:space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-black italic tracking-tight">OVERVIEW</h1>
-                    <p className="text-xs text-muted-foreground mt-0.5">Federation dashboard at a glance</p>
+        <div className="space-y-8">
+            {/* Header - Premium Style */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6">
+                <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-black italic tracking-tighter uppercase leading-none">Command <span className="text-blue-500">Center</span></h1>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1 italic">Real-time Federation Logistics & Intel</p>
+                    </div>
                 </div>
                 <RecordGameDialog members={members} />
             </div>
 
-            {/* Stats Grid — 2x2 on mobile, 4 columns on desktop */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            {/* Stats Grid — High Density HUD Style */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {stats.map((stat, i) => (
                     <div
                         key={i}
-                        className={`relative overflow-hidden p-4 md:p-6 rounded-2xl bg-gradient-to-br ${stat.gradient} border ${stat.borderColor} transition-all duration-200 active:scale-[0.98]`}
+                        className={`relative overflow-hidden p-6 rounded-[2rem] bg-slate-900/40 backdrop-blur-xl border border-white/5 transition-all duration-300 hover:border-white/10 group shadow-2xl`}
                     >
-                        {/* Icon */}
-                        <div className={`w-9 h-9 md:w-12 md:h-12 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color} mb-3`}>
-                            <stat.icon className="w-4 h-4 md:w-6 md:h-6" />
+                        <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.gradient} blur-3xl rounded-full pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity`}></div>
+
+                        <div className="relative z-10 space-y-4">
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${stat.bg} ${stat.color} shadow-inner border border-white/5`}>
+                                <stat.icon className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <div className="text-3xl font-black text-white leading-none tracking-tighter italic">{stat.value}</div>
+                                <div className="text-[9px] text-slate-500 font-black uppercase tracking-[0.2em] mt-2 group-hover:text-slate-400 transition-colors">{stat.title}</div>
+                            </div>
                         </div>
-                        {/* Value */}
-                        <div className="text-xl md:text-2xl font-black text-white leading-none">{stat.value}</div>
-                        {/* Label */}
-                        <div className="text-[10px] md:text-xs text-muted-foreground font-medium mt-1 uppercase tracking-wider">{stat.title}</div>
                     </div>
                 ))}
             </div>
 
-            {/* Content Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            {/* Content Sections - Premium HUD Containers */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Top Rated Members */}
-                <div className="rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/5">
-                        <div className="flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-blue-400" />
-                            <h2 className="text-sm md:text-base font-bold">Top Rated</h2>
+                <div className="rounded-[2.5rem] bg-slate-900/40 backdrop-blur-xl border border-white/5 overflow-hidden shadow-2xl group">
+                    <div className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-slate-950/30">
+                        <div className="flex items-center gap-3">
+                            <TrendingUp className="w-5 h-5 text-blue-500" />
+                            <h2 className="text-sm font-black uppercase tracking-[0.2em] italic text-white/90">Tactical Rankings</h2>
                         </div>
-                        <Link href="/admin/members" className="text-[10px] text-blue-400 font-bold uppercase tracking-wider flex items-center gap-0.5 hover:text-blue-300 transition-colors">
-                            View All <ChevronRight className="w-3 h-3" />
+                        <Link href="/admin/members" className="text-[9px] text-blue-500 font-black uppercase tracking-widest flex items-center gap-1.5 hover:text-blue-400 transition-all group-hover:translate-x-1">
+                            Access Database <ChevronRight className="w-3 h-3" />
                         </Link>
                     </div>
                     <div className="divide-y divide-white/5">
                         {topMembers.map((member, index) => (
-                            <div key={member.id} className="flex items-center gap-3 px-4 py-3 md:px-6 md:py-3.5 hover:bg-white/[0.02] transition-colors">
+                            <div key={member.id} className="flex items-center gap-4 px-8 py-4 hover:bg-white/[0.02] transition-colors relative">
                                 {/* Rank */}
-                                <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                                    <span className="text-[10px] font-black text-muted-foreground">{index + 1}</span>
+                                <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0">
+                                    <span className="text-[11px] font-black text-slate-500 italic">{index + 1}</span>
                                 </div>
                                 {/* Info */}
                                 <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-sm text-white truncate">{member.name}</div>
-                                    <div className="text-[10px] text-muted-foreground truncate">{member.club}</div>
+                                    <div className="font-black text-sm text-white uppercase italic tracking-tight truncate leading-none">{member.name}</div>
+                                    <div className="text-[9px] text-slate-600 font-bold uppercase tracking-widest mt-1 truncate">{member.club}</div>
                                 </div>
                                 {/* Ratings */}
-                                <div className="flex items-center gap-2 shrink-0">
+                                <div className="flex items-center gap-3 shrink-0">
                                     {member.title && member.title !== "None" && (
-                                        <span className="px-1.5 py-0.5 bg-blue-900/40 border border-blue-500/30 text-blue-400 text-[8px] font-bold rounded uppercase">
+                                        <span className="px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[8px] font-black rounded uppercase tracking-widest">
                                             {member.title}
                                         </span>
                                     )}
-                                    <span className="text-sm font-bold text-blue-400 tabular-nums">
+                                    <span className="text-base font-black text-blue-400 tabular-nums italic tracking-tighter">
                                         {member.rating > 0 ? member.rating : '—'}
                                     </span>
                                 </div>
@@ -122,35 +128,35 @@ export default async function AdminDashboard() {
                 </div>
 
                 {/* Upcoming Events */}
-                <div className="rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/5">
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-emerald-400" />
-                            <h2 className="text-sm md:text-base font-bold">Upcoming Events</h2>
+                <div className="rounded-[2.5rem] bg-slate-900/40 backdrop-blur-xl border border-white/5 overflow-hidden shadow-2xl group">
+                    <div className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-slate-950/30">
+                        <div className="flex items-center gap-3">
+                            <Clock className="w-5 h-5 text-emerald-500" />
+                            <h2 className="text-sm font-black uppercase tracking-[0.2em] italic text-white/90">Upcoming Operations</h2>
                         </div>
-                        <Link href="/admin/events" className="text-[10px] text-blue-400 font-bold uppercase tracking-wider flex items-center gap-0.5 hover:text-blue-300 transition-colors">
-                            View All <ChevronRight className="w-3 h-3" />
+                        <Link href="/admin/events" className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1.5 hover:text-emerald-400 transition-all group-hover:translate-x-1">
+                            Mission Log <ChevronRight className="w-3 h-3" />
                         </Link>
                     </div>
                     <div className="divide-y divide-white/5">
                         {events.slice(0, 5).map(event => (
-                            <div key={event.id} className="flex items-center gap-3 px-4 py-3 md:px-6 md:py-3.5 hover:bg-white/[0.02] transition-colors">
+                            <div key={event.id} className="flex items-center gap-4 px-8 py-4 hover:bg-white/[0.02] transition-colors">
                                 {/* Date chip */}
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex flex-col items-center justify-center shrink-0 border border-white/5">
-                                    <span className="text-[8px] font-bold text-muted-foreground uppercase leading-none">
+                                <div className="w-12 h-12 rounded-2xl bg-white/5 flex flex-col items-center justify-center shrink-0 border border-white/5 shadow-inner">
+                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-tighter leading-none italic">
                                         {event.date.split('-')[1] ? new Date(event.date).toLocaleString('en', { month: 'short' }) : event.date.slice(0, 3)}
                                     </span>
-                                    <span className="text-xs font-black text-white leading-none mt-0.5">
+                                    <span className="text-sm font-black text-white leading-none mt-1 italic tracking-tighter">
                                         {event.date.split('-')[2] || event.date.slice(4, 6)}
                                     </span>
                                 </div>
                                 {/* Info */}
                                 <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-sm text-white truncate">{event.title}</div>
-                                    <div className="text-[10px] text-muted-foreground truncate">{event.location}</div>
+                                    <div className="font-black text-sm text-white uppercase italic tracking-tight truncate leading-none">{event.title}</div>
+                                    <div className="text-[9px] text-slate-600 font-bold uppercase tracking-widest mt-1 truncate">{event.location}</div>
                                 </div>
                                 {/* Status */}
-                                <span className={`shrink-0 text-[9px] font-bold uppercase px-2 py-1 rounded-md ${event.status === 'Upcoming' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-500/10 text-slate-400'
+                                <span className={`shrink-0 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border ${event.status === 'Upcoming' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-500/10 text-slate-500 border-white/5'
                                     }`}>
                                     {event.status}
                                 </span>

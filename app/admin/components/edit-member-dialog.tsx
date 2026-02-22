@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogDescription,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -93,161 +94,203 @@ export function EditMemberDialog({ member }: { member: Member }) {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-[820px] w-[95vw] p-0 bg-transparent border-0 shadow-none overflow-visible">
-                <div className="relative bg-slate-900/98 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden shadow-[0_8px_80px_rgba(0,0,0,0.7)]">
-                    {/* Top gradient bar */}
-                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500" />
-                    {/* Glows */}
-                    <div className="absolute top-0 right-0 w-80 h-48 bg-blue-600/8 blur-[80px] pointer-events-none" />
-                    <div className="absolute bottom-0 left-0 w-60 h-40 bg-emerald-600/6 blur-[60px] pointer-events-none" />
+            <DialogContent className="w-[95vw] sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-slate-950/90 border-white/10 text-white rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-3xl p-0 shadow-2xl no-scrollbar border-b-0">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/5 blur-[80px] rounded-full pointer-events-none"></div>
 
-                    <div className="relative z-10 p-6">
-                        {/* Header */}
-                        <DialogHeader className="mb-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <DialogTitle className="text-2xl font-black italic tracking-tight text-white">
-                                        UPDATE PROFILE
-                                    </DialogTitle>
-                                    <p className="text-slate-500 text-xs font-medium mt-0.5">
-                                        Editing: <span className="text-blue-400 font-bold">{member.name}</span>
-                                    </p>
+                <DialogHeader className="p-6 pb-3 border-b border-white/5 relative z-50 sticky top-0 bg-slate-950/95 backdrop-blur-2xl">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 italic">Personnel Modification</span>
+                    </div>
+                    <DialogTitle className="text-xl md:text-2xl font-black italic tracking-tighter uppercase leading-none">
+                        Update <span className="text-blue-500">Operative</span>
+                    </DialogTitle>
+                    <DialogDescription className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mt-1">
+                        Modifying briefing for: <span className="text-white font-black">{member.name}</span>
+                    </DialogDescription>
+                </DialogHeader>
+
+                <form onSubmit={handleSubmit} className="p-6 pt-4 relative z-10">
+                    <div className="flex flex-col lg:flex-row gap-6">
+                        {/* Avatar / Bio Column */}
+                        <div className="lg:w-48 space-y-6 flex-shrink-0">
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Profile Signature</span>
                                 </div>
-                            </div>
-                        </DialogHeader>
-
-                        <form onSubmit={handleSubmit}>
-                            {/* Two-column layout */}
-                            <div className="flex gap-5">
-                                {/* LEFT: Avatar + bio */}
-                                <div className="flex flex-col gap-4 w-44 flex-shrink-0">
-                                    {/* Avatar */}
-                                    <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                                        <div className="w-full aspect-square rounded-xl overflow-hidden border border-white/10 bg-slate-800 flex items-center justify-center">
-                                            {previewUrl ? (
-                                                <img src={previewUrl} alt={member.name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <span className="text-3xl font-black text-blue-400">{initials}</span>
-                                            )}
+                                <div
+                                    className="relative group cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/10 bg-white/[0.02] shadow-inner"
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    {previewUrl ? (
+                                        <img src={previewUrl} alt={member.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                                    ) : (
+                                        <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                                            <div className="h-12 w-12 rounded-full bg-blue-600/10 flex items-center justify-center border border-blue-500/20">
+                                                <User className="w-6 h-6 text-blue-400" />
+                                            </div>
+                                            <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">No Signal</span>
                                         </div>
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                                            {uploadingImage ? (
-                                                <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-                                            ) : (
-                                                <>
-                                                    <Camera className="w-5 h-5 text-white" />
-                                                    <span className="text-[10px] text-white font-bold">Change Photo</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-1.5">
-                                        <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}
-                                            className="flex-1 h-8 text-[10px] font-bold bg-blue-600/10 border-blue-500/30 text-blue-400 hover:bg-blue-600/20 rounded-lg gap-1 px-2">
-                                            <Upload className="w-3 h-3" /> Upload
-                                        </Button>
-                                        {previewUrl && (
-                                            <Button type="button" variant="ghost" size="sm"
-                                                onClick={() => { setPreviewUrl(null); setImageUrl("") }}
-                                                className="h-8 w-8 p-0 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg flex-shrink-0">
-                                                <X className="w-3.5 h-3.5" />
-                                            </Button>
+                                    )}
+                                    <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-4 text-center">
+                                        {uploadingImage ? (
+                                            <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                            <>
+                                                <Camera className="w-5 h-5 text-blue-400 mb-1" />
+                                                <span className="text-[8px] font-black text-white uppercase tracking-widest">Update Asset</span>
+                                            </>
                                         )}
                                     </div>
-                                    <p className="text-[9px] text-slate-600 -mt-2 text-center">JPG / PNG / WEBP · 5MB max</p>
-
-                                    {/* Bio stacked below avatar */}
-                                    <div className="space-y-1 flex-1">
-                                        <SectionLabel icon={<User className="w-3 h-3 text-slate-500" />} label="Bio" />
-                                        <Textarea name="bio" defaultValue={member.bio ?? ""} placeholder="Achievements, style…"
-                                            className="bg-white/5 border border-white/10 rounded-xl text-white text-xs placeholder-slate-600 focus:border-blue-500/60 resize-none h-[106px] leading-relaxed" />
-                                    </div>
-
-                                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageFile} />
                                 </div>
 
-                                {/* RIGHT: All fields */}
-                                <div className="flex-1 space-y-3 min-w-0">
-                                    {/* Identity */}
-                                    <div>
-                                        <SectionLabel icon={<User className="w-3 h-3 text-blue-400" />} label="Identity" />
-                                        <div className="grid grid-cols-3 gap-2 mt-2">
-                                            <F label="Internal ID"><Input name="memberId" defaultValue={member.id} required className={ic} /></F>
-                                            <F label="FIDE ID"><Input name="fideId" defaultValue={member.fideId ?? ""} placeholder="Optional" className={ic} /></F>
-                                            <F label="Full Name" span><Input name="name" defaultValue={member.name} required className={ic} /></F>
-                                        </div>
-                                    </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="h-8 text-[8px] font-black bg-white/[0.03] border-white/10 hover:bg-blue-600 hover:text-white transition-all rounded-lg uppercase tracking-widest"
+                                    >
+                                        Update
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        disabled={!previewUrl}
+                                        onClick={() => { setPreviewUrl(null); setImageUrl("") }}
+                                        className="h-8 text-[8px] font-black text-slate-500 hover:text-red-400 transition-all rounded-lg uppercase tracking-widest"
+                                    >
+                                        Purge
+                                    </Button>
+                                </div>
+                                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageFile} />
+                            </div>
 
-                                    {/* Classification */}
-                                    <div>
-                                        <SectionLabel icon={<Shield className="w-3 h-3 text-emerald-400" />} label="Classification" />
-                                        <div className="grid grid-cols-2 gap-2 mt-2">
-                                            <F label="Title">
-                                                <Select name="title" defaultValue={member.title}>
-                                                    <SelectTrigger className={ic}><SelectValue placeholder="Select…" /></SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl">
-                                                        {["Grandmaster", "International Master", "FIDE Master", "Candidate Master", "CM", "WGM", "WIM", "WFM", "WCM", "National Master", "National Player", "None"].map(t => (
-                                                            <SelectItem key={t} value={t}>{t}</SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                            </F>
-                                            <F label="Chess Club"><Input name="club" defaultValue={member.club} required className={ic} /></F>
-                                        </div>
-                                    </div>
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Mission Log</span>
+                                </div>
+                                <Textarea
+                                    name="bio"
+                                    defaultValue={member.bio ?? ""}
+                                    placeholder="Briefing details..."
+                                    className="bg-white/[0.03] border-white/10 rounded-xl min-h-[140px] text-xs font-bold leading-relaxed focus:ring-1 focus:ring-blue-500/30 transition-all placeholder:text-slate-700"
+                                />
+                            </div>
+                        </div>
 
-                                    {/* Ratings */}
-                                    <div>
-                                        <SectionLabel icon={<Trophy className="w-3 h-3 text-yellow-400" />} label="Ratings" />
-                                        <div className="grid grid-cols-3 gap-2 mt-2">
-                                            <F label="Standard" accent="text-blue-400">
-                                                <Input name="rating" type="number" min={0} defaultValue={member.rating} className={ic} />
-                                            </F>
-                                            <F label="Rapid" accent="text-emerald-400">
-                                                <Input name="rapidRating" type="number" min={0} defaultValue={member.rapidRating} className={ic} />
-                                            </F>
-                                            <F label="Blitz" accent="text-purple-400">
-                                                <Input name="blitzRating" type="number" min={0} defaultValue={member.blitzRating} className={ic} />
-                                            </F>
-                                        </div>
+                        {/* Fields Column */}
+                        <div className="flex-1 space-y-6 min-w-0">
+                            {/* 01 Identity */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">01 Identity</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Internal Signature</Label>
+                                        <Input name="memberId" defaultValue={member.id} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs" />
                                     </div>
-
-                                    {/* Membership */}
-                                    <div>
-                                        <SectionLabel icon={<Calendar className="w-3 h-3 text-slate-400" />} label="Membership" />
-                                        <div className="grid grid-cols-2 gap-2 mt-2">
-                                            <F label="Status">
-                                                <Select name="status" defaultValue={member.status}>
-                                                    <SelectTrigger className={ic}><SelectValue /></SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl">
-                                                        <SelectItem value="Active">Active</SelectItem>
-                                                        <SelectItem value="Inactive">Inactive</SelectItem>
-                                                        <SelectItem value="Suspended">Suspended</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </F>
-                                            <F label="Join Date">
-                                                <Input name="joined" defaultValue={member.joined} required className={ic} />
-                                            </F>
-                                        </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">FIDE Identity</Label>
+                                        <Input name="fideId" defaultValue={member.fideId ?? ""} placeholder="Opt" className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs" />
                                     </div>
-
-                                    {/* Submit */}
-                                    <button type="submit" disabled={loading || uploadingImage}
-                                        className="mt-1 w-full relative h-11 rounded-xl font-black text-xs uppercase tracking-[0.15em] text-white overflow-hidden group transition-all disabled:opacity-50">
-                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 group-hover:from-blue-500 group-hover:to-cyan-500 transition-all duration-300" />
-                                        <span className="relative flex items-center justify-center gap-2">
-                                            {loading ? (
-                                                <><div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />Saving…</>
-                                            ) : "Save Changes"}
-                                        </span>
-                                    </button>
+                                    <div className="col-span-2 space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Operative Name</Label>
+                                        <Input name="name" defaultValue={member.name} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs" />
+                                    </div>
                                 </div>
                             </div>
-                        </form>
+
+                            {/* 02 Classification */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500/50">02 Classification</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Rank / Title</Label>
+                                        <Select name="title" defaultValue={member.title}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                {["Grandmaster", "International Master", "FIDE Master", "Candidate Master", "National Master", "National Player", "None"].map(t => (
+                                                    <SelectItem key={t} value={t}>{t}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Sector / Club</Label>
+                                        <Input name="club" defaultValue={member.club} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 03 Tactical Ratings */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-500/50">03 Tactical Ratings</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[7px] font-black uppercase tracking-[0.2em] text-blue-400 ml-1">Std</Label>
+                                        <Input name="rating" type="number" defaultValue={member.rating} className="bg-white/[0.03] border-white/10 rounded-lg h-9 focus:ring-1 focus:ring-blue-500/30 font-black text-center text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[7px] font-black uppercase tracking-[0.2em] text-emerald-400 ml-1">Rapid</Label>
+                                        <Input name="rapidRating" type="number" defaultValue={member.rapidRating} className="bg-white/[0.03] border-white/10 rounded-lg h-9 focus:ring-1 focus:ring-emerald-500/30 font-black text-center text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[7px] font-black uppercase tracking-[0.2em] text-purple-400 ml-1">Blitz</Label>
+                                        <Input name="blitzRating" type="number" defaultValue={member.blitzRating} className="bg-white/[0.03] border-white/10 rounded-lg h-9 focus:ring-1 focus:ring-purple-500/30 font-black text-center text-xs" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 04 Deployment Status */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500/50">04 Deployment</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Operational State</Label>
+                                        <Select name="status" defaultValue={member.status}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                <SelectItem value="Active">Active</SelectItem>
+                                                <SelectItem value="Inactive">Inactive</SelectItem>
+                                                <SelectItem value="Suspended">Suspended</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Join Date</Label>
+                                        <Input name="joined" defaultValue={member.joined} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 focus:ring-1 focus:ring-blue-500/30 font-bold text-xs" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={loading || uploadingImage}
+                                className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-[0.2em] italic rounded-xl shadow-[0_10px_30px_rgba(37,99,235,0.2)] transition-all active:scale-[0.98] disabled:opacity-50 mt-2"
+                            >
+                                {loading ? "SYNCHRONIZING..." : "PUSH MODIFICATIONS"}
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </DialogContent>
         </Dialog>
     )

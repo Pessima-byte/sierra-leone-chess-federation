@@ -98,191 +98,206 @@ export function EditEventDialog({ event }: { event: CalendarEvent }) {
                     <Pencil className="w-4 h-4" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[800px] bg-slate-900 border-white/10 text-white rounded-[2rem] overflow-hidden p-0 gap-0">
-                <div className="flex flex-col h-full max-h-[90vh]">
-                    <DialogHeader className="p-8 pb-4 border-b border-white/5">
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                                <Pencil className="w-5 h-5 text-blue-400" />
-                            </div>
-                            <div>
-                                <DialogTitle className="text-2xl font-black italic tracking-tight">UPDATE EVENT BROADCAST</DialogTitle>
-                                <DialogDescription className="text-slate-400">
-                                    Refine event parameters for the global calendar.
-                                </DialogDescription>
-                            </div>
-                        </div>
-                    </DialogHeader>
+            <DialogContent className="w-[95vw] sm:max-w-[650px] max-h-[85vh] overflow-y-auto bg-slate-950/90 border-white/10 text-white rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-3xl p-0 shadow-2xl no-scrollbar border-b-0">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/5 blur-[80px] rounded-full pointer-events-none"></div>
 
-                    <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
-                        <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                                {/* Left Column: Image & Basic Info */}
-                                <div className="lg:col-span-5 space-y-6">
-                                    <div className="space-y-4">
-                                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Event Visual</Label>
-                                        <div
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="relative aspect-video rounded-3xl bg-slate-950 border-2 border-dashed border-white/5 hover:border-blue-500/30 transition-all cursor-pointer overflow-hidden group"
-                                        >
-                                            {imageUrl ? (
-                                                <>
-                                                    <Image src={imageUrl} alt="Preview" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                                                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <Upload className="w-8 h-8 text-white" />
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => { e.stopPropagation(); setImageUrl(null); }}
-                                                        className="absolute top-3 right-3 p-2 rounded-full bg-slate-950/80 border border-white/10 text-white hover:bg-red-500 transition-colors"
-                                                    >
-                                                        <X className="w-4 h-4" />
-                                                    </button>
-                                                </>
+                <DialogHeader className="p-6 pb-3 border-b border-white/5 relative z-50 sticky top-0 bg-slate-950/95 backdrop-blur-2xl">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 italic">Intel Modification</span>
+                    </div>
+                    <DialogTitle className="text-xl md:text-2xl font-black italic tracking-tighter uppercase leading-none">
+                        Refine <span className="text-blue-500">Timeline</span>
+                    </DialogTitle>
+                    <DialogDescription className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mt-1">
+                        Adjusting event parameters in the archives.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-6 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Media Section (Left on Desktop) */}
+                        <div className="lg:col-span-12 xl:col-span-4 space-y-6">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Primary Display</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="relative aspect-video rounded-2xl bg-white/[0.02] border border-white/10 hover:border-blue-500/50 transition-all cursor-pointer overflow-hidden group shadow-inner"
+                                >
+                                    {imageUrl ? (
+                                        <>
+                                            <Image src={imageUrl} alt="Preview" fill className="object-cover grayscale group-hover:grayscale-0" />
+                                            <button
+                                                type="button"
+                                                onClick={(e) => { e.stopPropagation(); setImageUrl(null); }}
+                                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/80 border border-white/10 text-white hover:bg-red-500 z-20"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-500">
+                                            {uploading ? (
+                                                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                                             ) : (
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-500">
-                                                    {uploading ? (
-                                                        <Loader2 className="w-8 h-8 animate-spin" />
-                                                    ) : (
-                                                        <>
-                                                            <ImageIcon className="w-8 h-8 opacity-20" />
-                                                            <span className="text-[10px] font-bold uppercase tracking-widest">Upload Key Visual</span>
-                                                        </>
-                                                    )}
-                                                </div>
+                                                <>
+                                                    <ImageIcon className="w-6 h-6 opacity-20" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Inject Visual</span>
+                                                </>
                                             )}
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                onChange={handleImageUpload}
-                                                accept="image/*"
-                                                className="hidden"
-                                            />
                                         </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="title" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Event Title</Label>
-                                            <Input id="title" name="title" defaultValue={event.title} required className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold focus:border-blue-500/50" />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="type" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Type</Label>
-                                                <Select name="type" defaultValue={event.type}>
-                                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
-                                                        <SelectItem value="Tournament">Tournament</SelectItem>
-                                                        <SelectItem value="International">International</SelectItem>
-                                                        <SelectItem value="Training">Training</SelectItem>
-                                                        <SelectItem value="Federation">Federation</SelectItem>
-                                                        <SelectItem value="Youth">Youth</SelectItem>
-                                                        <SelectItem value="Development">Development</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="level" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Level</Label>
-                                                <Select name="level" defaultValue={event.level}>
-                                                    <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
-                                                        <SelectItem value="Professional">Professional</SelectItem>
-                                                        <SelectItem value="Advanced">Advanced</SelectItem>
-                                                        <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                                        <SelectItem value="Junior">Junior</SelectItem>
-                                                        <SelectItem value="All Levels">All Levels</SelectItem>
-                                                        <SelectItem value="Members Only">Members Only</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    )}
+                                    <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
                                 </div>
+                            </div>
 
-                                {/* Right Column: Logistics & Metadata */}
-                                <div className="lg:col-span-7 space-y-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="date" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Date</Label>
-                                            <Input id="date" name="date" defaultValue={event.date} required className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="time" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Time</Label>
-                                            <Input id="time" name="time" defaultValue={event.time} required className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">Tactical Tagging</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="type" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Type Focus</Label>
+                                        <Select name="type" required defaultValue={event.type}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                <SelectItem value="Tournament">Tournament</SelectItem>
+                                                <SelectItem value="International">International</SelectItem>
+                                                <SelectItem value="Training">Training</SelectItem>
+                                                <SelectItem value="Federation">Federation</SelectItem>
+                                                <SelectItem value="Youth">Youth</SelectItem>
+                                                <SelectItem value="Development">Development</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="location" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Location</Label>
-                                            <Input id="location" name="location" defaultValue={event.location} required className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="organizer" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Organizer</Label>
-                                            <Input id="organizer" name="organizer" defaultValue={event.organizer} required className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="description" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Event Brief</Label>
-                                        <Textarea id="description" name="description" defaultValue={event.description} required className="bg-white/[0.03] border-white/10 rounded-2xl min-h-[100px] font-medium leading-relaxed" />
-                                    </div>
-
-                                    <div className="grid grid-cols-12 gap-4 items-end">
-                                        <div className="col-span-3 space-y-2">
-                                            <Label htmlFor="prizePool" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Prize Pool</Label>
-                                            <Input id="prizePool" name="prizePool" defaultValue={event.prizePool || ""} placeholder="No Prize" className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
-                                        <div className="col-span-3 space-y-2">
-                                            <Label htmlFor="entryFee" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Entry Fee</Label>
-                                            <Input id="entryFee" name="entryFee" defaultValue={event.entryFee || ""} placeholder="Free" className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold" />
-                                        </div>
-                                        <div className="col-span-3 space-y-2">
-                                            <Label htmlFor="status" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Status</Label>
-                                            <Select name="status" defaultValue={event.status}>
-                                                <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-2xl h-12 font-bold">
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
-                                                    <SelectItem value="Upcoming">Upcoming</SelectItem>
-                                                    <SelectItem value="Ongoing">Ongoing</SelectItem>
-                                                    <SelectItem value="Active">Active</SelectItem>
-                                                    <SelectItem value="Planned">Planned</SelectItem>
-                                                    <SelectItem value="Completed">Completed</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div className="col-span-3 pb-3 flex items-center justify-end gap-3">
-                                            <Label htmlFor="registrationOpen" className="text-[8px] font-black uppercase tracking-widest text-slate-500 leading-none text-right">Reg. <br /> Open</Label>
-                                            <input
-                                                type="checkbox"
-                                                id="registrationOpen"
-                                                name="registrationOpen"
-                                                defaultChecked={event.registrationOpen}
-                                                className="w-6 h-6 rounded-lg border-white/10 bg-white/5 accent-blue-500 cursor-pointer"
-                                            />
-                                        </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="level" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Operative Rank</Label>
+                                        <Select name="level" required defaultValue={event.level}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                <SelectItem value="Professional">Professional</SelectItem>
+                                                <SelectItem value="Advanced">Advanced</SelectItem>
+                                                <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                                <SelectItem value="Junior">Junior</SelectItem>
+                                                <SelectItem value="All Levels">All Levels</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <DialogFooter className="p-8 pt-4 border-t border-white/5 bg-slate-950/50">
-                            <div className="flex w-full gap-3">
-                                <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="flex-1 h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px] border border-white/10 hover:bg-white/5">
-                                    Cancel
-                                </Button>
-                                <Button type="submit" disabled={loading} className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white font-black h-14 rounded-2xl shadow-xl shadow-blue-600/20 uppercase tracking-[0.2em] text-[10px]">
-                                    {loading ? "Relaying Data..." : "Broadcast Changes"}
-                                </Button>
+                        {/* Details Section (Right on Desktop) */}
+                        <div className="lg:col-span-12 xl:col-span-8 space-y-6">
+                            {/* 01 Sector ID */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500/50">01 Tactical Headline</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="title" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Command Headline</Label>
+                                    <Input id="title" name="title" defaultValue={event.title} required className="bg-white/[0.03] border-white/10 rounded-xl h-10 font-black uppercase italic tracking-tight focus:ring-1 focus:ring-blue-500/30 text-blue-400 text-xs" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="date" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Window</Label>
+                                        <Input id="date" name="date" defaultValue={event.date} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="time" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Start</Label>
+                                        <Input id="time" name="time" defaultValue={event.time} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                    </div>
+                                </div>
                             </div>
-                        </DialogFooter>
-                    </form>
-                </div>
+
+                            {/* 02 Logistics */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500/50">02 Geo-Logistics</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="location" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Station</Label>
+                                        <Input id="location" name="location" defaultValue={event.location} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="organizer" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Unit</Label>
+                                        <Input id="organizer" name="organizer" defaultValue={event.organizer} required className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 03 Mission Detail */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-500/50">03 Directives</span>
+                                    <div className="flex-1 h-px bg-white/5"></div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="prizePool" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Bounty</Label>
+                                        <Input id="prizePool" name="prizePool" defaultValue={event.prizePool || ""} className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-black text-blue-400 placeholder:text-slate-800 text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="entryFee" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Token</Label>
+                                        <Input id="entryFee" name="entryFee" defaultValue={event.entryFee || ""} className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-black text-emerald-400 placeholder:text-slate-800 text-xs" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="status" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">State</Label>
+                                        <Select name="status" defaultValue={event.status}>
+                                            <SelectTrigger className="bg-white/[0.03] border-white/10 rounded-xl h-9 font-bold text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white rounded-xl backdrop-blur-xl">
+                                                <SelectItem value="Upcoming">Upcoming</SelectItem>
+                                                <SelectItem value="Ongoing">Ongoing</SelectItem>
+                                                <SelectItem value="Completed">Completed</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="description" className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Briefing</Label>
+                                    <Textarea id="description" name="description" defaultValue={event.description} required className="bg-white/[0.03] border-white/10 rounded-xl min-h-[100px] text-xs font-medium leading-relaxed resize-none focus:ring-1 focus:ring-blue-500/30 transition-all placeholder:text-slate-700" />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-4 rounded-2xl bg-blue-600/5 border border-blue-500/10">
+                                <div className="space-y-0.5">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-400">Enrollment Active</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id="registrationOpen"
+                                    name="registrationOpen"
+                                    defaultChecked={event.registrationOpen}
+                                    className="w-6 h-6 rounded-lg border-white/10 bg-slate-950 accent-blue-500 cursor-pointer"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="pt-6 border-t border-white/5 pb-6 sm:justify-center sticky bottom-0 bg-slate-950/95 backdrop-blur-2xl -mx-6 px-6 z-50">
+                        <div className="flex w-full gap-3">
+                            <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="flex-1 h-11 rounded-xl font-black uppercase tracking-[0.2em] text-[9px] border border-white/5 text-slate-500 transition-all">
+                                Abort
+                            </Button>
+                            <Button type="submit" disabled={loading || uploading} className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white font-black h-11 rounded-xl shadow-[0_10px_40px_rgba(37,99,235,0.3)] uppercase tracking-[0.2em] text-[9px] transition-all active:scale-[0.98] italic">
+                                {loading ? "COMMITING..." : "COMMIT REVISIONS"}
+                            </Button>
+                        </div>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )
